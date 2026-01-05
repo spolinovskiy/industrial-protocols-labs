@@ -1,0 +1,23 @@
+services:
+  modbus-server:
+    image: polinovskiy/iacs-modbus-server:1.0
+    container_name: modbus-server
+    networks: [modbus_net]
+
+  modbus-client:
+    image: polinovskiy/iacs-modbus-client:1.0
+    container_name: modbus-client
+    networks: [modbus_net]
+    depends_on: [modbus-server]
+
+  diagnostics:
+    image: polinovskiy/iacs-diag:1.0
+    container_name: diagnostics
+    network_mode: "service:modbus-client"
+    depends_on: [modbus-client]
+    cap_add: [NET_ADMIN, NET_RAW]
+    command: ["sleep", "infinity"]
+
+networks:
+  modbus_net:
+    driver: bridge

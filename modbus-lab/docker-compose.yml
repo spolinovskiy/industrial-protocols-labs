@@ -1,0 +1,49 @@
+services:
+  modbus-server:
+    volumes:
+      - ./modbus_server.py:/app/modbus_server.py
+    image: iacs-modbus-server:dev
+    container_name: modbus-server
+    networks:
+      - modbus_net
+
+  modbus-client:
+    build:
+      context: .
+      dockerfile: Dockerfile.modbus_client
+    container_name: modbus-client
+    networks:
+      - modbus_net
+    depends_on:
+      - modbus-server
+      
+  fuxa:
+    image: frangoteam/fuxa:latest
+    container_name: fuxa
+    restart: unless-stopped
+    networks:
+      - modbus_net
+    ports:
+      - "1881:1881"
+    volumes:
+      - "./fuxa/appdata:/usr/src/app/FUXA/server/_appdata"
+      - "./fuxa/db:/usr/src/app/FUXA/server/_db"
+      - "./fuxa/logs:/usr/src/app/FUXA/server/_logs"
+      - "./fuxa/images:/usr/src/app/FUXA/server/_images"
+    environment:
+      - PORT=1881
+
+  diagnostics:
+    image: polinovskiy/iacs-diag:1.0.1
+    container_name: diagnostics
+    network_mode: "container:fuxa"
+    depends_on:
+      - fuxa
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    command: ["sleep", "infinity"]
+
+networks:
+  modbus_net:
+    driver: bridge

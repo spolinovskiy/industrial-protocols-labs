@@ -1,0 +1,9 @@
+FROM python:3.11-slim
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    tcpdump tshark ca-certificates iproute2 \
+  && pip install --no-cache-dir pyshark \
+  && rm -rf /var/lib/apt/lists/*
+
+CMD ["sleep", "infinity"]
+

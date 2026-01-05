@@ -1,0 +1,18 @@
+# Use a lightweight Python image
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+
+# Install required Python libraries
+RUN pip install --no-cache-dir pyModbusTCP
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the Modbus client script into the container
+COPY modbus_client.py /app/modbus_client.py
+
+# Command to run the Modbus client script
+CMD ["python", "/app/modbus_client.py"]
+
