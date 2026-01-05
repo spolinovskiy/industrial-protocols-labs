@@ -1,4 +1,5 @@
 import logging
+import os
 import time
 from pyModbusTCP.server import ModbusServer
 from time import sleep
@@ -9,6 +10,29 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(message)s",
 )
+
+
+def ensure_log_size(path: str, max_bytes: int = 5 * 1024 * 1024, backups: int = 2) -> None:
+    """
+    Keep log files bounded for lab use.
+    If *path* exceeds *max_bytes*, rotate with up to *backups* files.
+    """
+    try:
+        size = os.path.getsize(path)
+    except FileNotFoundError:
+        return
+
+    if size <= max_bytes:
+        return
+
+    for idx in range(backups, 0, -1):
+        src = f"{path}.{idx-1}" if idx > 1 else path
+        dst = f"{path}.{idx}"
+        if os.path.exists(src):
+            os.replace(src, dst)
+
+    # truncate current log
+    open(path, "w").close()
 
 
 def start_server() -> ModbusServer:
@@ -113,8 +137,13 @@ def handle_reset(
     return timer_accum, reset_done
 
 
-def log_changes(server: ModbusServer, prev_state: dict) -> dict:
-    """Log changes across all areas to a dedicated file for register overview."""
+def log_changes(server: ModbusServer, prev_state: dict) -> tuple[dict, bool]:
+    """Log changes across all areas to a dedicated file for register overview.
+
+    Returns:
+        (updated_prev_state, changed) where *changed* is True if any area differs
+        from the previous snapshot.
+    """
     log_lines = []
     areas = {
         "DO": server.data_bank.get_coils(0, 4) or [],
@@ -130,16 +159,21 @@ def log_changes(server: ModbusServer, prev_state: dict) -> dict:
             prev_state[key] = list(current)
 
     if log_lines:
+        ensure_log_size("modbus_registers.log")
         for line in log_lines:
             logging.info(line)
         with open("modbus_registers.log", "a", encoding="utf-8") as fh:
             for line in log_lines:
                 fh.write(line + "\n")
 
-    return prev_state
+    return prev_state, bool(log_lines)
 
 
 def log_snapshot(server: ModbusServer) -> None:
+    """
+    Log a readable snapshot with explicit Modbus addresses so students can
+    correlate packets/registers with the HMI.
+    """
     coils = server.data_bank.get_coils(0, 4) or [False] * 4
     di = server.data_bank.get_discrete_inputs(0, 4) or [False] * 4
     ao = server.data_bank.get_holding_registers(0, 3) or []
@@ -150,13 +184,32 @@ def log_snapshot(server: ModbusServer) -> None:
     if len(ai) < 4:
         ai = (ai + [0, 0, 0, 0])[:4]
 
-    msg = (
-        f"DO -> {coils} | DI -> {di} | "
-        f"AO0 -> {ao[0]} | SwitchCount(HR1) -> {ao[1]} | AIThreshCount(HR2) -> {ao[2]} | "
-        f"AI0(analog) -> {ai[0]} | AI1(timer s) -> {ai[1]} | AI2(switches) -> {ai[2]} | AI3(thresh) -> {ai[3]}"
-    )
+    now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    snapshot = [
+        f"=== Modbus snapshot @ {now} ===",
+        f"COILS (DO: 000001-000004): 000001={int(coils[0])}, 000002={int(coils[1])}, 000003={int(coils[2])}, 000004={int(coils[3])}",
+        f"DISCRETE (DI: 100001-100004): 100001={int(di[0])}, 100002={int(di[1])}, 100003={int(di[2])}, 100004={int(di[3])}",
+        (
+            "HOLDING (HR: 400001-400003): "
+            f"400001 (AO1)={ao[0]}, "
+            f"400002 (SwitchCountHR)={ao[1]}, "
+            f"400003 (AIThreshHR)={ao[2]}"
+        ),
+        (
+            "INPUT (IR: 300001-300004): "
+            f"300001 (AI0 mirror AO1)={ai[0]}, "
+            f"300002 (TimerAI1 s)={ai[1]}, "
+            f"300003 (SwitchCountAI2)={ai[2]}, "
+            f"300004 (AIThreshAI3)={ai[3]}"
+        ),
+    ]
+
+    msg = " | ".join(snapshot[1:])
     print(msg)
     logging.info(msg)
+    ensure_log_size("modbus_registers.log")
+    with open("modbus_registers.log", "a", encoding="utf-8") as fh:
+        fh.write("\n".join(snapshot) + "\n")
 
 
 if __name__ == "__main__":
@@ -216,11 +269,13 @@ if __name__ == "__main__":
             ir[3] = thresh_count
             server.data_bank.set_holding_registers(0, hr)
             server.data_bank.set_input_registers(0, ir)
-            prev_state = log_changes(server, prev_state)
-            log_snapshot(server)
+            prev_state, changed = log_changes(server, prev_state)
+            if changed:
+                log_snapshot(server)
 
             prev_coils = server.data_bank.get_coils(0, 5) or prev_coils
             prev_ai0 = ai0_value
+            ensure_log_size("modbus_server.log")
             sleep(0.01)
 
     except KeyboardInterrupt:

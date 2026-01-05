@@ -4,8 +4,16 @@ services:
       - ./modbus_server.py:/app/modbus_server.py
     image: iacs-modbus-server:dev
     container_name: modbus-server
+    ports:
+      - "8081:8081"
+    command: ["/bin/sh","-c","python /app/modbus_server.py & python -m http.server 8081 --directory /app"]
     networks:
       - modbus_net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   modbus-client:
     build:
@@ -16,6 +24,11 @@ services:
       - modbus_net
     depends_on:
       - modbus-server
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
       
   fuxa:
     image: frangoteam/fuxa:latest
@@ -32,9 +45,17 @@ services:
       - "./fuxa/images:/usr/src/app/FUXA/server/_images"
     environment:
       - PORT=1881
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   diagnostics:
-    image: polinovskiy/iacs-diag:1.0.1
+    build:
+      context: .
+      dockerfile: Dockerfile.diagnostics
+    image: iacs-diagnostics:dev
     container_name: diagnostics
     network_mode: "container:fuxa"
     depends_on:
@@ -43,6 +64,11 @@ services:
       - NET_ADMIN
       - NET_RAW
     command: ["sleep", "infinity"]
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 networks:
   modbus_net:
