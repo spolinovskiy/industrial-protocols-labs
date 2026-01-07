@@ -1,8 +1,29 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    tcpdump tshark termshark ca-certificates iproute2 \
-  && pip install --no-cache-dir pyshark \
-  && rm -rf /var/lib/apt/lists/*
+# Strip docs/man/locales to keep image small and builds fast
+RUN set -eux; \
+    echo 'path-exclude=/usr/share/doc/*' > /etc/dpkg/dpkg.cfg.d/01_nodoc; \
+    echo 'path-exclude=/usr/share/man/*' >> /etc/dpkg/dpkg.cfg.d/01_nodoc; \
+    echo 'path-exclude=/usr/share/locale/*' >> /etc/dpkg/dpkg.cfg.d/01_nodoc
 
-CMD ["sleep", "infinity"]
+# Minimal tooling for industrial protocol captures/analysis (tshark CLI + tcpdump)
+RUN set -eux; \
+    apt-get update; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        tshark \
+        tcpdump \
+        ca-certificates \
+        libcap2-bin \
+        curl \
+    ; \
+    curl -L -o /usr/local/bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.aarch64; \
+    chmod +x /usr/local/bin/ttyd; \
+    rm -rf /var/lib/apt/lists/*
+
+# Python tooling for parsing/automation
+RUN pip install --no-cache-dir \
+    pyshark \
+    scapy
+
+WORKDIR /work
+ENTRYPOINT ["bash"]

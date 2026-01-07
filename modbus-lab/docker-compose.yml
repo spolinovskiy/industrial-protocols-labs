@@ -57,13 +57,16 @@ services:
       dockerfile: Dockerfile.diagnostics
     image: iacs-diagnostics:dev
     container_name: diagnostics
-    network_mode: "container:fuxa"
     depends_on:
       - fuxa
     cap_add:
       - NET_ADMIN
       - NET_RAW
-    command: ["sleep", "infinity"]
+    networks:
+      - modbus_net
+    ports:
+      - "8082:8082"
+    command: ["/bin/bash", "-lc", "/usr/local/bin/ttyd --version >/dev/null 2>&1 && /usr/local/bin/ttyd -p 8082 bash"]
     logging:
       driver: "json-file"
       options:
