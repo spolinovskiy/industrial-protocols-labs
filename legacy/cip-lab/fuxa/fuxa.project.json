@@ -1,0 +1,53 @@
+{
+  "project": {
+    "name": "CIP / EtherNet-IP Protocol Lab",
+    "description": "Prebuilt HMI blueprint for EtherNet/IP lab (import into FUXA).",
+    "connections": [
+      {
+        "name": "cip",
+        "type": "EtherNetIP",
+        "address": "cip-server",
+        "port": 44818
+      }
+    ],
+    "tags": [
+      {"name": "cip/DO1", "type": "bool", "address": "DO1"},
+      {"name": "cip/DO2", "type": "bool", "address": "DO2"},
+      {"name": "cip/DO3", "type": "bool", "address": "DO3"},
+      {"name": "cip/DO4", "type": "bool", "address": "DO4"},
+      {"name": "cip/DI1", "type": "bool", "address": "DI1"},
+      {"name": "cip/DI2", "type": "bool", "address": "DI2"},
+      {"name": "cip/DI3", "type": "bool", "address": "DI3"},
+      {"name": "cip/DI4", "type": "bool", "address": "DI4"},
+      {"name": "cip/AO1", "type": "int", "address": "AO1"},
+      {"name": "cip/AI0", "type": "int", "address": "AI0"},
+      {"name": "cip/TimerAI1", "type": "int", "address": "TimerAI1"},
+      {"name": "cip/SwitchCount", "type": "int", "address": "SwitchCount"},
+      {"name": "cip/Crossing70", "type": "int", "address": "Crossing70"}
+    ],
+    "hmi": {
+      "views": [
+        {
+          "name": "CIP Test Bench",
+          "width": 1024,
+          "height": 768,
+          "widgets": [
+            {"type": "switch", "tag": "cip/DO1", "label": "DO1"},
+            {"type": "switch", "tag": "cip/DO2", "label": "DO2"},
+            {"type": "switch", "tag": "cip/DO3", "label": "DO3"},
+            {"type": "switch", "tag": "cip/DO4", "label": "DO4"},
+            {"type": "led", "tag": "cip/DI1", "label": "DI1"},
+            {"type": "led", "tag": "cip/DI2", "label": "DI2"},
+            {"type": "led", "tag": "cip/DI3", "label": "DI3"},
+            {"type": "led", "tag": "cip/DI4", "label": "DI4"},
+            {"type": "slider", "tag": "cip/AO1", "label": "AO1"},
+            {"type": "bar", "tag": "cip/AI0", "label": "AI0"},
+            {"type": "text", "tag": "cip/TimerAI1", "label": "Time above 70"},
+            {"type": "text", "tag": "cip/Crossing70", "label": "Crossings 70"},
+            {"type": "text", "tag": "cip/SwitchCount", "label": "Switch Count"}
+          ]
+        }
+      ]
+    }
+  }
+}

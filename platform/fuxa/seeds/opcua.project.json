@@ -1,0 +1,218 @@
+{
+  "project": {
+    "name": "Unified ICS Lab - OPCUA",
+    "description": "Seed HMI blueprint for opcua lab (import into FUXA).",
+    "connections": [
+      {
+        "name": "opcua",
+        "type": "OPCUA",
+        "endpoint": "opc.tcp://proto-server-opcua:4840/",
+        "security_mode": "None",
+        "security_policy": "None"
+      }
+    ],
+    "tags": [
+      {
+        "name": "DO_01",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DO_01"
+      },
+      {
+        "name": "DO_02",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DO_02"
+      },
+      {
+        "name": "DO_03",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DO_03"
+      },
+      {
+        "name": "DO_04",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DO_04"
+      },
+      {
+        "name": "DO_05",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DO_05"
+      },
+      {
+        "name": "DO_06",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DO_06"
+      },
+      {
+        "name": "DO_07",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DO_07"
+      },
+      {
+        "name": "DO_08",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DO_08"
+      },
+      {
+        "name": "DI_01",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DI_01"
+      },
+      {
+        "name": "DI_02",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DI_02"
+      },
+      {
+        "name": "DI_03",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DI_03"
+      },
+      {
+        "name": "DI_04",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DI_04"
+      },
+      {
+        "name": "DI_05",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DI_05"
+      },
+      {
+        "name": "DI_06",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DI_06"
+      },
+      {
+        "name": "DI_07",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DI_07"
+      },
+      {
+        "name": "DI_08",
+        "type": "bool",
+        "address": "ns=2;s=opcua/DI_08"
+      },
+      {
+        "name": "AO_01",
+        "type": "float",
+        "address": "ns=2;s=opcua/AO_01"
+      },
+      {
+        "name": "AO_02",
+        "type": "float",
+        "address": "ns=2;s=opcua/AO_02"
+      },
+      {
+        "name": "AO_03",
+        "type": "float",
+        "address": "ns=2;s=opcua/AO_03"
+      },
+      {
+        "name": "AO_04",
+        "type": "float",
+        "address": "ns=2;s=opcua/AO_04"
+      },
+      {
+        "name": "AI_01",
+        "type": "float",
+        "address": "ns=2;s=opcua/AI_01"
+      },
+      {
+        "name": "AI_02",
+        "type": "float",
+        "address": "ns=2;s=opcua/AI_02"
+      },
+      {
+        "name": "AI_03",
+        "type": "float",
+        "address": "ns=2;s=opcua/AI_03"
+      },
+      {
+        "name": "AI_04",
+        "type": "float",
+        "address": "ns=2;s=opcua/AI_04"
+      },
+      {
+        "name": "TMR_01",
+        "type": "int",
+        "address": "ns=2;s=opcua/TMR_01"
+      },
+      {
+        "name": "CNT_01",
+        "type": "int",
+        "address": "ns=2;s=opcua/CNT_01"
+      }
+    ],
+    "hmi": {
+      "views": [
+        {
+          "name": "OPCUA Test Bench",
+          "width": 1024,
+          "height": 768,
+          "widgets": [
+            {
+              "type": "switch",
+              "tag": "DO_01",
+              "label": "DO_01"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_02",
+              "label": "DO_02"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_03",
+              "label": "DO_03"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_04",
+              "label": "DO_04"
+            },
+            {
+              "type": "led",
+              "tag": "DI_01",
+              "label": "DI_01"
+            },
+            {
+              "type": "led",
+              "tag": "DI_02",
+              "label": "DI_02"
+            },
+            {
+              "type": "led",
+              "tag": "DI_03",
+              "label": "DI_03"
+            },
+            {
+              "type": "led",
+              "tag": "DI_04",
+              "label": "DI_04"
+            },
+            {
+              "type": "slider",
+              "tag": "AO_01",
+              "label": "AO_01"
+            },
+            {
+              "type": "bar",
+              "tag": "AI_01",
+              "label": "AI_01"
+            },
+            {
+              "type": "text",
+              "tag": "TMR_01",
+              "label": "Time above 70"
+            },
+            {
+              "type": "text",
+              "tag": "CNT_01",
+              "label": "Crossings 70"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

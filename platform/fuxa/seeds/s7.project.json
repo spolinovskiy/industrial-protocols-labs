@@ -1,0 +1,218 @@
+{
+  "project": {
+    "name": "Unified ICS Lab - S7",
+    "description": "Seed HMI blueprint for s7 lab (import into FUXA).",
+    "connections": [
+      {
+        "name": "s7",
+        "type": "S7",
+        "address": "proto-server-s7",
+        "rack": 0,
+        "slot": 1
+      }
+    ],
+    "tags": [
+      {
+        "name": "DO_01",
+        "type": "bool",
+        "address": "DB1.DBX0.0"
+      },
+      {
+        "name": "DO_02",
+        "type": "bool",
+        "address": "DB1.DBX0.1"
+      },
+      {
+        "name": "DO_03",
+        "type": "bool",
+        "address": "DB1.DBX0.2"
+      },
+      {
+        "name": "DO_04",
+        "type": "bool",
+        "address": "DB1.DBX0.3"
+      },
+      {
+        "name": "DO_05",
+        "type": "bool",
+        "address": "DB1.DBX0.4"
+      },
+      {
+        "name": "DO_06",
+        "type": "bool",
+        "address": "DB1.DBX0.5"
+      },
+      {
+        "name": "DO_07",
+        "type": "bool",
+        "address": "DB1.DBX0.6"
+      },
+      {
+        "name": "DO_08",
+        "type": "bool",
+        "address": "DB1.DBX0.7"
+      },
+      {
+        "name": "DI_01",
+        "type": "bool",
+        "address": "DB1.DBX1.0"
+      },
+      {
+        "name": "DI_02",
+        "type": "bool",
+        "address": "DB1.DBX1.1"
+      },
+      {
+        "name": "DI_03",
+        "type": "bool",
+        "address": "DB1.DBX1.2"
+      },
+      {
+        "name": "DI_04",
+        "type": "bool",
+        "address": "DB1.DBX1.3"
+      },
+      {
+        "name": "DI_05",
+        "type": "bool",
+        "address": "DB1.DBX1.4"
+      },
+      {
+        "name": "DI_06",
+        "type": "bool",
+        "address": "DB1.DBX1.5"
+      },
+      {
+        "name": "DI_07",
+        "type": "bool",
+        "address": "DB1.DBX1.6"
+      },
+      {
+        "name": "DI_08",
+        "type": "bool",
+        "address": "DB1.DBX1.7"
+      },
+      {
+        "name": "AO_01",
+        "type": "int",
+        "address": "DB1.DBW2"
+      },
+      {
+        "name": "AO_02",
+        "type": "int",
+        "address": "DB1.DBW4"
+      },
+      {
+        "name": "AO_03",
+        "type": "int",
+        "address": "DB1.DBW6"
+      },
+      {
+        "name": "AO_04",
+        "type": "int",
+        "address": "DB1.DBW8"
+      },
+      {
+        "name": "AI_01",
+        "type": "int",
+        "address": "DB1.DBW10"
+      },
+      {
+        "name": "AI_02",
+        "type": "int",
+        "address": "DB1.DBW12"
+      },
+      {
+        "name": "AI_03",
+        "type": "int",
+        "address": "DB1.DBW14"
+      },
+      {
+        "name": "AI_04",
+        "type": "int",
+        "address": "DB1.DBW16"
+      },
+      {
+        "name": "TMR_01",
+        "type": "int",
+        "address": "DB1.DBW18"
+      },
+      {
+        "name": "CNT_01",
+        "type": "int",
+        "address": "DB1.DBW20"
+      }
+    ],
+    "hmi": {
+      "views": [
+        {
+          "name": "S7 Test Bench",
+          "width": 1024,
+          "height": 768,
+          "widgets": [
+            {
+              "type": "switch",
+              "tag": "DO_01",
+              "label": "DO_01"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_02",
+              "label": "DO_02"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_03",
+              "label": "DO_03"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_04",
+              "label": "DO_04"
+            },
+            {
+              "type": "led",
+              "tag": "DI_01",
+              "label": "DI_01"
+            },
+            {
+              "type": "led",
+              "tag": "DI_02",
+              "label": "DI_02"
+            },
+            {
+              "type": "led",
+              "tag": "DI_03",
+              "label": "DI_03"
+            },
+            {
+              "type": "led",
+              "tag": "DI_04",
+              "label": "DI_04"
+            },
+            {
+              "type": "slider",
+              "tag": "AO_01",
+              "label": "AO_01"
+            },
+            {
+              "type": "bar",
+              "tag": "AI_01",
+              "label": "AI_01"
+            },
+            {
+              "type": "text",
+              "tag": "TMR_01",
+              "label": "Time above 70"
+            },
+            {
+              "type": "text",
+              "tag": "CNT_01",
+              "label": "Crossings 70"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,8 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+COPY cip_server.py /app/cip_server.py
+
+RUN pip install --no-cache-dir cpppo
+
+CMD ["python", "/app/cip_server.py"]

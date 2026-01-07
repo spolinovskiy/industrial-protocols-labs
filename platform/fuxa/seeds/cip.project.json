@@ -1,0 +1,217 @@
+{
+  "project": {
+    "name": "Unified ICS Lab - CIP",
+    "description": "Seed HMI blueprint for cip lab (import into FUXA).",
+    "connections": [
+      {
+        "name": "cip",
+        "type": "EtherNetIP",
+        "address": "proto-server-cip",
+        "port": 44818
+      }
+    ],
+    "tags": [
+      {
+        "name": "DO_01",
+        "type": "bool",
+        "address": "DO_01"
+      },
+      {
+        "name": "DO_02",
+        "type": "bool",
+        "address": "DO_02"
+      },
+      {
+        "name": "DO_03",
+        "type": "bool",
+        "address": "DO_03"
+      },
+      {
+        "name": "DO_04",
+        "type": "bool",
+        "address": "DO_04"
+      },
+      {
+        "name": "DO_05",
+        "type": "bool",
+        "address": "DO_05"
+      },
+      {
+        "name": "DO_06",
+        "type": "bool",
+        "address": "DO_06"
+      },
+      {
+        "name": "DO_07",
+        "type": "bool",
+        "address": "DO_07"
+      },
+      {
+        "name": "DO_08",
+        "type": "bool",
+        "address": "DO_08"
+      },
+      {
+        "name": "DI_01",
+        "type": "bool",
+        "address": "DI_01"
+      },
+      {
+        "name": "DI_02",
+        "type": "bool",
+        "address": "DI_02"
+      },
+      {
+        "name": "DI_03",
+        "type": "bool",
+        "address": "DI_03"
+      },
+      {
+        "name": "DI_04",
+        "type": "bool",
+        "address": "DI_04"
+      },
+      {
+        "name": "DI_05",
+        "type": "bool",
+        "address": "DI_05"
+      },
+      {
+        "name": "DI_06",
+        "type": "bool",
+        "address": "DI_06"
+      },
+      {
+        "name": "DI_07",
+        "type": "bool",
+        "address": "DI_07"
+      },
+      {
+        "name": "DI_08",
+        "type": "bool",
+        "address": "DI_08"
+      },
+      {
+        "name": "AO_01",
+        "type": "int",
+        "address": "AO_01"
+      },
+      {
+        "name": "AO_02",
+        "type": "int",
+        "address": "AO_02"
+      },
+      {
+        "name": "AO_03",
+        "type": "int",
+        "address": "AO_03"
+      },
+      {
+        "name": "AO_04",
+        "type": "int",
+        "address": "AO_04"
+      },
+      {
+        "name": "AI_01",
+        "type": "int",
+        "address": "AI_01"
+      },
+      {
+        "name": "AI_02",
+        "type": "int",
+        "address": "AI_02"
+      },
+      {
+        "name": "AI_03",
+        "type": "int",
+        "address": "AI_03"
+      },
+      {
+        "name": "AI_04",
+        "type": "int",
+        "address": "AI_04"
+      },
+      {
+        "name": "TMR_01",
+        "type": "int",
+        "address": "TMR_01"
+      },
+      {
+        "name": "CNT_01",
+        "type": "int",
+        "address": "CNT_01"
+      }
+    ],
+    "hmi": {
+      "views": [
+        {
+          "name": "CIP Test Bench",
+          "width": 1024,
+          "height": 768,
+          "widgets": [
+            {
+              "type": "switch",
+              "tag": "DO_01",
+              "label": "DO_01"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_02",
+              "label": "DO_02"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_03",
+              "label": "DO_03"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_04",
+              "label": "DO_04"
+            },
+            {
+              "type": "led",
+              "tag": "DI_01",
+              "label": "DI_01"
+            },
+            {
+              "type": "led",
+              "tag": "DI_02",
+              "label": "DI_02"
+            },
+            {
+              "type": "led",
+              "tag": "DI_03",
+              "label": "DI_03"
+            },
+            {
+              "type": "led",
+              "tag": "DI_04",
+              "label": "DI_04"
+            },
+            {
+              "type": "slider",
+              "tag": "AO_01",
+              "label": "AO_01"
+            },
+            {
+              "type": "bar",
+              "tag": "AI_01",
+              "label": "AI_01"
+            },
+            {
+              "type": "text",
+              "tag": "TMR_01",
+              "label": "Time above 70"
+            },
+            {
+              "type": "text",
+              "tag": "CNT_01",
+              "label": "Crossings 70"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

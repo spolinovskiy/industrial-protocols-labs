@@ -1,0 +1,217 @@
+{
+  "project": {
+    "name": "Unified ICS Lab - DNP3",
+    "description": "Seed HMI blueprint for dnp3 lab (import into FUXA).",
+    "connections": [
+      {
+        "name": "dnp3",
+        "type": "DNP3",
+        "address": "proto-server-dnp3",
+        "port": 20000
+      }
+    ],
+    "tags": [
+      {
+        "name": "DO_01",
+        "type": "bool",
+        "address": "binaryOutput:0"
+      },
+      {
+        "name": "DO_02",
+        "type": "bool",
+        "address": "binaryOutput:1"
+      },
+      {
+        "name": "DO_03",
+        "type": "bool",
+        "address": "binaryOutput:2"
+      },
+      {
+        "name": "DO_04",
+        "type": "bool",
+        "address": "binaryOutput:3"
+      },
+      {
+        "name": "DO_05",
+        "type": "bool",
+        "address": "binaryOutput:4"
+      },
+      {
+        "name": "DO_06",
+        "type": "bool",
+        "address": "binaryOutput:5"
+      },
+      {
+        "name": "DO_07",
+        "type": "bool",
+        "address": "binaryOutput:6"
+      },
+      {
+        "name": "DO_08",
+        "type": "bool",
+        "address": "binaryOutput:7"
+      },
+      {
+        "name": "DI_01",
+        "type": "bool",
+        "address": "binaryInput:0"
+      },
+      {
+        "name": "DI_02",
+        "type": "bool",
+        "address": "binaryInput:1"
+      },
+      {
+        "name": "DI_03",
+        "type": "bool",
+        "address": "binaryInput:2"
+      },
+      {
+        "name": "DI_04",
+        "type": "bool",
+        "address": "binaryInput:3"
+      },
+      {
+        "name": "DI_05",
+        "type": "bool",
+        "address": "binaryInput:4"
+      },
+      {
+        "name": "DI_06",
+        "type": "bool",
+        "address": "binaryInput:5"
+      },
+      {
+        "name": "DI_07",
+        "type": "bool",
+        "address": "binaryInput:6"
+      },
+      {
+        "name": "DI_08",
+        "type": "bool",
+        "address": "binaryInput:7"
+      },
+      {
+        "name": "AO_01",
+        "type": "float",
+        "address": "analogOutput:0"
+      },
+      {
+        "name": "AO_02",
+        "type": "float",
+        "address": "analogOutput:1"
+      },
+      {
+        "name": "AO_03",
+        "type": "float",
+        "address": "analogOutput:2"
+      },
+      {
+        "name": "AO_04",
+        "type": "float",
+        "address": "analogOutput:3"
+      },
+      {
+        "name": "AI_01",
+        "type": "float",
+        "address": "analogInput:0"
+      },
+      {
+        "name": "AI_02",
+        "type": "float",
+        "address": "analogInput:1"
+      },
+      {
+        "name": "AI_03",
+        "type": "float",
+        "address": "analogInput:2"
+      },
+      {
+        "name": "AI_04",
+        "type": "float",
+        "address": "analogInput:3"
+      },
+      {
+        "name": "TMR_01",
+        "type": "int",
+        "address": "analogInput:4"
+      },
+      {
+        "name": "CNT_01",
+        "type": "int",
+        "address": "analogInput:5"
+      }
+    ],
+    "hmi": {
+      "views": [
+        {
+          "name": "DNP3 Test Bench",
+          "width": 1024,
+          "height": 768,
+          "widgets": [
+            {
+              "type": "switch",
+              "tag": "DO_01",
+              "label": "DO_01"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_02",
+              "label": "DO_02"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_03",
+              "label": "DO_03"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_04",
+              "label": "DO_04"
+            },
+            {
+              "type": "led",
+              "tag": "DI_01",
+              "label": "DI_01"
+            },
+            {
+              "type": "led",
+              "tag": "DI_02",
+              "label": "DI_02"
+            },
+            {
+              "type": "led",
+              "tag": "DI_03",
+              "label": "DI_03"
+            },
+            {
+              "type": "led",
+              "tag": "DI_04",
+              "label": "DI_04"
+            },
+            {
+              "type": "slider",
+              "tag": "AO_01",
+              "label": "AO_01"
+            },
+            {
+              "type": "bar",
+              "tag": "AI_01",
+              "label": "AI_01"
+            },
+            {
+              "type": "text",
+              "tag": "TMR_01",
+              "label": "Time above 70"
+            },
+            {
+              "type": "text",
+              "tag": "CNT_01",
+              "label": "Crossings 70"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

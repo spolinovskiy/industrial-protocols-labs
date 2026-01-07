@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+COMPOSE_FILE="$ROOT/platform/docker-compose.platform.yml"
+ACTIVE_FILE="$ROOT/platform/active_protocol"
+
+protocols=(modbus opcua bacnet cip dnp3 iec104 mqtt s7)
+
+die() {
+  echo "error: $*" >&2
+  exit 1
+}
+
+is_protocol() {
+  local candidate="$1"
+  for proto in "${protocols[@]}"; do
+    if [[ "$proto" == "$candidate" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+stop_all_servers() {
+  docker ps --format '{{.Names}}' | grep -E '^proto-server-' | xargs -r docker stop
+}
+
+cmd=${1:-}
+case "$cmd" in
+  list)
+    printf '%s\n' "${protocols[@]}"
+    ;;
+  start)
+    proto=${2:-}
+    is_protocol "$proto" || die "unknown protocol: $proto"
+    stop_all_servers
+    docker compose -f "$COMPOSE_FILE" --profile "$proto" up -d
+    echo "$proto" > "$ACTIVE_FILE"
+    ;;
+  stop)
+    stop_all_servers
+    ;;
+  status)
+    docker compose -f "$COMPOSE_FILE" ps
+    ;;
+  switch)
+    proto=${2:-}
+    is_protocol "$proto" || die "unknown protocol: $proto"
+    stop_all_servers
+    docker compose -f "$COMPOSE_FILE" --profile "$proto" up -d
+    echo "$proto" > "$ACTIVE_FILE"
+    ;;
+  *)
+    cat <<USAGE
+Usage: ./labctl <command>
+
+Commands:
+  list             List available protocols
+  start <proto>    Start platform + protocol server
+  switch <proto>   Switch to protocol server
+  stop             Stop protocol server(s)
+  status           Show compose status
+USAGE
+    exit 1
+    ;;
+esac

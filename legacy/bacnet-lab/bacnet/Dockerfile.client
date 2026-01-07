@@ -1,0 +1,8 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+COPY bacnet_client.py /app/bacnet_client.py
+
+RUN pip install --no-cache-dir BAC0
+
+CMD ["python", "/app/bacnet_client.py"]

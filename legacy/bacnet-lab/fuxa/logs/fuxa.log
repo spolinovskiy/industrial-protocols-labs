@@ -1,0 +1,101 @@
+2026-01-07T15:07:12.504Z [info] FUXA V.1.2.8-2638
+2026-01-07T15:07:12.516Z [info] daqstorage: init successful!
+2026-01-07T15:07:12.868Z [info] api: init successful!
+2026-01-07T15:07:12.871Z [info] plugin-installed ads-client 2.1.0
+2026-01-07T15:07:12.871Z [info] plugin-installed node-opcua 2.149.0
+2026-01-07T15:07:12.871Z [info] plugin-installed modbus-serial 8.0.19
+2026-01-07T15:07:12.871Z [info] plugin-installed node-bacnet 0.2.4
+2026-01-07T15:07:12.872Z [info] plugin-installed odbc 2.4.9
+2026-01-07T15:07:12.872Z [info] plugin-installed node-red 4.1.1
+2026-01-07T15:07:12.872Z [info] runtime init plugins successful!
+2026-01-07T15:07:12.872Z [info] currentstorage.connected-to /usr/src/app/FUXA/server/_db/currentTagReadings.db database
+2026-01-07T15:07:12.873Z [info] apiKeysStorage.connected /usr/src/app/FUXA/server/_appdata/apikeys.fuxap.db database
+2026-01-07T15:07:12.873Z [info] usrstorage.connected /usr/src/app/FUXA/server/_appdata/users.fuxap.db database
+2026-01-07T15:07:12.874Z [info] prjstorage.connected-to /usr/src/app/FUXA/server/_appdata/project.fuxap.db database
+2026-01-07T15:07:12.881Z [info] currentstorage init successful!
+2026-01-07T15:07:12.884Z [info] apikeys.apiKeysStorage-init successful!
+2026-01-07T15:07:12.885Z [info] runtime init apiKeys successful!
+2026-01-07T15:07:12.957Z [info] runtime init scheduler services successful!
+2026-01-07T15:07:13.047Z [info] users.usrstorage-init successful!
+2026-01-07T15:07:13.217Z [info] project.prjstorage-init-successful!
+2026-01-07T15:07:13.253Z [info] users.usrstorage-set-default successful!
+2026-01-07T15:07:13.254Z [info] runtime init users successful!
+2026-01-07T15:07:13.258Z [info] project.prjstorage-set-default-successful!
+2026-01-07T15:07:13.258Z [info] runtime init project successful!
+2026-01-07T15:07:13.258Z [info] FUXA init in  768ms.
+2026-01-07T15:07:13.563Z [info] daqstorage reset!
+2026-01-07T15:07:13.570Z [info] alarms check start
+2026-01-07T15:07:13.571Z [info] notificator check start
+2026-01-07T15:07:13.572Z [info] scripts.start-checkstatus
+2026-01-07T15:07:13.573Z [info] jobs check start
+2026-01-07T15:07:13.581Z [info] FUXA started!
+2026-01-07T15:07:14.661Z [info] alarmsstorage.connected-to /usr/src/app/FUXA/server/_appdata/alarms.fuxap.db database.
+2026-01-07T15:07:15.115Z [info] alarms.alarmstorage-init-successful!
+2026-01-07T15:07:15.284Z [info] [Node-RED] Started at /nodered
+2026-01-07T15:07:15.289Z [info] WebServer is running http://127.0.0.1:1881/
+2026-01-07T15:18:33.721Z [info] FUXA V.1.2.8-2638
+2026-01-07T15:18:33.726Z [info] daqstorage: init successful!
+2026-01-07T15:18:33.999Z [info] api: init successful!
+2026-01-07T15:18:34.001Z [info] plugin-installed ads-client 2.1.0
+2026-01-07T15:18:34.002Z [info] plugin-installed node-opcua 2.149.0
+2026-01-07T15:18:34.002Z [info] plugin-installed modbus-serial 8.0.19
+2026-01-07T15:18:34.003Z [info] plugin-installed node-bacnet 0.2.4
+2026-01-07T15:18:34.003Z [info] plugin-installed odbc 2.4.9
+2026-01-07T15:18:34.003Z [info] plugin-installed node-red 4.1.1
+2026-01-07T15:18:34.003Z [info] runtime init plugins successful!
+2026-01-07T15:18:34.005Z [info] currentstorage.connected-to /usr/src/app/FUXA/server/_db/currentTagReadings.db database
+2026-01-07T15:18:34.006Z [info] apiKeysStorage.connected /usr/src/app/FUXA/server/_appdata/apikeys.fuxap.db database
+2026-01-07T15:18:34.006Z [info] usrstorage.connected /usr/src/app/FUXA/server/_appdata/users.fuxap.db database
+2026-01-07T15:18:34.007Z [info] prjstorage.connected-to /usr/src/app/FUXA/server/_appdata/project.fuxap.db database
+2026-01-07T15:18:34.011Z [info] currentstorage init successful!
+2026-01-07T15:18:34.011Z [info] apikeys.apiKeysStorage-init successful!
+2026-01-07T15:18:34.012Z [info] runtime init apiKeys successful!
+2026-01-07T15:18:34.013Z [info] runtime init scheduler services successful!
+2026-01-07T15:18:34.013Z [info] project.prjstorage-init-successful!
+2026-01-07T15:18:34.014Z [info] runtime init project successful!
+2026-01-07T15:18:34.015Z [info] users.usrstorage-init successful!
+2026-01-07T15:18:34.062Z [info] runtime init users successful!
+2026-01-07T15:18:34.063Z [info] FUXA init in  359ms.
+2026-01-07T15:18:34.076Z [info] daqstorage reset!
+2026-01-07T15:18:34.076Z [info] alarms check start
+2026-01-07T15:18:34.076Z [info] notificator check start
+2026-01-07T15:18:34.077Z [info] scripts.start-checkstatus
+2026-01-07T15:18:34.077Z [info] jobs check start
+2026-01-07T15:18:34.078Z [info] FUXA started!
+2026-01-07T15:18:35.576Z [info] alarmsstorage.connected-to /usr/src/app/FUXA/server/_appdata/alarms.fuxap.db database.
+2026-01-07T15:18:35.580Z [info] alarms.alarmstorage-init-successful!
+2026-01-07T15:18:35.910Z [info] [Node-RED] Started at /nodered
+2026-01-07T15:18:35.915Z [info] WebServer is running http://127.0.0.1:1881/
+2026-01-07T15:21:34.564Z [info] FUXA V.1.2.8-2638
+2026-01-07T15:21:34.568Z [info] daqstorage: init successful!
+2026-01-07T15:21:34.794Z [info] api: init successful!
+2026-01-07T15:21:34.796Z [info] plugin-installed ads-client 2.1.0
+2026-01-07T15:21:34.797Z [info] plugin-installed node-opcua 2.149.0
+2026-01-07T15:21:34.797Z [info] plugin-installed modbus-serial 8.0.19
+2026-01-07T15:21:34.797Z [info] plugin-installed node-bacnet 0.2.4
+2026-01-07T15:21:34.797Z [info] plugin-installed odbc 2.4.9
+2026-01-07T15:21:34.797Z [info] plugin-installed node-red 4.1.1
+2026-01-07T15:21:34.797Z [info] runtime init plugins successful!
+2026-01-07T15:21:34.798Z [info] currentstorage.connected-to /usr/src/app/FUXA/server/_db/currentTagReadings.db database
+2026-01-07T15:21:34.798Z [info] apiKeysStorage.connected /usr/src/app/FUXA/server/_appdata/apikeys.fuxap.db database
+2026-01-07T15:21:34.799Z [info] usrstorage.connected /usr/src/app/FUXA/server/_appdata/users.fuxap.db database
+2026-01-07T15:21:34.799Z [info] prjstorage.connected-to /usr/src/app/FUXA/server/_appdata/project.fuxap.db database
+2026-01-07T15:21:34.812Z [info] currentstorage init successful!
+2026-01-07T15:21:34.814Z [info] apikeys.apiKeysStorage-init successful!
+2026-01-07T15:21:34.816Z [info] runtime init apiKeys successful!
+2026-01-07T15:21:34.819Z [info] runtime init scheduler services successful!
+2026-01-07T15:21:34.910Z [info] project.prjstorage-init-successful!
+2026-01-07T15:21:34.911Z [info] runtime init project successful!
+2026-01-07T15:21:34.914Z [info] users.usrstorage-init successful!
+2026-01-07T15:21:34.915Z [info] runtime init users successful!
+2026-01-07T15:21:34.916Z [info] FUXA init in  367ms.
+2026-01-07T15:21:34.933Z [info] daqstorage reset!
+2026-01-07T15:21:34.933Z [info] alarms check start
+2026-01-07T15:21:34.933Z [info] notificator check start
+2026-01-07T15:21:34.934Z [info] scripts.start-checkstatus
+2026-01-07T15:21:34.934Z [info] jobs check start
+2026-01-07T15:21:34.934Z [info] FUXA started!
+2026-01-07T15:21:36.405Z [info] alarmsstorage.connected-to /usr/src/app/FUXA/server/_appdata/alarms.fuxap.db database.
+2026-01-07T15:21:36.408Z [info] alarms.alarmstorage-init-successful!
+2026-01-07T15:21:36.594Z [info] [Node-RED] Started at /nodered
+2026-01-07T15:21:36.596Z [info] WebServer is running http://127.0.0.1:1881/

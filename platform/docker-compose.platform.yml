@@ -1,0 +1,474 @@
+version: "3.9"
+
+services:
+  # FUXA SCADA (shared across all labs)
+  fuxa:
+    image: frangoteam/fuxa:latest
+    container_name: fuxa
+    networks:
+      - platform_net
+      - modbus_net
+      - opcua_net
+      - bacnet_net
+      - cip_net
+      - dnp3_net
+      - iec104_net
+      - mqtt_net
+      - s7_net
+    volumes:
+      - "./fuxa/volumes/appdata:/usr/src/app/FUXA/server/_appdata"
+      - "./fuxa/volumes/db:/usr/src/app/FUXA/server/_db"
+      - "./fuxa/volumes/logs:/usr/src/app/FUXA/server/_logs"
+      - "./fuxa/volumes/images:/usr/src/app/FUXA/server/_images"
+    environment:
+      - PORT=1881
+    restart: always
+    labels:
+      - "com.example.role=scada"
+      - "com.example.stack=platform"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+
+  # Diagnostics (termshark + ttyd menu)
+  diagnostics:
+    build:
+      context: ./diagnostics
+    container_name: diagnostics
+    networks:
+      - platform_net
+      - modbus_net
+      - opcua_net
+      - bacnet_net
+      - cip_net
+      - dnp3_net
+      - iec104_net
+      - mqtt_net
+      - s7_net
+    volumes:
+      - "./diagnostics/capture:/work/capture"
+    environment:
+      - TTYD_PORT=7681
+      - TTYD_USER=student
+      - TTYD_PASS=lab123
+      - DIAG_ALLOW_SHELL=0
+      - CAP_DURATION=10
+      - CAP_MAX_FILES=20
+      - CAP_RETENTION_DAYS=3
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    restart: always
+    labels:
+      - "com.example.role=diagnostics"
+      - "com.example.stack=platform"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+
+  # Nginx auth gateway (guest + admin)
+  gateway:
+    image: nginx:alpine
+    container_name: gateway
+    depends_on:
+      - fuxa
+      - diagnostics
+    networks:
+      - platform_net
+    ports:
+      - "1881:1881"  # guest (view-only)
+      - "1882:1882"  # admin (full)
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "./nginx/auth:/etc/nginx/auth:ro"
+    restart: always
+    labels:
+      - "com.example.role=gateway"
+      - "com.example.stack=platform"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+
+  # Reset controller (session TTL + idle timeout)
+  reset-controller:
+    build:
+      context: ./reset
+    container_name: reset-controller
+    networks:
+      - platform_net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./:/lab/platform:ro
+      - "./diagnostics/capture:/lab/capture"
+      - "./fuxa/volumes:/lab/fuxa"
+      - "./fuxa/seeds:/lab/seeds:ro"
+      - "./active_protocol:/lab/active_protocol"
+    restart: always
+    labels:
+      - "com.example.role=reset"
+      - "com.example.stack=platform"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 64M
+
+  # --- Protocol servers (exactly one active at a time) ---
+
+  proto-server-modbus:
+    build:
+      context: ../protocols/modbus/server
+    container_name: proto-server-modbus
+    profiles: ["modbus"]
+    ports:
+      - "502:502"
+    networks:
+      - modbus_net
+    restart: always
+    labels:
+      - "com.example.role=proto-server"
+      - "com.example.protocol=modbus"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
+
+  proto-server-opcua:
+    build:
+      context: ../protocols/opcua/server
+    container_name: proto-server-opcua
+    profiles: ["opcua"]
+    ports:
+      - "4840:4840"
+    networks:
+      - opcua_net
+    restart: always
+    labels:
+      - "com.example.role=proto-server"
+      - "com.example.protocol=opcua"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
+
+  proto-server-bacnet:
+    build:
+      context: ../protocols/bacnet/server
+    container_name: proto-server-bacnet
+    profiles: ["bacnet"]
+    ports:
+      - "47808:47808/udp"
+    networks:
+      - bacnet_net
+    restart: always
+    labels:
+      - "com.example.role=proto-server"
+      - "com.example.protocol=bacnet"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
+
+  proto-server-cip:
+    build:
+      context: ../protocols/cip/server
+    container_name: proto-server-cip
+    profiles: ["cip"]
+    ports:
+      - "44818:44818"
+    networks:
+      - cip_net
+    restart: always
+    labels:
+      - "com.example.role=proto-server"
+      - "com.example.protocol=cip"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
+
+  proto-server-dnp3:
+    build:
+      context: ../protocols/dnp3/server
+    container_name: proto-server-dnp3
+    profiles: ["dnp3"]
+    ports:
+      - "20000:20000"
+    networks:
+      - dnp3_net
+    restart: always
+    labels:
+      - "com.example.role=proto-server"
+      - "com.example.protocol=dnp3"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
+
+  proto-server-iec104:
+    build:
+      context: ../protocols/iec104/server
+    container_name: proto-server-iec104
+    profiles: ["iec104"]
+    ports:
+      - "2404:2404"
+    networks:
+      - iec104_net
+    restart: always
+    labels:
+      - "com.example.role=proto-server"
+      - "com.example.protocol=iec104"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
+
+  proto-server-mqtt:
+    image: eclipse-mosquitto:2
+    container_name: proto-server-mqtt
+    profiles: ["mqtt"]
+    ports:
+      - "1883:1883"
+    networks:
+      - mqtt_net
+    volumes:
+      - "../protocols/mqtt/broker/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro"
+    restart: always
+    labels:
+      - "com.example.role=proto-server"
+      - "com.example.protocol=mqtt"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+
+  proto-server-mqtt-bridge:
+    build:
+      context: ../protocols/mqtt/device-bridge
+    container_name: proto-server-mqtt-bridge
+    profiles: ["mqtt"]
+    depends_on:
+      - proto-server-mqtt
+    networks:
+      - mqtt_net
+    environment:
+      - MQTT_HOST=proto-server-mqtt
+      - MQTT_PORT=1883
+    restart: always
+    labels:
+      - "com.example.role=proto-server"
+      - "com.example.protocol=mqtt"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+
+  proto-server-s7:
+    build:
+      context: ../protocols/s7/plc-sim
+    container_name: proto-server-s7
+    profiles: ["s7"]
+    ports:
+      - "102:102"
+    networks:
+      - s7_net
+    restart: always
+    labels:
+      - "com.example.role=proto-server"
+      - "com.example.protocol=s7"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
+
+  # --- Optional clients (disabled by default) ---
+
+  proto-client-modbus:
+    build:
+      context: ../protocols/modbus/client
+    container_name: proto-client-modbus
+    profiles: ["modbus-test"]
+    depends_on:
+      - proto-server-modbus
+    networks:
+      - modbus_net
+    labels:
+      - "com.example.role=proto-client"
+      - "com.example.protocol=modbus"
+
+  proto-client-opcua:
+    build:
+      context: ../protocols/opcua/client
+    container_name: proto-client-opcua
+    profiles: ["opcua-test"]
+    depends_on:
+      - proto-server-opcua
+    networks:
+      - opcua_net
+    labels:
+      - "com.example.role=proto-client"
+      - "com.example.protocol=opcua"
+
+  proto-client-bacnet:
+    build:
+      context: ../protocols/bacnet/client
+    container_name: proto-client-bacnet
+    profiles: ["bacnet-test"]
+    depends_on:
+      - proto-server-bacnet
+    networks:
+      - bacnet_net
+    labels:
+      - "com.example.role=proto-client"
+      - "com.example.protocol=bacnet"
+
+  proto-client-cip:
+    build:
+      context: ../protocols/cip/client
+    container_name: proto-client-cip
+    profiles: ["cip-test"]
+    depends_on:
+      - proto-server-cip
+    networks:
+      - cip_net
+    labels:
+      - "com.example.role=proto-client"
+      - "com.example.protocol=cip"
+
+  proto-client-dnp3:
+    build:
+      context: ../protocols/dnp3/client
+    container_name: proto-client-dnp3
+    profiles: ["dnp3-test"]
+    depends_on:
+      - proto-server-dnp3
+    networks:
+      - dnp3_net
+    labels:
+      - "com.example.role=proto-client"
+      - "com.example.protocol=dnp3"
+
+  proto-client-iec104:
+    build:
+      context: ../protocols/iec104/client
+    container_name: proto-client-iec104
+    profiles: ["iec104-test"]
+    depends_on:
+      - proto-server-iec104
+    networks:
+      - iec104_net
+    labels:
+      - "com.example.role=proto-client"
+      - "com.example.protocol=iec104"
+
+  proto-client-mqtt:
+    build:
+      context: ../protocols/mqtt/client
+    container_name: proto-client-mqtt
+    profiles: ["mqtt-test"]
+    depends_on:
+      - proto-server-mqtt
+      - proto-server-mqtt-bridge
+    networks:
+      - mqtt_net
+    labels:
+      - "com.example.role=proto-client"
+      - "com.example.protocol=mqtt"
+
+  proto-client-s7:
+    build:
+      context: ../protocols/s7/client
+    container_name: proto-client-s7
+    profiles: ["s7-test"]
+    depends_on:
+      - proto-server-s7
+    networks:
+      - s7_net
+    labels:
+      - "com.example.role=proto-client"
+      - "com.example.protocol=s7"
+
+networks:
+  platform_net:
+    driver: bridge
+    labels:
+      - "k8s.network=platform"
+
+  modbus_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.10.0/24
+    labels:
+      - "k8s.network=internal"
+
+  opcua_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.20.0/24
+    labels:
+      - "k8s.network=internal"
+
+  bacnet_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.30.0/24
+    labels:
+      - "k8s.network=internal"
+
+  cip_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.40.0/24
+    labels:
+      - "k8s.network=internal"
+
+  dnp3_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.50.0/24
+    labels:
+      - "k8s.network=internal"
+
+  iec104_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.60.0/24
+    labels:
+      - "k8s.network=internal"
+
+  mqtt_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.70.0/24
+    labels:
+      - "k8s.network=internal"
+
+  s7_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.80.0/24
+    labels:
+      - "k8s.network=internal"

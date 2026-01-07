@@ -1,0 +1,56 @@
+{
+  "project": {
+    "name": "OPC UA Protocol Lab",
+    "description": "Prebuilt HMI blueprint for OPC UA lab (import into FUXA).",
+    "connections": [
+      {
+        "name": "opcua",
+        "type": "OPCUA",
+        "endpoint": "opc.tcp://opcua-server:4840/",
+        "security_mode": "None",
+        "security_policy": "None",
+        "username": "",
+        "password": ""
+      }
+    ],
+    "tags": [
+      {"name": "opcua/DO1", "type": "bool", "address": "ns=2;s=opcua/DO1"},
+      {"name": "opcua/DO2", "type": "bool", "address": "ns=2;s=opcua/DO2"},
+      {"name": "opcua/DO3", "type": "bool", "address": "ns=2;s=opcua/DO3"},
+      {"name": "opcua/DO4", "type": "bool", "address": "ns=2;s=opcua/DO4"},
+      {"name": "opcua/DI1", "type": "bool", "address": "ns=2;s=opcua/DI1"},
+      {"name": "opcua/DI2", "type": "bool", "address": "ns=2;s=opcua/DI2"},
+      {"name": "opcua/DI3", "type": "bool", "address": "ns=2;s=opcua/DI3"},
+      {"name": "opcua/DI4", "type": "bool", "address": "ns=2;s=opcua/DI4"},
+      {"name": "opcua/AO1", "type": "float", "address": "ns=2;s=opcua/AO1"},
+      {"name": "opcua/AI0", "type": "float", "address": "ns=2;s=opcua/AI0"},
+      {"name": "opcua/TimerAI1", "type": "int", "address": "ns=2;s=opcua/TimerAI1"},
+      {"name": "opcua/SwitchCount", "type": "int", "address": "ns=2;s=opcua/SwitchCount"},
+      {"name": "opcua/Crossing70", "type": "int", "address": "ns=2;s=opcua/Crossing70"}
+    ],
+    "hmi": {
+      "views": [
+        {
+          "name": "OPC UA Test Bench",
+          "width": 1024,
+          "height": 768,
+          "widgets": [
+            {"type": "switch", "tag": "opcua/DO1", "label": "DO1"},
+            {"type": "switch", "tag": "opcua/DO2", "label": "DO2"},
+            {"type": "switch", "tag": "opcua/DO3", "label": "DO3"},
+            {"type": "switch", "tag": "opcua/DO4", "label": "DO4"},
+            {"type": "led", "tag": "opcua/DI1", "label": "DI1"},
+            {"type": "led", "tag": "opcua/DI2", "label": "DI2"},
+            {"type": "led", "tag": "opcua/DI3", "label": "DI3"},
+            {"type": "led", "tag": "opcua/DI4", "label": "DI4"},
+            {"type": "slider", "tag": "opcua/AO1", "label": "AO1"},
+            {"type": "bar", "tag": "opcua/AI0", "label": "AI0"},
+            {"type": "text", "tag": "opcua/TimerAI1", "label": "Time above 70"},
+            {"type": "text", "tag": "opcua/Crossing70", "label": "Crossings 70"},
+            {"type": "text", "tag": "opcua/SwitchCount", "label": "Switch Count"}
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+.DS_Store
+platform/fuxa/volumes/
+platform/diagnostics/capture/
+platform/active_protocol
+__pycache__/
+*.pyc
+*-lab/fuxa/appdata/
+*-lab/fuxa/db/
+*-lab/fuxa/logs/
+*-lab/fuxa/images/

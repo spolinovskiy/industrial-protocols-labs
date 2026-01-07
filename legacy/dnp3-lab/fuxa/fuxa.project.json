@@ -1,0 +1,53 @@
+{
+  "project": {
+    "name": "DNP3 Protocol Lab",
+    "description": "Prebuilt HMI blueprint for DNP3 lab (import into FUXA).",
+    "connections": [
+      {
+        "name": "dnp3",
+        "type": "DNP3",
+        "address": "dnp3-server",
+        "port": 20000
+      }
+    ],
+    "tags": [
+      {"name": "dnp3/DO1", "type": "bool", "address": "binaryOutput:0"},
+      {"name": "dnp3/DO2", "type": "bool", "address": "binaryOutput:1"},
+      {"name": "dnp3/DO3", "type": "bool", "address": "binaryOutput:2"},
+      {"name": "dnp3/DO4", "type": "bool", "address": "binaryOutput:3"},
+      {"name": "dnp3/DI1", "type": "bool", "address": "binaryInput:0"},
+      {"name": "dnp3/DI2", "type": "bool", "address": "binaryInput:1"},
+      {"name": "dnp3/DI3", "type": "bool", "address": "binaryInput:2"},
+      {"name": "dnp3/DI4", "type": "bool", "address": "binaryInput:3"},
+      {"name": "dnp3/AO1", "type": "float", "address": "analogOutput:0"},
+      {"name": "dnp3/AI0", "type": "float", "address": "analogInput:0"},
+      {"name": "dnp3/TimerAI1", "type": "int", "address": "analogInput:1"},
+      {"name": "dnp3/SwitchCount", "type": "int", "address": "analogInput:2"},
+      {"name": "dnp3/Crossing70", "type": "int", "address": "analogInput:3"}
+    ],
+    "hmi": {
+      "views": [
+        {
+          "name": "DNP3 Test Bench",
+          "width": 1024,
+          "height": 768,
+          "widgets": [
+            {"type": "switch", "tag": "dnp3/DO1", "label": "DO1"},
+            {"type": "switch", "tag": "dnp3/DO2", "label": "DO2"},
+            {"type": "switch", "tag": "dnp3/DO3", "label": "DO3"},
+            {"type": "switch", "tag": "dnp3/DO4", "label": "DO4"},
+            {"type": "led", "tag": "dnp3/DI1", "label": "DI1"},
+            {"type": "led", "tag": "dnp3/DI2", "label": "DI2"},
+            {"type": "led", "tag": "dnp3/DI3", "label": "DI3"},
+            {"type": "led", "tag": "dnp3/DI4", "label": "DI4"},
+            {"type": "slider", "tag": "dnp3/AO1", "label": "AO1"},
+            {"type": "bar", "tag": "dnp3/AI0", "label": "AI0"},
+            {"type": "text", "tag": "dnp3/TimerAI1", "label": "Time above 70"},
+            {"type": "text", "tag": "dnp3/Crossing70", "label": "Crossings 70"},
+            {"type": "text", "tag": "dnp3/SwitchCount", "label": "Switch Count"}
+          ]
+        }
+      ]
+    }
+  }
+}

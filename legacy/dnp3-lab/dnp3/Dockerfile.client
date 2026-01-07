@@ -1,0 +1,16 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+COPY dnp3_client.py /app/dnp3_client.py
+
+RUN set -eux; \
+    apt-get update; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        build-essential \
+        cmake \
+    ; \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir pydnp3
+
+CMD ["python", "/app/dnp3_client.py"]

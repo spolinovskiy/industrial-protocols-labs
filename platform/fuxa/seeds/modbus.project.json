@@ -1,0 +1,218 @@
+{
+  "project": {
+    "name": "Unified ICS Lab - MODBUS",
+    "description": "Seed HMI blueprint for modbus lab (import into FUXA).",
+    "connections": [
+      {
+        "name": "modbus",
+        "type": "ModbusTCP",
+        "address": "proto-server-modbus",
+        "port": 502,
+        "slave_id": 1
+      }
+    ],
+    "tags": [
+      {
+        "name": "DO_01",
+        "type": "bool",
+        "address": "1"
+      },
+      {
+        "name": "DO_02",
+        "type": "bool",
+        "address": "2"
+      },
+      {
+        "name": "DO_03",
+        "type": "bool",
+        "address": "3"
+      },
+      {
+        "name": "DO_04",
+        "type": "bool",
+        "address": "4"
+      },
+      {
+        "name": "DO_05",
+        "type": "bool",
+        "address": "5"
+      },
+      {
+        "name": "DO_06",
+        "type": "bool",
+        "address": "6"
+      },
+      {
+        "name": "DO_07",
+        "type": "bool",
+        "address": "7"
+      },
+      {
+        "name": "DO_08",
+        "type": "bool",
+        "address": "8"
+      },
+      {
+        "name": "DI_01",
+        "type": "bool",
+        "address": "100001"
+      },
+      {
+        "name": "DI_02",
+        "type": "bool",
+        "address": "100002"
+      },
+      {
+        "name": "DI_03",
+        "type": "bool",
+        "address": "100003"
+      },
+      {
+        "name": "DI_04",
+        "type": "bool",
+        "address": "100004"
+      },
+      {
+        "name": "DI_05",
+        "type": "bool",
+        "address": "100005"
+      },
+      {
+        "name": "DI_06",
+        "type": "bool",
+        "address": "100006"
+      },
+      {
+        "name": "DI_07",
+        "type": "bool",
+        "address": "100007"
+      },
+      {
+        "name": "DI_08",
+        "type": "bool",
+        "address": "100008"
+      },
+      {
+        "name": "AO_01",
+        "type": "int",
+        "address": "400001"
+      },
+      {
+        "name": "AO_02",
+        "type": "int",
+        "address": "400002"
+      },
+      {
+        "name": "AO_03",
+        "type": "int",
+        "address": "400003"
+      },
+      {
+        "name": "AO_04",
+        "type": "int",
+        "address": "400004"
+      },
+      {
+        "name": "AI_01",
+        "type": "int",
+        "address": "300001"
+      },
+      {
+        "name": "AI_02",
+        "type": "int",
+        "address": "300002"
+      },
+      {
+        "name": "AI_03",
+        "type": "int",
+        "address": "300003"
+      },
+      {
+        "name": "AI_04",
+        "type": "int",
+        "address": "300004"
+      },
+      {
+        "name": "TMR_01",
+        "type": "int",
+        "address": "300005"
+      },
+      {
+        "name": "CNT_01",
+        "type": "int",
+        "address": "300006"
+      }
+    ],
+    "hmi": {
+      "views": [
+        {
+          "name": "MODBUS Test Bench",
+          "width": 1024,
+          "height": 768,
+          "widgets": [
+            {
+              "type": "switch",
+              "tag": "DO_01",
+              "label": "DO_01"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_02",
+              "label": "DO_02"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_03",
+              "label": "DO_03"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_04",
+              "label": "DO_04"
+            },
+            {
+              "type": "led",
+              "tag": "DI_01",
+              "label": "DI_01"
+            },
+            {
+              "type": "led",
+              "tag": "DI_02",
+              "label": "DI_02"
+            },
+            {
+              "type": "led",
+              "tag": "DI_03",
+              "label": "DI_03"
+            },
+            {
+              "type": "led",
+              "tag": "DI_04",
+              "label": "DI_04"
+            },
+            {
+              "type": "slider",
+              "tag": "AO_01",
+              "label": "AO_01"
+            },
+            {
+              "type": "bar",
+              "tag": "AI_01",
+              "label": "AI_01"
+            },
+            {
+              "type": "text",
+              "tag": "TMR_01",
+              "label": "Time above 70"
+            },
+            {
+              "type": "text",
+              "tag": "CNT_01",
+              "label": "Crossings 70"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

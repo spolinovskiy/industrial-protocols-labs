@@ -1,0 +1,143 @@
+version: "3.9"
+
+services:
+  # OPC UA server (demo tags: DO/DI/AI/AO + counters)
+  opcua-server:
+    build:
+      context: ./opcua
+      dockerfile: Dockerfile.server
+    container_name: opcua-server
+    ports:
+      - "14840:4840"  # Host port 14840 -> OPC UA default 4840
+      - "8082:8082"   # Diagnostics TTYD (shared network namespace)
+    networks:
+      - opcua_net
+    restart: always  # Keep server running for lab continuity
+    labels:
+      - "com.example.lab=opcua"
+      - "com.example.role=server"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+
+  # OPC UA client (simple read/write loop for testing)
+  opcua-client:
+    build:
+      context: ./opcua
+      dockerfile: Dockerfile.client
+    container_name: opcua-client
+    depends_on:
+      - opcua-server
+    networks:
+      - opcua_net
+    restart: always
+    labels:
+      - "com.example.lab=opcua"
+      - "com.example.role=client"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+
+  # FUXA SCADA (internal, proxied via Nginx with basic auth)
+  fuxa:
+    image: frangoteam/fuxa:latest
+    container_name: opcua-fuxa
+    networks:
+      - opcua_net
+    volumes:
+      - "./fuxa/appdata:/usr/src/app/FUXA/server/_appdata"  # Persist FUXA project
+      - "./fuxa/db:/usr/src/app/FUXA/server/_db"            # Internal DB storage
+      - "./fuxa/logs:/usr/src/app/FUXA/server/_logs"        # Logs for troubleshooting
+      - "./fuxa/images:/usr/src/app/FUXA/server/_images"    # HMI assets
+    environment:
+      - PORT=1881
+    restart: always
+    labels:
+      - "com.example.lab=opcua"
+      - "com.example.role=scada"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+
+  # Nginx proxy with HTTP Basic Auth for SCADA access
+  fuxa-proxy:
+    image: nginx:alpine
+    container_name: opcua-fuxa-proxy
+    depends_on:
+      - fuxa
+    networks:
+      - opcua_net
+    ports:
+      - "1882:1882"  # Auth-protected SCADA entrypoint
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"  # Proxy config
+      - "./auth/.htpasswd:/etc/nginx/auth/.htpasswd:ro" # Basic auth credentials
+    restart: always
+    labels:
+      - "com.example.lab=opcua"
+      - "com.example.role=proxy"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+
+  # Diagnostics (termshark via ttyd web terminal)
+  diagnostics:
+    build:
+      context: ./diagnostics
+    container_name: opcua-diagnostics
+    network_mode: "service:opcua-server"  # Share server network to sniff protocol traffic
+    environment:
+      - TTYD_USER=student
+      - TTYD_PASS=lab123
+      - TTYD_PORT=8082
+    command: ["/bin/sh", "-c", "/usr/local/bin/ttyd -p $${TTYD_PORT} -c $${TTYD_USER}:$${TTYD_PASS} bash"]
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    restart: always
+    labels:
+      - "com.example.lab=opcua"
+      - "com.example.role=diagnostics"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+
+  # Optional reset loop (restart lab services hourly). Enable with --profile reset
+  lab-reset:
+    image: docker:24-cli
+    container_name: opcua-reset
+    profiles: ["reset"]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./:/lab
+    working_dir: /lab
+    command: ["/bin/sh", "-c", "./reset/reset.sh"]
+    restart: always
+    labels:
+      - "com.example.lab=opcua"
+      - "com.example.role=reset"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 64M
+
+networks:
+  # Shared network for OPC UA lab (isolated from other labs)
+  opcua_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.10.0/24
+    labels:
+      - "k8s.network=internal"

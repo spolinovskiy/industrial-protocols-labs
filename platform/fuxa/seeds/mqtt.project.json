@@ -1,0 +1,217 @@
+{
+  "project": {
+    "name": "Unified ICS Lab - MQTT",
+    "description": "Seed HMI blueprint for mqtt lab (import into FUXA).",
+    "connections": [
+      {
+        "name": "mqtt",
+        "type": "MQTT",
+        "address": "proto-server-mqtt",
+        "port": 1883
+      }
+    ],
+    "tags": [
+      {
+        "name": "DO_01",
+        "type": "bool",
+        "address": "lab/cmd/DO_01"
+      },
+      {
+        "name": "DO_02",
+        "type": "bool",
+        "address": "lab/cmd/DO_02"
+      },
+      {
+        "name": "DO_03",
+        "type": "bool",
+        "address": "lab/cmd/DO_03"
+      },
+      {
+        "name": "DO_04",
+        "type": "bool",
+        "address": "lab/cmd/DO_04"
+      },
+      {
+        "name": "DO_05",
+        "type": "bool",
+        "address": "lab/cmd/DO_05"
+      },
+      {
+        "name": "DO_06",
+        "type": "bool",
+        "address": "lab/cmd/DO_06"
+      },
+      {
+        "name": "DO_07",
+        "type": "bool",
+        "address": "lab/cmd/DO_07"
+      },
+      {
+        "name": "DO_08",
+        "type": "bool",
+        "address": "lab/cmd/DO_08"
+      },
+      {
+        "name": "DI_01",
+        "type": "bool",
+        "address": "lab/state/DI_01"
+      },
+      {
+        "name": "DI_02",
+        "type": "bool",
+        "address": "lab/state/DI_02"
+      },
+      {
+        "name": "DI_03",
+        "type": "bool",
+        "address": "lab/state/DI_03"
+      },
+      {
+        "name": "DI_04",
+        "type": "bool",
+        "address": "lab/state/DI_04"
+      },
+      {
+        "name": "DI_05",
+        "type": "bool",
+        "address": "lab/state/DI_05"
+      },
+      {
+        "name": "DI_06",
+        "type": "bool",
+        "address": "lab/state/DI_06"
+      },
+      {
+        "name": "DI_07",
+        "type": "bool",
+        "address": "lab/state/DI_07"
+      },
+      {
+        "name": "DI_08",
+        "type": "bool",
+        "address": "lab/state/DI_08"
+      },
+      {
+        "name": "AO_01",
+        "type": "int",
+        "address": "lab/cmd/AO_01"
+      },
+      {
+        "name": "AO_02",
+        "type": "int",
+        "address": "lab/cmd/AO_02"
+      },
+      {
+        "name": "AO_03",
+        "type": "int",
+        "address": "lab/cmd/AO_03"
+      },
+      {
+        "name": "AO_04",
+        "type": "int",
+        "address": "lab/cmd/AO_04"
+      },
+      {
+        "name": "AI_01",
+        "type": "int",
+        "address": "lab/state/AI_01"
+      },
+      {
+        "name": "AI_02",
+        "type": "int",
+        "address": "lab/state/AI_02"
+      },
+      {
+        "name": "AI_03",
+        "type": "int",
+        "address": "lab/state/AI_03"
+      },
+      {
+        "name": "AI_04",
+        "type": "int",
+        "address": "lab/state/AI_04"
+      },
+      {
+        "name": "TMR_01",
+        "type": "int",
+        "address": "lab/state/TMR_01"
+      },
+      {
+        "name": "CNT_01",
+        "type": "int",
+        "address": "lab/state/CNT_01"
+      }
+    ],
+    "hmi": {
+      "views": [
+        {
+          "name": "MQTT Test Bench",
+          "width": 1024,
+          "height": 768,
+          "widgets": [
+            {
+              "type": "switch",
+              "tag": "DO_01",
+              "label": "DO_01"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_02",
+              "label": "DO_02"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_03",
+              "label": "DO_03"
+            },
+            {
+              "type": "switch",
+              "tag": "DO_04",
+              "label": "DO_04"
+            },
+            {
+              "type": "led",
+              "tag": "DI_01",
+              "label": "DI_01"
+            },
+            {
+              "type": "led",
+              "tag": "DI_02",
+              "label": "DI_02"
+            },
+            {
+              "type": "led",
+              "tag": "DI_03",
+              "label": "DI_03"
+            },
+            {
+              "type": "led",
+              "tag": "DI_04",
+              "label": "DI_04"
+            },
+            {
+              "type": "slider",
+              "tag": "AO_01",
+              "label": "AO_01"
+            },
+            {
+              "type": "bar",
+              "tag": "AI_01",
+              "label": "AI_01"
+            },
+            {
+              "type": "text",
+              "tag": "TMR_01",
+              "label": "Time above 70"
+            },
+            {
+              "type": "text",
+              "tag": "CNT_01",
+              "label": "Crossings 70"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

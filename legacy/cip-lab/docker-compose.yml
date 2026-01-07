@@ -1,0 +1,143 @@
+version: "3.9"
+
+services:
+  # EtherNet/IP server (cpppo demo tags)
+  cip-server:
+    build:
+      context: ./cip
+      dockerfile: Dockerfile.server
+    container_name: cip-server
+    ports:
+      - "44819:44818"  # Host 44819 -> EtherNet/IP 44818
+      - "8084:8084"    # Diagnostics TTYD (shared network namespace)
+    networks:
+      - cip_net
+    restart: always
+    labels:
+      - "com.example.lab=cip"
+      - "com.example.role=server"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+
+  # EtherNet/IP client (pycomm3 demo)
+  cip-client:
+    build:
+      context: ./cip
+      dockerfile: Dockerfile.client
+    container_name: cip-client
+    depends_on:
+      - cip-server
+    networks:
+      - cip_net
+    restart: always
+    labels:
+      - "com.example.lab=cip"
+      - "com.example.role=client"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+
+  # FUXA SCADA (internal, proxied via Nginx with basic auth)
+  fuxa:
+    image: frangoteam/fuxa:latest
+    container_name: cip-fuxa
+    networks:
+      - cip_net
+    volumes:
+      - "./fuxa/appdata:/usr/src/app/FUXA/server/_appdata"
+      - "./fuxa/db:/usr/src/app/FUXA/server/_db"
+      - "./fuxa/logs:/usr/src/app/FUXA/server/_logs"
+      - "./fuxa/images:/usr/src/app/FUXA/server/_images"
+    environment:
+      - PORT=1881
+    restart: always
+    labels:
+      - "com.example.lab=cip"
+      - "com.example.role=scada"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+
+  # Nginx proxy with HTTP Basic Auth for SCADA access
+  fuxa-proxy:
+    image: nginx:alpine
+    container_name: cip-fuxa-proxy
+    depends_on:
+      - fuxa
+    networks:
+      - cip_net
+    ports:
+      - "1884:1884"
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "./auth/.htpasswd:/etc/nginx/auth/.htpasswd:ro"
+    restart: always
+    labels:
+      - "com.example.lab=cip"
+      - "com.example.role=proxy"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+
+  # Diagnostics (termshark via ttyd web terminal)
+  diagnostics:
+    build:
+      context: ./diagnostics
+    container_name: cip-diagnostics
+    network_mode: "service:cip-server"  # Share server network to sniff protocol traffic
+    environment:
+      - TTYD_USER=student
+      - TTYD_PASS=lab123
+      - TTYD_PORT=8084
+    command: ["/bin/sh", "-c", "/usr/local/bin/ttyd -p $${TTYD_PORT} -c $${TTYD_USER}:$${TTYD_PASS} bash"]
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    restart: always
+    labels:
+      - "com.example.lab=cip"
+      - "com.example.role=diagnostics"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+
+  # Optional reset loop (restart lab services hourly). Enable with --profile reset
+  lab-reset:
+    image: docker:24-cli
+    container_name: cip-reset
+    profiles: ["reset"]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./:/lab
+    working_dir: /lab
+    command: ["/bin/sh", "-c", "./reset/reset.sh"]
+    restart: always
+    labels:
+      - "com.example.lab=cip"
+      - "com.example.role=reset"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 64M
+
+networks:
+  # Shared network for CIP lab (isolated from others)
+  cip_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.30.0/24
+    labels:
+      - "k8s.network=internal"

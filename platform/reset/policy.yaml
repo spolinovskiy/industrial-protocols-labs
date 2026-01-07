@@ -1,0 +1,4 @@
+ttl_seconds: 3600
+idle_seconds: 900
+capture_retention_days: 3
+capture_max_files: 20

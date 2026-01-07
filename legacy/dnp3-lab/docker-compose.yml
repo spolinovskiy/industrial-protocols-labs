@@ -1,0 +1,143 @@
+version: "3.9"
+
+services:
+  # DNP3 outstation (server)
+  dnp3-server:
+    build:
+      context: ./dnp3
+      dockerfile: Dockerfile.server
+    container_name: dnp3-server
+    ports:
+      - "20001:20000"  # Host 20001 -> DNP3 20000
+      - "8085:8085"    # Diagnostics TTYD (shared network namespace)
+    networks:
+      - dnp3_net
+    restart: always
+    labels:
+      - "com.example.lab=dnp3"
+      - "com.example.role=server"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+
+  # DNP3 master (client)
+  dnp3-client:
+    build:
+      context: ./dnp3
+      dockerfile: Dockerfile.client
+    container_name: dnp3-client
+    depends_on:
+      - dnp3-server
+    networks:
+      - dnp3_net
+    restart: always
+    labels:
+      - "com.example.lab=dnp3"
+      - "com.example.role=client"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+
+  # FUXA SCADA (internal, proxied via Nginx with basic auth)
+  fuxa:
+    image: frangoteam/fuxa:latest
+    container_name: dnp3-fuxa
+    networks:
+      - dnp3_net
+    volumes:
+      - "./fuxa/appdata:/usr/src/app/FUXA/server/_appdata"
+      - "./fuxa/db:/usr/src/app/FUXA/server/_db"
+      - "./fuxa/logs:/usr/src/app/FUXA/server/_logs"
+      - "./fuxa/images:/usr/src/app/FUXA/server/_images"
+    environment:
+      - PORT=1881
+    restart: always
+    labels:
+      - "com.example.lab=dnp3"
+      - "com.example.role=scada"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+
+  # Nginx proxy with HTTP Basic Auth for SCADA access
+  fuxa-proxy:
+    image: nginx:alpine
+    container_name: dnp3-fuxa-proxy
+    depends_on:
+      - fuxa
+    networks:
+      - dnp3_net
+    ports:
+      - "1885:1885"
+    volumes:
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "./auth/.htpasswd:/etc/nginx/auth/.htpasswd:ro"
+    restart: always
+    labels:
+      - "com.example.lab=dnp3"
+      - "com.example.role=proxy"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+
+  # Diagnostics (termshark via ttyd web terminal)
+  diagnostics:
+    build:
+      context: ./diagnostics
+    container_name: dnp3-diagnostics
+    network_mode: "service:dnp3-server"  # Share server network to sniff protocol traffic
+    environment:
+      - TTYD_USER=student
+      - TTYD_PASS=lab123
+      - TTYD_PORT=8085
+    command: ["/bin/sh", "-c", "/usr/local/bin/ttyd -p $${TTYD_PORT} -c $${TTYD_USER}:$${TTYD_PASS} bash"]
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    restart: always
+    labels:
+      - "com.example.lab=dnp3"
+      - "com.example.role=diagnostics"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+
+  # Optional reset loop (restart lab services hourly). Enable with --profile reset
+  lab-reset:
+    image: docker:24-cli
+    container_name: dnp3-reset
+    profiles: ["reset"]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./:/lab
+    working_dir: /lab
+    command: ["/bin/sh", "-c", "./reset/reset.sh"]
+    restart: always
+    labels:
+      - "com.example.lab=dnp3"
+      - "com.example.role=reset"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 64M
+
+networks:
+  # Shared network for DNP3 lab (isolated from others)
+  dnp3_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.40.0/24
+    labels:
+      - "k8s.network=internal"

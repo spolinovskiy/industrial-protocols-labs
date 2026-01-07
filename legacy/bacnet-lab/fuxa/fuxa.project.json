@@ -1,0 +1,54 @@
+{
+  "project": {
+    "name": "BACnet Protocol Lab",
+    "description": "Prebuilt HMI blueprint for BACnet lab (import into FUXA).",
+    "connections": [
+      {
+        "name": "bacnet",
+        "type": "BACnetIP",
+        "address": "bacnet-server",
+        "port": 47808,
+        "device_id": 1234
+      }
+    ],
+    "tags": [
+      {"name": "bacnet/DO1", "type": "bool", "address": "binaryOutput:1"},
+      {"name": "bacnet/DO2", "type": "bool", "address": "binaryOutput:2"},
+      {"name": "bacnet/DO3", "type": "bool", "address": "binaryOutput:3"},
+      {"name": "bacnet/DO4", "type": "bool", "address": "binaryOutput:4"},
+      {"name": "bacnet/DI1", "type": "bool", "address": "binaryInput:1"},
+      {"name": "bacnet/DI2", "type": "bool", "address": "binaryInput:2"},
+      {"name": "bacnet/DI3", "type": "bool", "address": "binaryInput:3"},
+      {"name": "bacnet/DI4", "type": "bool", "address": "binaryInput:4"},
+      {"name": "bacnet/AO1", "type": "float", "address": "analogOutput:1"},
+      {"name": "bacnet/AI0", "type": "float", "address": "analogInput:1"},
+      {"name": "bacnet/TimerAI1", "type": "int", "address": "analogValue:1"},
+      {"name": "bacnet/SwitchCount", "type": "int", "address": "analogValue:2"},
+      {"name": "bacnet/Crossing70", "type": "int", "address": "analogValue:3"}
+    ],
+    "hmi": {
+      "views": [
+        {
+          "name": "BACnet Test Bench",
+          "width": 1024,
+          "height": 768,
+          "widgets": [
+            {"type": "switch", "tag": "bacnet/DO1", "label": "DO1"},
+            {"type": "switch", "tag": "bacnet/DO2", "label": "DO2"},
+            {"type": "switch", "tag": "bacnet/DO3", "label": "DO3"},
+            {"type": "switch", "tag": "bacnet/DO4", "label": "DO4"},
+            {"type": "led", "tag": "bacnet/DI1", "label": "DI1"},
+            {"type": "led", "tag": "bacnet/DI2", "label": "DI2"},
+            {"type": "led", "tag": "bacnet/DI3", "label": "DI3"},
+            {"type": "led", "tag": "bacnet/DI4", "label": "DI4"},
+            {"type": "slider", "tag": "bacnet/AO1", "label": "AO1"},
+            {"type": "bar", "tag": "bacnet/AI0", "label": "AI0"},
+            {"type": "text", "tag": "bacnet/TimerAI1", "label": "Time above 70"},
+            {"type": "text", "tag": "bacnet/Crossing70", "label": "Crossings 70"},
+            {"type": "text", "tag": "bacnet/SwitchCount", "label": "Switch Count"}
+          ]
+        }
+      ]
+    }
+  }
+}
