@@ -1,4 +1,6 @@
 import asyncio
+import os
+import socket
 
 from bacpypes3.app import Application
 from bacpypes3.basetypes import NetworkType, ProtocolLevel
@@ -29,7 +31,13 @@ async def main() -> None:
     )
     network_port.networkType = NetworkType.ipv4
     network_port.protocolLevel = ProtocolLevel.bacnetApplication
-    network_port.address = IPv4Address("0.0.0.0/24:47808")
+    ip_addr = os.environ.get("BACNET_IP")
+    if not ip_addr:
+        try:
+            ip_addr = socket.gethostbyname(socket.gethostname())
+        except socket.gaierror:
+            ip_addr = "0.0.0.0"
+    network_port.address = IPv4Address(f\"{ip_addr}/24:47808\")
     network_port.networkNumber = 1
     network_port.networkNumberQuality = "configured"
 
