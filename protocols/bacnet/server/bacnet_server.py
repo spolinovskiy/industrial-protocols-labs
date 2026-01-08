@@ -26,23 +26,23 @@ async def main() -> None:
     app = bacnet.this_application.app
 
     do_objs = [
-        BinaryOutputObject(objectIdentifier=("binary-output", i), objectName=f"DO_0{i}", presentValue=False)
+        BinaryOutputObject(objectIdentifier=("binaryOutput", i), objectName=f"DO_0{i}", presentValue=False)
         for i in range(1, 9)
     ]
     di_objs = [
-        BinaryInputObject(objectIdentifier=("binary-input", i), objectName=f"DI_0{i}", presentValue=False)
+        BinaryInputObject(objectIdentifier=("binaryInput", i), objectName=f"DI_0{i}", presentValue=False)
         for i in range(1, 9)
     ]
     ao_objs = [
-        AnalogOutputObject(objectIdentifier=("analog-output", i), objectName=f"AO_0{i}", presentValue=0.0)
+        AnalogOutputObject(objectIdentifier=("analogOutput", i), objectName=f"AO_0{i}", presentValue=0.0)
         for i in range(1, 5)
     ]
     ai_objs = [
-        AnalogInputObject(objectIdentifier=("analog-input", i), objectName=f"AI_0{i}", presentValue=0.0)
+        AnalogInputObject(objectIdentifier=("analogInput", i), objectName=f"AI_0{i}", presentValue=0.0)
         for i in range(1, 5)
     ]
-    tmr_obj = AnalogValueObject(objectIdentifier=("analog-value", 1), objectName="TMR_01", presentValue=0)
-    cnt_obj = AnalogValueObject(objectIdentifier=("analog-value", 2), objectName="CNT_01", presentValue=0)
+    tmr_obj = AnalogValueObject(objectIdentifier=("analogValue", 1), objectName="TMR_01", presentValue=0)
+    cnt_obj = AnalogValueObject(objectIdentifier=("analogValue", 2), objectName="CNT_01", presentValue=0)
 
     for obj in do_objs + di_objs + ao_objs + ai_objs + [tmr_obj, cnt_obj]:
         app.add_object(obj)
