@@ -5,6 +5,7 @@ TTYD_PORT=${TTYD_PORT:-7681}
 TTYD_USER=${TTYD_USER:-}
 TTYD_PASS=${TTYD_PASS:-}
 DIAG_ALLOW_SHELL=${DIAG_ALLOW_SHELL:-0}
+DIAG_AUTH=${DIAG_AUTH:-0}
 
 if [ "$DIAG_ALLOW_SHELL" = "1" ]; then
   CMD="/bin/bash"
@@ -12,7 +13,7 @@ else
   CMD="/bin/bash -lc /work/menu.sh"
 fi
 
-if [ -n "${TTYD_USER}" ] && [ -n "${TTYD_PASS}" ]; then
+if [ "$DIAG_AUTH" = "1" ] && [ -n "${TTYD_USER}" ] && [ -n "${TTYD_PASS}" ]; then
   echo "Starting ttyd on ${TTYD_PORT} with auth user ${TTYD_USER}" >&2
   exec /usr/local/bin/ttyd -W -p "${TTYD_PORT}" -c "${TTYD_USER}:${TTYD_PASS}" ${CMD}
 fi

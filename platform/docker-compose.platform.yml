@@ -45,6 +45,7 @@ services:
       - TTYD_PORT=7681
       - TTYD_USER=admin
       - TTYD_PASS=lab123
+      - DIAG_AUTH=0
       - DIAG_ALLOW_SHELL=0
       - CAP_DURATION=10
       - CAP_MAX_FILES=20
