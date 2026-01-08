@@ -36,8 +36,9 @@ WORKDIR /work
 
 COPY entrypoint.sh /entrypoint.sh
 COPY menu.sh /work/menu.sh
+COPY start.sh /work/start.sh
 COPY capture/ /work/capture/
 
-RUN chmod +x /entrypoint.sh /work/menu.sh /work/capture/*.sh
+RUN chmod +x /entrypoint.sh /work/menu.sh /work/start.sh /work/capture/*.sh
 
 ENTRYPOINT ["/entrypoint.sh"]

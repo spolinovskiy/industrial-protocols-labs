@@ -6,7 +6,7 @@ TTYD_USER=${TTYD_USER:-}
 TTYD_PASS=${TTYD_PASS:-}
 DIAG_ALLOW_SHELL=${DIAG_ALLOW_SHELL:-0}
 
-MENU_CMD=(/bin/bash -lc /work/menu.sh)
+MENU_CMD=(/work/start.sh)
 if [[ "$DIAG_ALLOW_SHELL" == "1" ]]; then
   MENU_CMD=(/bin/bash)
 fi
