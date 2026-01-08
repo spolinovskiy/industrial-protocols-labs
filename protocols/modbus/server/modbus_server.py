@@ -24,11 +24,6 @@ def main() -> None:
     last_tick = time.monotonic()
     while True:
         now = time.monotonic()
-        if now - last_tick < 1.0:
-            time.sleep(0.05)
-            continue
-        last_tick = now
-
         holding = server.data_bank.get_holding_registers(0, 4) or [0] * 4
         ao1 = int(holding[0])
 
@@ -39,28 +34,32 @@ def main() -> None:
             thresh_count = 0
             timer = 0
             prev_ao1 = ao1
+            last_tick = now
             # Clear DO_01..DO_05 so reset is a momentary pulse.
             new_coils = list(coils)
             for idx in range(5):
                 new_coils[idx] = False
             server.data_bank.set_coils(0, new_coils)
             coils = new_coils
-            prev_coils = list(coils)
         else:
             # Count DO rising edges (first 4 switches)
             for idx in range(4):
                 if not prev_coils[idx] and coils[idx]:
                     switch_count = min(switch_count + 1, 65535)
-            prev_coils = list(coils)
 
             # Threshold crossing counter (AO_01 low->high)
             if prev_ao1 <= THRESHOLD < ao1:
                 thresh_count = min(thresh_count + 1, 65535)
-            prev_ao1 = ao1
 
-            # Timer counts only while AO_01 > threshold
-            if ao1 > THRESHOLD:
-                timer = min(timer + 1, 65535)
+            # Timer counts in real seconds while AO_01 > threshold
+            if now - last_tick >= 1.0:
+                ticks = int(now - last_tick)
+                last_tick += ticks
+                if ao1 > THRESHOLD:
+                    timer = min(timer + ticks, 65535)
+
+        prev_coils = list(coils)
+        prev_ao1 = ao1
 
         # Mirror DO -> DI (first 8 points)
         server.data_bank.set_discrete_inputs(0, coils)
@@ -81,7 +80,7 @@ def main() -> None:
         inputs[5] = thresh_count
 
         server.data_bank.set_input_registers(0, inputs)
-        time.sleep(0.01)
+        time.sleep(0.05)
 
 
 if __name__ == "__main__":
