@@ -129,7 +129,10 @@ services:
     ports:
       - "502:502"
     networks:
-      - modbus_net
+      modbus_net:
+        aliases:
+          - modbus-server
+          - modbus
     restart: always
     labels:
       - "com.example.role=proto-server"
