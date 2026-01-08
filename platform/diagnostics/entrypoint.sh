@@ -14,8 +14,8 @@ fi
 
 if [ -n "${TTYD_USER}" ] && [ -n "${TTYD_PASS}" ]; then
   echo "Starting ttyd on ${TTYD_PORT} with auth user ${TTYD_USER}" >&2
-  exec /usr/local/bin/ttyd -w -p "${TTYD_PORT}" -c "${TTYD_USER}:${TTYD_PASS}" ${CMD}
+  exec /usr/local/bin/ttyd -W -p "${TTYD_PORT}" -c "${TTYD_USER}:${TTYD_PASS}" ${CMD}
 fi
 
 echo "Starting ttyd on ${TTYD_PORT} without auth" >&2
-exec /usr/local/bin/ttyd -w -p "${TTYD_PORT}" ${CMD}
+exec /usr/local/bin/ttyd -W -p "${TTYD_PORT}" ${CMD}
