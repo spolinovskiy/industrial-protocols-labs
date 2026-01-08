@@ -47,6 +47,8 @@ async def main() -> None:
     for obj in do_objs + di_objs + ao_objs + ai_objs + [tmr_obj, cnt_obj]:
         app.add_object(obj)
 
+    print("BACnet objects:", ", ".join(str(oid) for oid in app.objectIdentifier.keys()))
+
     print("BACnet/IP server running on UDP/47808")
 
     prev_ao1 = float(ao_objs[0].presentValue)
