@@ -37,7 +37,7 @@ async def main() -> None:
             ip_addr = socket.gethostbyname(socket.gethostname())
         except socket.gaierror:
             ip_addr = "0.0.0.0"
-    network_port.address = IPv4Address(f\"{ip_addr}/24:47808\")
+    network_port.address = IPv4Address(f"{ip_addr}/24:47808")
     network_port.networkNumber = 1
     network_port.networkNumberQuality = "configured"
 
