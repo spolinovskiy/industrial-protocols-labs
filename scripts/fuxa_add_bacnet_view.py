@@ -7,6 +7,8 @@ import uuid
 
 DEFAULT_DB = "/home/master/industrial-protocols-labs/platform/fuxa/volumes/appdata/project.fuxap.db"
 BACNET_DEVICE_ID = 1234
+DEFAULT_BACNET_ADDR = "172.31.30.2:47808"
+DEFAULT_BACNET_BROADCAST = "proto-server-bacnet"
 
 
 def make_tag(tag_id, name, tag_type, address, memaddress, description):
@@ -36,6 +38,7 @@ def main() -> None:
     devices_rows = cur.fetchall()
 
     modbus_device = None
+    bacnet_device_existing = None
     fuxa_server_row = None
     tag_by_id = {}
     for name, value in devices_rows:
@@ -45,6 +48,8 @@ def main() -> None:
             continue
         if obj.get("name") == "modbus":
             modbus_device = obj
+        if obj.get("name") == "bacnet":
+            bacnet_device_existing = (name, obj)
         if obj.get("type") == "FuxaServer" and obj.get("tags"):
             fuxa_server_row = (name, obj)
         for tag in obj.get("tags", {}).values():
@@ -53,7 +58,11 @@ def main() -> None:
     if not modbus_device:
         raise SystemExit("modbus device not found in FUXA DB")
 
-    bacnet_id = f"d_{uuid.uuid4().hex}"
+    if bacnet_device_existing:
+        bacnet_row_name, bacnet_existing_obj = bacnet_device_existing
+        bacnet_id = bacnet_existing_obj.get("id", bacnet_row_name)
+    else:
+        bacnet_id = f"d_{uuid.uuid4().hex}"
     bacnet_mem = str(BACNET_DEVICE_ID)
 
     bacnet_tags = {}
@@ -76,8 +85,8 @@ def main() -> None:
         "name": "bacnet",
         "enabled": True,
         "property": {
-            "address": "172.31.30.2:47808",
-            "broadcastAddress": "172.31.30.255",
+            "address": os.environ.get("BACNET_ADDR", DEFAULT_BACNET_ADDR),
+            "broadcastAddress": os.environ.get("BACNET_BROADCAST", DEFAULT_BACNET_BROADCAST),
             "adpuTimeout": 6000,
         },
         "type": "BACnet",
@@ -86,10 +95,8 @@ def main() -> None:
     }
 
     # Upsert bacnet device into devices table
-    cur.execute("select name from devices where name = ?", (bacnet_id,))
-    exists = cur.fetchone() is not None
-    if exists:
-        cur.execute("update devices set value = ? where name = ?", (json.dumps(bacnet_device), bacnet_id))
+    if bacnet_device_existing:
+        cur.execute("update devices set value = ? where name = ?", (json.dumps(bacnet_device), bacnet_row_name))
     else:
         cur.execute(
             "insert into devices (name, value, connection, cntid, cntpwd) values (?, ?, '', '', '')",
@@ -99,17 +106,24 @@ def main() -> None:
     # Add bacnet connection status tag to FUXA Server device
     if fuxa_server_row:
         fuxa_name, fuxa_obj = fuxa_server_row
-        status_tag_id = f"t_{uuid.uuid4().hex[:16]}"
-        fuxa_obj["tags"][status_tag_id] = {
-            "id": status_tag_id,
-            "name": "bacnet Connection Status",
-            "label": "bacnet Connection Status",
-            "type": "number",
-            "memaddress": bacnet_id,
-            "daq": {"enabled": False, "interval": 60, "changed": False, "restored": False},
-            "init": "",
-            "sysType": 1,
-        }
+        status_tag_id = None
+        for tag in fuxa_obj.get("tags", {}).values():
+            if tag.get("name") == "bacnet Connection Status":
+                status_tag_id = tag.get("id")
+                tag["memaddress"] = bacnet_id
+                break
+        if not status_tag_id:
+            status_tag_id = f"t_{uuid.uuid4().hex[:16]}"
+            fuxa_obj["tags"][status_tag_id] = {
+                "id": status_tag_id,
+                "name": "bacnet Connection Status",
+                "label": "bacnet Connection Status",
+                "type": "number",
+                "memaddress": bacnet_id,
+                "daq": {"enabled": False, "interval": 60, "changed": False, "restored": False},
+                "init": "",
+                "sysType": 1,
+            }
         cur.execute("update devices set value = ? where name = ?", (json.dumps(fuxa_obj), fuxa_name))
     else:
         status_tag_id = None
