@@ -48,7 +48,10 @@ while true; do
   echo "11) Advanced shell (admin only)"
   echo "0) Exit"
   echo ""
-  read -r -p "Select option: " choice
+  if ! read -r -p "Select option: " choice; then
+    sleep 0.1
+    continue
+  fi
 
   case "$choice" in
     1) run_capture /work/capture/modbus.sh ;;
