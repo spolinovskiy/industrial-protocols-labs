@@ -29,27 +29,37 @@ def main() -> None:
             continue
         last_tick = now
 
-        # Mirror DO -> DI (first 8 points)
-        coils = server.data_bank.get_coils(0, 8) or [False] * 8
-        server.data_bank.set_discrete_inputs(0, coils)
-
-        # Count DO rising edges (first 4 switches)
-        for idx in range(4):
-            if not prev_coils[idx] and coils[idx]:
-                switch_count = min(switch_count + 1, 65535)
-        prev_coils = list(coils)
-
         holding = server.data_bank.get_holding_registers(0, 4) or [0] * 4
         ao1 = int(holding[0])
 
-        # Threshold crossing counter (AO_01 low->high)
-        if prev_ao1 <= THRESHOLD < ao1:
-            thresh_count = min(thresh_count + 1, 65535)
-        prev_ao1 = ao1
+        coils = server.data_bank.get_coils(0, 8) or [False] * 8
+        reset_requested = coils[4] and not prev_coils[4]
+        if reset_requested:
+            switch_count = 0
+            thresh_count = 0
+            timer = 0
+            prev_ao1 = ao1
+            server.data_bank.set_coils(0, [False] * 4)
+            coils = server.data_bank.get_coils(0, 8) or [False] * 8
+            prev_coils = list(coils)
+        else:
+            # Count DO rising edges (first 4 switches)
+            for idx in range(4):
+                if not prev_coils[idx] and coils[idx]:
+                    switch_count = min(switch_count + 1, 65535)
+            prev_coils = list(coils)
 
-        # Timer counts only while AO_01 > threshold
-        if ao1 > THRESHOLD:
-            timer = min(timer + 1, 65535)
+            # Threshold crossing counter (AO_01 low->high)
+            if prev_ao1 <= THRESHOLD < ao1:
+                thresh_count = min(thresh_count + 1, 65535)
+            prev_ao1 = ao1
+
+            # Timer counts only while AO_01 > threshold
+            if ao1 > THRESHOLD:
+                timer = min(timer + 1, 65535)
+
+        # Mirror DO -> DI (first 8 points)
+        server.data_bank.set_discrete_inputs(0, coils)
 
         # AI_01 mirrors AO_01
         inputs = server.data_bank.get_input_registers(0, 6) or [0] * 6
