@@ -11,4 +11,4 @@ if [[ "$DIAG_ALLOW_SHELL" == "1" ]]; then
   MENU_CMD=(/bin/bash)
 fi
 
-exec /usr/local/bin/ttyd -p "${TTYD_PORT}" -c "${TTYD_USER}:${TTYD_PASS}" "${MENU_CMD[@]}"
+exec /usr/local/bin/ttyd -w -p "${TTYD_PORT}" -c "${TTYD_USER}:${TTYD_PASS}" "${MENU_CMD[@]}"
