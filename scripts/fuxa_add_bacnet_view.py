@@ -70,15 +70,15 @@ def main() -> None:
         bacnet_tags[tag_id] = make_tag(tag_id, name, tag_type, address, bacnet_mem, description)
 
     for idx in range(1, 9):
-        add_tag(f"b_do_{idx:02d}", f"DO_0{idx}", "Bool", f"binaryOutput-{idx}", f"BACnet DO {idx}")
-        add_tag(f"b_di_{idx:02d}", f"DI_0{idx}", "Bool", f"binaryInput-{idx}", f"BACnet DI {idx}")
+        add_tag(f"b_do_{idx:02d}", f"DO_0{idx}", "Bool", f"4-{idx}", f"BACnet DO {idx}")
+        add_tag(f"b_di_{idx:02d}", f"DI_0{idx}", "Bool", f"3-{idx}", f"BACnet DI {idx}")
 
     for idx in range(1, 5):
-        add_tag(f"b_ao_{idx:02d}", f"AO_0{idx}", "Float", f"analogOutput-{idx}", f"BACnet AO {idx}")
-        add_tag(f"b_ai_{idx:02d}", f"AI_0{idx}", "Float", f"analogInput-{idx}", f"BACnet AI {idx}")
+        add_tag(f"b_ao_{idx:02d}", f"AO_0{idx}", "Float", f"1-{idx}", f"BACnet AO {idx}")
+        add_tag(f"b_ai_{idx:02d}", f"AI_0{idx}", "Float", f"0-{idx}", f"BACnet AI {idx}")
 
-    add_tag("b_tmr_01", "TMR_01", "Float", "analogValue-1", "Timer above 70%")
-    add_tag("b_cnt_01", "CNT_01", "Float", "analogValue-2", "Crossings above 70%")
+    add_tag("b_tmr_01", "TMR_01", "Float", "2-1", "Timer above 70%")
+    add_tag("b_cnt_01", "CNT_01", "Float", "2-2", "Crossings above 70%")
 
     bacnet_device = {
         "id": bacnet_id,

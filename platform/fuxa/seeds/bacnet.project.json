@@ -15,132 +15,132 @@
       {
         "name": "DO_01",
         "type": "bool",
-        "address": "binaryOutput:1"
+        "address": "4-1"
       },
       {
         "name": "DO_02",
         "type": "bool",
-        "address": "binaryOutput:2"
+        "address": "4-2"
       },
       {
         "name": "DO_03",
         "type": "bool",
-        "address": "binaryOutput:3"
+        "address": "4-3"
       },
       {
         "name": "DO_04",
         "type": "bool",
-        "address": "binaryOutput:4"
+        "address": "4-4"
       },
       {
         "name": "DO_05",
         "type": "bool",
-        "address": "binaryOutput:5"
+        "address": "4-5"
       },
       {
         "name": "DO_06",
         "type": "bool",
-        "address": "binaryOutput:6"
+        "address": "4-6"
       },
       {
         "name": "DO_07",
         "type": "bool",
-        "address": "binaryOutput:7"
+        "address": "4-7"
       },
       {
         "name": "DO_08",
         "type": "bool",
-        "address": "binaryOutput:8"
+        "address": "4-8"
       },
       {
         "name": "DI_01",
         "type": "bool",
-        "address": "binaryInput:1"
+        "address": "3-1"
       },
       {
         "name": "DI_02",
         "type": "bool",
-        "address": "binaryInput:2"
+        "address": "3-2"
       },
       {
         "name": "DI_03",
         "type": "bool",
-        "address": "binaryInput:3"
+        "address": "3-3"
       },
       {
         "name": "DI_04",
         "type": "bool",
-        "address": "binaryInput:4"
+        "address": "3-4"
       },
       {
         "name": "DI_05",
         "type": "bool",
-        "address": "binaryInput:5"
+        "address": "3-5"
       },
       {
         "name": "DI_06",
         "type": "bool",
-        "address": "binaryInput:6"
+        "address": "3-6"
       },
       {
         "name": "DI_07",
         "type": "bool",
-        "address": "binaryInput:7"
+        "address": "3-7"
       },
       {
         "name": "DI_08",
         "type": "bool",
-        "address": "binaryInput:8"
+        "address": "3-8"
       },
       {
         "name": "AO_01",
         "type": "float",
-        "address": "analogOutput:1"
+        "address": "1-1"
       },
       {
         "name": "AO_02",
         "type": "float",
-        "address": "analogOutput:2"
+        "address": "1-2"
       },
       {
         "name": "AO_03",
         "type": "float",
-        "address": "analogOutput:3"
+        "address": "1-3"
       },
       {
         "name": "AO_04",
         "type": "float",
-        "address": "analogOutput:4"
+        "address": "1-4"
       },
       {
         "name": "AI_01",
         "type": "float",
-        "address": "analogInput:1"
+        "address": "0-1"
       },
       {
         "name": "AI_02",
         "type": "float",
-        "address": "analogInput:2"
+        "address": "0-2"
       },
       {
         "name": "AI_03",
         "type": "float",
-        "address": "analogInput:3"
+        "address": "0-3"
       },
       {
         "name": "AI_04",
         "type": "float",
-        "address": "analogInput:4"
+        "address": "0-4"
       },
       {
         "name": "TMR_01",
         "type": "int",
-        "address": "analogValue:1"
+        "address": "2-1"
       },
       {
         "name": "CNT_01",
         "type": "int",
-        "address": "analogValue:2"
+        "address": "2-2"
       }
     ],
     "hmi": {
