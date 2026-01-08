@@ -57,6 +57,8 @@ services:
       - CAP_DURATION=10
       - CAP_MAX_FILES=20
       - CAP_RETENTION_DAYS=3
+    ports:
+      - "7681:7681"
     cap_add:
       - NET_ADMIN
       - NET_RAW
