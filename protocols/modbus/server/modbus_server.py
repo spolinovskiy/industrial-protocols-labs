@@ -39,8 +39,12 @@ def main() -> None:
             thresh_count = 0
             timer = 0
             prev_ao1 = ao1
-            server.data_bank.set_coils(0, [False] * 4)
-            coils = server.data_bank.get_coils(0, 8) or [False] * 8
+            # Clear DO_01..DO_05 so reset is a momentary pulse.
+            new_coils = list(coils)
+            for idx in range(5):
+                new_coils[idx] = False
+            server.data_bank.set_coils(0, new_coils)
+            coils = new_coils
             prev_coils = list(coils)
         else:
             # Count DO rising edges (first 4 switches)
