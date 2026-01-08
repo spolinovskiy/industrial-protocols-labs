@@ -37,16 +37,8 @@ services:
     build:
       context: ./diagnostics
     container_name: diagnostics
-    networks:
-      - platform_net
-      - modbus_net
-      - opcua_net
-      - bacnet_net
-      - cip_net
-      - dnp3_net
-      - iec104_net
-      - mqtt_net
-      - s7_net
+    # Use host network so tcpdump can see traffic between other containers.
+    network_mode: host
     volumes:
       - "./diagnostics/capture:/work/capture"
     environment:
@@ -57,8 +49,6 @@ services:
       - CAP_DURATION=10
       - CAP_MAX_FILES=20
       - CAP_RETENTION_DAYS=3
-    ports:
-      - "7681:7681"
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -81,6 +71,8 @@ services:
       - diagnostics
     networks:
       - platform_net
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "1881:1881"  # guest (view-only)
       - "1882:1882"  # admin (full)
