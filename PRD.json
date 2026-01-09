@@ -1,0 +1,33 @@
+{
+  "project": "industrial-protocols-labs",
+  "updated_at": "2026-01-09T12:56:11Z",
+  "tasks": [
+    {
+      "id": "T001",
+      "title": "Bootstrap PRD tracking artifacts",
+      "priority": 1,
+      "dependencies": [],
+      "passes": true,
+      "status": "done",
+      "description": "Create PRD.json and progress.txt to enforce Ralph methodology tracking.",
+      "validation": "PRD.json and progress.txt exist in repo root.",
+      "scripts": [],
+      "updated_at": "2026-01-09T12:56:11Z"
+    },
+    {
+      "id": "T002",
+      "title": "Stabilize CIP WebAPI gateway and tag mirroring",
+      "priority": 2,
+      "dependencies": [
+        "T001"
+      ],
+      "passes": false,
+      "status": "todo",
+      "description": "Ensure CIP gateway serves /tags reliably and mirrors DO/DI, AO/AI, timer, counters, and reset behavior against cpppo server.",
+      "validation": "CIP /tags returns tag list; FUXA CIP view updates; reset and counters behave as specified.",
+      "scripts": [
+        "scripts/test_all.sh"
+      ]
+    }
+  ]
+}
