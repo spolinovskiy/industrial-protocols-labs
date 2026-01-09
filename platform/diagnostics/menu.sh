@@ -38,7 +38,7 @@ while true; do
   echo "1) Capture Modbus (10s)"
   echo "2) Capture OPC UA (10s)"
   echo "3) Capture BACnet/IP (10s)"
-  echo "4) Capture CIP (10s)"
+  echo "4) Capture CIP + Gateway (10s)"
   echo "5) Capture DNP3 (10s)"
   echo "6) Capture IEC-104 (10s)"
   echo "7) Capture MQTT (10s)"

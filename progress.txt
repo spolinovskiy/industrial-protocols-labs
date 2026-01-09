@@ -3,3 +3,4 @@
 - 2026-01-09: Created PRD.json with initial task backlog and initialized progress.txt to track Ralph methodology execution.
 - 2026-01-09: Stabilized CIP WebAPI gateway. Gateway now computes DI/AI/timer/counter values locally, reads only DO/AO from cpppo server, and issues reset writes when DO_05 pulses. Updated CIP gateway service in compose, added CIP view seed script polling=1000ms, removed pycomm3 from CIP server. Verified on l-machine: `proto-gateway-cip` /tags returns 26 items within 5s.
 - 2026-01-09: Increased CIP WebAPI polling interval to 3000ms to avoid FUXA overload warnings; restarted FUXA after updating CIP device seed.
+- 2026-01-09: Updated diagnostics CIP capture to include WebAPI gateway traffic on tcp/9000 and refreshed menu label for clarity.

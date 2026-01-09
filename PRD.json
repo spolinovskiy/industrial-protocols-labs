@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-09T13:37:25Z",
+  "updated_at": "2026-01-09T13:58:23Z",
   "tasks": [
     {
       "id": "T001",
@@ -29,6 +29,36 @@
         "scripts/test_all.sh"
       ],
       "updated_at": "2026-01-09T13:37:25Z"
+    },
+    {
+      "id": "T003",
+      "title": "Diagnostics: capture gateway traffic for CIP",
+      "priority": 3,
+      "dependencies": [
+        "T002"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Update diagnostics capture logic so CIP captures include WebAPI gateway traffic on port 9000 alongside CIP port 44818.",
+      "validation": "Capture menu produces pcap containing CIP and WebAPI traffic when gateway is active.",
+      "scripts": [
+        "platform/diagnostics/menu.sh",
+        "platform/diagnostics/capture/cip.sh"
+      ],
+      "updated_at": "2026-01-09T13:58:23Z"
+    },
+    {
+      "id": "T004",
+      "title": "Implement MQTT protocol lab with direct FUXA connection",
+      "priority": 4,
+      "dependencies": [
+        "T003"
+      ],
+      "passes": false,
+      "status": "todo",
+      "description": "Set up MQTT broker/device bridge and FUXA MQTT client tags for canonical IO with timer/counter/reset logic.",
+      "validation": "FUXA MQTT view updates and mirrors IO; diagnostics can capture MQTT traffic.",
+      "scripts": []
     }
   ]
 }
