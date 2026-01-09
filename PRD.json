@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-09T20:56:11Z",
+  "updated_at": "2026-01-09T21:11:21Z",
   "tasks": [
     {
       "id": "T001",
@@ -86,11 +86,14 @@
       "dependencies": [
         "T005"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "description": "Delete extra CIP Test Bench view so only one CIP view remains in FUXA.",
       "validation": "FUXA Views list shows a single CIP Test Bench entry.",
-      "scripts": []
+      "scripts": [
+        "scripts/fuxa_dedupe_cip_view.py"
+      ],
+      "updated_at": "2026-01-09T21:11:21Z"
     },
     {
       "id": "T007",

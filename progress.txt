@@ -8,3 +8,5 @@
 - 2026-01-09: Added MQTT direct-connection lab updates. Device bridge now mirrors AO/AI, counts switch/threshold events, handles reset pulse (DO_05), and uses env-configured broker. Added FUXA DB patch script for MQTT device/view and updated MQTT seed type to MQTTclient.
 
 - 2026-01-09: Fixed MQTT connectivity by removing host port binding for proto-server-mqtt so it stays on mqtt_net and is resolvable by FUXA; rebuilt MQTT bridge so switch/threshold counters publish correctly.
+
+- 2026-01-09: Removed duplicate CIP Test Bench view using scripts/fuxa_dedupe_cip_view.py on l-machine; kept one CIP view in FUXA DB.
