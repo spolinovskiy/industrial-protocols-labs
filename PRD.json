@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-09T13:58:23Z",
+  "updated_at": "2026-01-09T15:08:57Z",
   "tasks": [
     {
       "id": "T001",
@@ -54,11 +54,14 @@
       "dependencies": [
         "T003"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "description": "Set up MQTT broker/device bridge and FUXA MQTT client tags for canonical IO with timer/counter/reset logic.",
       "validation": "FUXA MQTT view updates and mirrors IO; diagnostics can capture MQTT traffic.",
-      "scripts": []
+      "scripts": [
+        "scripts/fuxa_add_mqtt_view.py"
+      ],
+      "updated_at": "2026-01-09T15:08:57Z"
     }
   ]
 }

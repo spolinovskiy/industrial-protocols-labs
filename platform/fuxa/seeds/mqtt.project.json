@@ -5,7 +5,7 @@
     "connections": [
       {
         "name": "mqtt",
-        "type": "MQTT",
+        "type": "MQTTclient",
         "address": "proto-server-mqtt",
         "port": 1883
       }

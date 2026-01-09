@@ -1,10 +1,13 @@
-import json
+import os
 import time
-from typing import Dict
 
 import paho.mqtt.client as mqtt
 
 THRESHOLD = 70
+MAX_INT = 2**31 - 1
+
+MQTT_HOST = os.environ.get("MQTT_HOST", "proto-server-mqtt")
+MQTT_PORT = int(os.environ.get("MQTT_PORT", "1883"))
 
 STATE = {
     "DO": [0] * 8,
@@ -32,7 +35,7 @@ def on_message(client, userdata, msg):
         idx = int(topic.split("DO_")[1]) - 1
         if 0 <= idx < 8:
             STATE["DO"][idx] = 1 if value else 0
-    if topic.startswith("lab/cmd/AO_"):
+    elif topic.startswith("lab/cmd/AO_"):
         idx = int(topic.split("AO_")[1]) - 1
         if 0 <= idx < 4:
             STATE["AO"][idx] = max(0, min(100, value))
@@ -49,32 +52,69 @@ def publish_state(client):
     client.publish("lab/state/CNT_01", STATE["CNT_01"], retain=False)
 
 
+def publish_reset_commands(client):
+    for i in range(5):
+        client.publish(f"lab/cmd/DO_0{i+1}", 0, retain=True)
+
+
 def main() -> None:
     client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message
-    client.connect("proto-server-mqtt", 1883, 60)
+    client.connect(MQTT_HOST, MQTT_PORT, 60)
     client.loop_start()
 
     prev_ao1 = 0
+    prev_do = [0] * 8
+    timer = 0
+    switch_count = 0
+    thresh_count = 0
+    last_tick = time.monotonic()
 
     while True:
+        ao1 = int(STATE["AO"][0])
+        reset_requested = STATE["DO"][4] and not prev_do[4]
+        if reset_requested:
+            timer = 0
+            switch_count = 0
+            thresh_count = 0
+            prev_ao1 = ao1
+            last_tick = time.monotonic()
+            for idx in range(5):
+                STATE["DO"][idx] = 0
+            publish_reset_commands(client)
+        else:
+            for idx in range(4):
+                if not prev_do[idx] and STATE["DO"][idx]:
+                    switch_count = min(switch_count + 1, MAX_INT)
+
+            if prev_ao1 <= THRESHOLD < ao1:
+                thresh_count = min(thresh_count + 1, MAX_INT)
+            prev_ao1 = ao1
+
+            now = time.monotonic()
+            if now - last_tick >= 1.0:
+                ticks = int(now - last_tick)
+                last_tick += ticks
+                if ao1 > THRESHOLD:
+                    timer = min(timer + ticks, MAX_INT)
+
+        prev_do = list(STATE["DO"])
+
         # Mirror DO -> DI
         STATE["DI"] = list(STATE["DO"])
 
-        # Mirror AO -> AI
-        STATE["AI"] = list(STATE["AO"])
+        # Mirror AO -> AI (canonical counters via AI_02/AI_03)
+        STATE["AI"][0] = ao1
+        STATE["AI"][1] = switch_count
+        STATE["AI"][2] = thresh_count
+        STATE["AI"][3] = int(STATE["AO"][3])
 
-        ao1 = STATE["AO"][0]
-        if prev_ao1 <= THRESHOLD < ao1:
-            STATE["CNT_01"] = min(STATE["CNT_01"] + 1, 2**31 - 1)
-        prev_ao1 = ao1
-
-        if ao1 > THRESHOLD:
-            STATE["TMR_01"] = min(STATE["TMR_01"] + 1, 2**31 - 1)
+        STATE["TMR_01"] = timer
+        STATE["CNT_01"] = thresh_count
 
         publish_state(client)
-        time.sleep(1)
+        time.sleep(0.2)
 
 
 if __name__ == "__main__":
