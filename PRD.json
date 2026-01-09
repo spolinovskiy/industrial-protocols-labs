@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-09T15:08:57Z",
+  "updated_at": "2026-01-09T20:56:11Z",
   "tasks": [
     {
       "id": "T001",
@@ -62,6 +62,50 @@
         "scripts/fuxa_add_mqtt_view.py"
       ],
       "updated_at": "2026-01-09T15:08:57Z"
+    },
+    {
+      "id": "T005",
+      "title": "Fix MQTT connection status and IO updates in FUXA",
+      "priority": 5,
+      "dependencies": [
+        "T004"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Ensure FUXA MQTT device connects cleanly and the MQTT bridge publishes expected IO for the Test Bench.",
+      "validation": "MQTT connection status is green and DO/AO changes update DI/AI/TMR/CNT on MQTT Test Bench.",
+      "scripts": [
+        "platform/docker-compose.platform.yml"
+      ],
+      "updated_at": "2026-01-09T20:56:11Z"
+    },
+    {
+      "id": "T006",
+      "title": "Remove duplicate CIP Test Bench view",
+      "priority": 6,
+      "dependencies": [
+        "T005"
+      ],
+      "passes": false,
+      "status": "todo",
+      "description": "Delete extra CIP Test Bench view so only one CIP view remains in FUXA.",
+      "validation": "FUXA Views list shows a single CIP Test Bench entry.",
+      "scripts": []
+    },
+    {
+      "id": "T007",
+      "title": "Harden labctl when no proto-server containers exist",
+      "priority": 7,
+      "dependencies": [
+        "T006"
+      ],
+      "passes": false,
+      "status": "todo",
+      "description": "Prevent labctl from failing when no proto-server containers are running.",
+      "validation": "labctl switch works cleanly with zero proto-server containers.",
+      "scripts": [
+        "labctl"
+      ]
     }
   ]
 }

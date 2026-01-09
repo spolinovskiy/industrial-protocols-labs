@@ -257,8 +257,6 @@ services:
     image: eclipse-mosquitto:2
     container_name: proto-server-mqtt
     profiles: ["mqtt"]
-    ports:
-      - "1883:1883"
     networks:
       - mqtt_net
     volumes:
