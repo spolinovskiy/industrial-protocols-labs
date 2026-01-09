@@ -10,3 +10,5 @@
 - 2026-01-09: Fixed MQTT connectivity by removing host port binding for proto-server-mqtt so it stays on mqtt_net and is resolvable by FUXA; rebuilt MQTT bridge so switch/threshold counters publish correctly.
 
 - 2026-01-09: Removed duplicate CIP Test Bench view using scripts/fuxa_dedupe_cip_view.py on l-machine; kept one CIP view in FUXA DB.
+
+- 2026-01-09: Hardened labctl stop logic to tolerate zero proto-server containers without failing.

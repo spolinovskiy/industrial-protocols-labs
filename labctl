@@ -23,7 +23,11 @@ is_protocol() {
 }
 
 stop_all_servers() {
-  docker ps --format '{{.Names}}' | grep -E '^proto-server-' | xargs -r docker stop
+  local servers
+  servers=$(docker ps --format '{{.Names}}' | grep -E '^proto-server-' || true)
+  if [[ -n "$servers" ]]; then
+    echo "$servers" | xargs -r docker stop
+  fi
 }
 
 cmd=${1:-}

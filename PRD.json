@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-09T21:11:21Z",
+  "updated_at": "2026-01-09T21:16:20Z",
   "tasks": [
     {
       "id": "T001",
@@ -102,13 +102,14 @@
       "dependencies": [
         "T006"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "description": "Prevent labctl from failing when no proto-server containers are running.",
       "validation": "labctl switch works cleanly with zero proto-server containers.",
       "scripts": [
         "labctl"
-      ]
+      ],
+      "updated_at": "2026-01-09T21:16:20Z"
     }
   ]
 }
