@@ -195,6 +195,26 @@ services:
           cpus: "0.25"
           memory: 256M
 
+  proto-gateway-cip:
+    build:
+      context: ../protocols/cip/gateway
+    container_name: proto-gateway-cip
+    profiles: ["cip"]
+    environment:
+      - CIP_ADDRESS=proto-server-cip
+    networks:
+      - platform_net
+      - cip_net
+    restart: always
+    labels:
+      - "com.example.role=proto-gateway"
+      - "com.example.protocol=cip"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
+
   proto-server-dnp3:
     build:
       context: ../protocols/dnp3/server
