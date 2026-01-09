@@ -87,7 +87,7 @@ def main() -> None:
             "postTags": os.environ.get("CIP_POST", DEFAULT_ADDR),
         },
         "type": "WebAPI",
-        "polling": 1000,
+        "polling": 3000,
         "tags": cip_tags,
     }
 
