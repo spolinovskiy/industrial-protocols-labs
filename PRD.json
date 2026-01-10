@@ -170,6 +170,22 @@
         "scripts/fuxa_add_iec104_view.py"
       ],
       "updated_at": "2026-01-10T15:23:45Z"
+    },
+    {
+      "id": "T012",
+      "title": "Normalize FUXA Test Bench styling and AI bar naming",
+      "priority": 12,
+      "dependencies": [
+        "T011"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Update all Test Bench views so led_1..led_4, output_1..output_3, and shape_24 use stroke/text color #1f8ed3ff, and rename the AI bar currently named reset.",
+      "validation": "All Test Bench views show updated colors for specified items and the AI bar is renamed from reset to ai_bar.",
+      "scripts": [
+        "scripts/fuxa_update_view_styles.py"
+      ],
+      "updated_at": "2026-01-10T21:12:30Z"
     }
   ]
 }
