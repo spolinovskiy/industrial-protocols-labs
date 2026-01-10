@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-10T15:09:44Z",
+  "updated_at": "2026-01-10T15:23:45Z",
   "tasks": [
     {
       "id": "T001",
@@ -154,6 +154,22 @@
       "validation": "FUXA DNP3 view updates via the WebAPI gateway with DO/DI mirror, AO/AI mirror, timer, counters, and reset.",
       "scripts": [],
       "updated_at": "2026-01-10T15:09:44Z"
+    },
+    {
+      "id": "T011",
+      "title": "Implement IEC-104 WebAPI gateway lab",
+      "priority": 11,
+      "dependencies": [
+        "T010"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Expose IEC-104 points via a WebAPI gateway with internal IO logic so FUXA can bind using WebAPI. Include the IEC-104 server container for packet capture and future full-stack testing.",
+      "validation": "FUXA IEC-104 view updates via WebAPI gateway with DO/DI mirror, AO/AI mirror, timer, counters, and reset; diagnostics can capture IEC-104 traffic when server is enabled.",
+      "scripts": [
+        "scripts/fuxa_add_iec104_view.py"
+      ],
+      "updated_at": "2026-01-10T15:23:45Z"
     }
   ]
 }

@@ -274,6 +274,24 @@ services:
           cpus: "0.25"
           memory: 256M
 
+  proto-gateway-iec104:
+    build:
+      context: ../protocols/iec104/gateway
+    container_name: proto-gateway-iec104
+    profiles: ["iec104"]
+    networks:
+      - platform_net
+      - iec104_net
+    restart: always
+    labels:
+      - "com.example.role=proto-gateway"
+      - "com.example.protocol=iec104"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
+
   proto-server-mqtt:
     image: eclipse-mosquitto:2
     container_name: proto-server-mqtt
