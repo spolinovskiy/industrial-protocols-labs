@@ -12,3 +12,5 @@
 - 2026-01-09: Removed duplicate CIP Test Bench view using scripts/fuxa_dedupe_cip_view.py on l-machine; kept one CIP view in FUXA DB.
 
 - 2026-01-09: Hardened labctl stop logic to tolerate zero proto-server containers without failing.
+
+- 2026-01-10: Added DNP3 WebAPI gateway (FastAPI) with internal IO logic and background DNP3 master scans. Added proto-gateway-dnp3 service and FUXA DB patch script to bind DNP3 view to WebAPI.

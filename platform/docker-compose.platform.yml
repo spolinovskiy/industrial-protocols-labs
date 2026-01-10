@@ -234,6 +234,27 @@ services:
           cpus: "0.25"
           memory: 256M
 
+  proto-gateway-dnp3:
+    build:
+      context: ../protocols/dnp3/gateway
+    container_name: proto-gateway-dnp3
+    profiles: ["dnp3"]
+    environment:
+      - DNP3_HOST=proto-server-dnp3
+      - DNP3_PORT=20000
+    networks:
+      - platform_net
+      - dnp3_net
+    restart: always
+    labels:
+      - "com.example.role=proto-gateway"
+      - "com.example.protocol=dnp3"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
+
   proto-server-iec104:
     build:
       context: ../protocols/iec104/server
