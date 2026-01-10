@@ -15,3 +15,4 @@
 
 - 2026-01-10: Added DNP3 WebAPI gateway (FastAPI) with internal IO logic and background DNP3 master scans. Added proto-gateway-dnp3 service and FUXA DB patch script to bind DNP3 view to WebAPI.
 - 2026-01-10: Made DNP3 gateway build optional for pydnp3 (WITH_PYDNP3 build arg) and kept default build lightweight; verified gateway image builds without pydnp3.
+- 2026-01-10: Reverted DNP3 to gateway-only logic (no outstation) by removing pydnp3 master wiring in `protocols/dnp3/gateway/app.py`, keeping internal DO/DI mirroring, AO/AI mirror, timer, counters, and reset. Updated compose so `proto-server-dnp3` only runs under profile `dnp3-full`. Verified gateway tag read/write flow locally via FastAPI imports using a temporary PYTHONPATH.

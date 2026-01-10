@@ -219,7 +219,7 @@ services:
     build:
       context: ../protocols/dnp3/server
     container_name: proto-server-dnp3
-    profiles: ["dnp3"]
+    profiles: ["dnp3-full"]
     ports:
       - "20000:20000"
     networks:

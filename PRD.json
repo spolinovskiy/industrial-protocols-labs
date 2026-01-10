@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-10T06:41:42Z",
+  "updated_at": "2026-01-10T15:09:44Z",
   "tasks": [
     {
       "id": "T001",
@@ -140,6 +140,20 @@
       "validation": "Default docker build for protocols/dnp3/gateway succeeds without pydnp3; optional pydnp3 build can be enabled via WITH_PYDNP3=1.",
       "scripts": [],
       "updated_at": "2026-01-10T06:41:42Z"
+    },
+    {
+      "id": "T010",
+      "title": "Keep DNP3 gateway logic self-contained (defer outstation)",
+      "priority": 10,
+      "dependencies": [
+        "T009"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Revert DNP3 to a WebAPI gateway that simulates IO internally, deferring the outstation-backed implementation to a later task.",
+      "validation": "FUXA DNP3 view updates via the WebAPI gateway with DO/DI mirror, AO/AI mirror, timer, counters, and reset.",
+      "scripts": [],
+      "updated_at": "2026-01-10T15:09:44Z"
     }
   ]
 }
