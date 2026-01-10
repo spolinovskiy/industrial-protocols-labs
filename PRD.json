@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-10T05:50:25Z",
+  "updated_at": "2026-01-10T06:41:42Z",
   "tasks": [
     {
       "id": "T001",
@@ -126,6 +126,20 @@
         "scripts/fuxa_add_dnp3_view.py"
       ],
       "updated_at": "2026-01-10T05:50:25Z"
+    },
+    {
+      "id": "T009",
+      "title": "Fix DNP3 gateway build dependencies",
+      "priority": 9,
+      "dependencies": [
+        "T008"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Ensure the DNP3 WebAPI gateway image builds successfully by making pydnp3 optional with a build arg.",
+      "validation": "Default docker build for protocols/dnp3/gateway succeeds without pydnp3; optional pydnp3 build can be enabled via WITH_PYDNP3=1.",
+      "scripts": [],
+      "updated_at": "2026-01-10T06:41:42Z"
     }
   ]
 }
