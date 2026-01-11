@@ -233,6 +233,36 @@
       "validation": "README or docs section explains HTTPS/TLS setup with clear deployment guidance.",
       "scripts": [],
       "updated_at": "2026-01-11T10:02:30Z"
+    },
+    {
+      "id": "T016",
+      "title": "Deployment readiness analysis and scaling guidance",
+      "priority": 16,
+      "dependencies": [
+        "T015"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Produce a deployment readiness report covering VM sizing, multi-user behavior, lab switchover flow, and backend orchestration expectations for the frontend integration.",
+      "validation": "docs/deployment_evaluation.md exists with recommendations and integration steps.",
+      "scripts": [],
+      "updated_at": "2026-01-11T13:55:00Z"
+    },
+    {
+      "id": "T017",
+      "title": "Prototype lab switchover UI and control endpoints",
+      "priority": 17,
+      "dependencies": [
+        "T016"
+      ],
+      "passes": false,
+      "status": "pending",
+      "description": "Create a simple HTML page to test lab switching and a minimal control script to start/stop protocol containers and toggle FUXA connections.",
+      "validation": "HTML page loads and triggers lab switches on the host; control script updates active protocol and enables/disables FUXA connections.",
+      "scripts": [
+        "scripts/lab_switcher_server.py"
+      ],
+      "updated_at": "2026-01-11T13:40:00Z"
     }
   ]
 }
