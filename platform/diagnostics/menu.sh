@@ -45,7 +45,6 @@ while true; do
   echo "8) Capture S7comm (10s)"
   echo "9) Open last capture in termshark"
   echo "10) Show active connections"
-  echo "11) Advanced shell (admin only)"
   echo "0) Exit"
   echo ""
   if ! read -r -p "Select option: " choice; then
@@ -64,13 +63,6 @@ while true; do
     8) run_capture /work/capture/s7.sh ;;
     9) open_last_capture ;;
     10) show_connections ;;
-    11)
-      if [[ "${DIAG_ALLOW_SHELL:-0}" == "1" ]]; then
-        /bin/bash
-      else
-        echo "Advanced shell disabled."
-      fi
-      ;;
     0) exit 0 ;;
     *) echo "Invalid option." ;;
   esac

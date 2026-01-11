@@ -211,14 +211,14 @@
       "dependencies": [
         "T013"
       ],
-      "passes": false,
-      "status": "pending",
+      "passes": true,
+      "status": "done",
       "description": "Remove the advanced shell option from the diagnostics menu and keep ttyd limited to the capture workflow.",
       "validation": "Diagnostics menu has no advanced shell option and users cannot access a shell from ttyd.",
       "scripts": [
         "platform/diagnostics/menu.sh"
       ],
-      "updated_at": "2026-01-10T21:30:00Z"
+      "updated_at": "2026-01-11T07:15:20Z"
     },
     {
       "id": "T015",
