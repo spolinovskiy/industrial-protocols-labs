@@ -263,6 +263,76 @@
         "scripts/lab_switcher_server.py"
       ],
       "updated_at": "2026-01-11T14:08:30Z"
+    },
+    {
+      "id": "T018",
+      "title": "Rename admin account to proto-researcher",
+      "priority": 18,
+      "dependencies": [
+        "T017"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Rename the admin account to proto-researcher across gateway auth, diagnostics ttyd login, and documentation.",
+      "validation": "Admin login uses proto-researcher everywhere and previous admin credentials no longer apply.",
+      "scripts": [],
+      "updated_at": "2026-01-11T14:40:00Z"
+    },
+    {
+      "id": "T019",
+      "title": "Harden guest navigation to Modbus-only view",
+      "priority": 19,
+      "dependencies": [
+        "T018"
+      ],
+      "passes": false,
+      "status": "pending",
+      "description": "Prevent guest users from accessing lab/home/configurator navigation and restrict guest to Modbus view only.",
+      "validation": "Guest access cannot open lab/home/configurator or editor routes; only Modbus Test Bench is reachable.",
+      "scripts": [],
+      "updated_at": "2026-01-11T14:30:00Z"
+    },
+    {
+      "id": "T020",
+      "title": "Document lab switcher usage and integration notes",
+      "priority": 20,
+      "dependencies": [
+        "T019"
+      ],
+      "passes": false,
+      "status": "pending",
+      "description": "Add comprehensive guidance for using platform/lab_switcher/index.html and the control server.",
+      "validation": "README (or docs) contains clear steps for running the lab switcher and describing expected behavior.",
+      "scripts": [],
+      "updated_at": "2026-01-11T14:30:00Z"
+    },
+    {
+      "id": "T021",
+      "title": "Switchover performance and resource report",
+      "priority": 21,
+      "dependencies": [
+        "T020"
+      ],
+      "passes": false,
+      "status": "pending",
+      "description": "Measure lab switchover timing, startup from zero, and resource peaks. Provide optimization options and compose vs Kubernetes evaluation.",
+      "validation": "docs/switchover_performance.md includes timings, CPU/RAM peaks, restart behavior, and optimization recommendations.",
+      "scripts": [],
+      "updated_at": "2026-01-11T14:30:00Z"
+    },
+    {
+      "id": "T022",
+      "title": "Create blog content folder and initial article",
+      "priority": 22,
+      "dependencies": [
+        "T021"
+      ],
+      "passes": false,
+      "status": "pending",
+      "description": "Add a blog content folder and seed it with the Industrial Protocols Overview article in markdown.",
+      "validation": "docs/blog/01-industrial-protocols-overview.md exists and contains the provided article text.",
+      "scripts": [],
+      "updated_at": "2026-01-11T15:10:00Z"
     }
   ]
 }

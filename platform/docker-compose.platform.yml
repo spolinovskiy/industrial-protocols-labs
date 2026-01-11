@@ -67,7 +67,7 @@ services:
       - "./diagnostics/capture:/work/capture"
     environment:
       - TTYD_PORT=7681
-      - TTYD_USER=admin
+      - TTYD_USER=proto-researcher
       - TTYD_PASS=lab123
       - DIAG_AUTH=0
       - DIAG_ALLOW_SHELL=0
