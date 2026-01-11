@@ -25,3 +25,4 @@
 - 2026-01-11: Added lab switcher prototype (platform/lab_switcher/index.html + scripts/lab_switcher_server.py) to switch protocols, stop/pause servers, and toggle FUXA device enablement.
 - 2026-01-11: Renamed admin account to proto-researcher across nginx auth, diagnostics ttyd login, and README credentials.
 - 2026-01-11: Blocked guest navigation routes (/home, /config, /configurator) at the gateway to keep guest access Modbus-only.
+- 2026-01-11: Documented lab switcher UI usage and token auth in README.

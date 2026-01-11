@@ -24,6 +24,42 @@ Stop the active protocol server:
 ./labctl stop
 ```
 
+## Lab Switcher UI (Prototype)
+
+The prototype UI lives at `platform/lab_switcher/index.html` and is served by
+`scripts/lab_switcher_server.py`. It provides a quick way to switch protocols
+and toggle FUXA device enablement during integration testing.
+
+Start the switcher server:
+
+```bash
+LAB_SWITCHER_HOST=0.0.0.0 LAB_SWITCHER_PORT=8090 \
+python3 scripts/lab_switcher_server.py
+```
+
+Open the UI:
+
+```
+http://localhost:8090
+```
+
+Optional auth token (recommended for shared hosts):
+
+```bash
+export LAB_SWITCHER_TOKEN="change-me"
+```
+
+Then pass the token as a query param or header:
+- `http://localhost:8090?token=change-me`
+- `X-Auth-Token: change-me`
+
+What it does:
+- Switches protocols via `labctl switch <protocol>`.
+- Updates FUXA device enable flags so only the active protocol is enabled.
+- Restarts FUXA after switch/stop to apply connection changes.
+
+Note: `Pause/Resume` uses `docker pause/unpause` and is intended only for debugging.
+
 ## Repo Layout
 
 ```

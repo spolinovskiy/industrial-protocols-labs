@@ -299,12 +299,12 @@
       "dependencies": [
         "T019"
       ],
-      "passes": false,
-      "status": "pending",
+      "passes": true,
+      "status": "done",
       "description": "Add comprehensive guidance for using platform/lab_switcher/index.html and the control server.",
       "validation": "README (or docs) contains clear steps for running the lab switcher and describing expected behavior.",
       "scripts": [],
-      "updated_at": "2026-01-11T14:30:00Z"
+      "updated_at": "2026-01-11T15:35:00Z"
     },
     {
       "id": "T021",
