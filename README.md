@@ -173,3 +173,21 @@ scripts/test_all.sh
 - Diagnostics menu (via gateway): /diag
 
 Protocol server ports are the standard defaults (502, 4840, 47808/udp, 44818, 20000, 2404, 1883, 102).
+
+## HTTPS / TLS Guidance
+
+Use HTTPS for any access outside a trusted LAN or when exposing the lab via Replit or a public endpoint. Keep HTTP only for local LAN testing.
+
+Recommended options:
+
+- **TLS termination at nginx (in gateway container)**:
+  - Add `listen 443 ssl;` and mount cert/key into `platform/nginx/`.
+  - Redirect `http -> https` (port 80) if you expose it.
+  - Keep upstreams (`fuxa`, `fuxa_guest`, `diagnostics`) on HTTP inside the Docker network.
+- **External reverse proxy** (Caddy/Traefik/Nginx on the host):
+  - Terminate TLS on the host and proxy to `gateway:1881/1882`.
+  - Recommended for managed environments (Replit, cloud VM) where cert automation is easier.
+
+Notes:
+- Diagnostics uses WebSockets; keep `Upgrade`/`Connection` headers in the TLS proxy.
+- If you enforce HTTPS, ensure `X-Forwarded-Proto https` is preserved so FUXA generates correct links.

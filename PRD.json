@@ -227,12 +227,12 @@
       "dependencies": [
         "T014"
       ],
-      "passes": false,
-      "status": "pending",
+      "passes": true,
+      "status": "done",
       "description": "Document where TLS termination should live (nginx or external proxy) and recommended HTTPS deployment for guest/admin/diagnostics endpoints.",
       "validation": "README or docs section explains HTTPS/TLS setup with clear deployment guidance.",
       "scripts": [],
-      "updated_at": "2026-01-10T21:30:00Z"
+      "updated_at": "2026-01-11T10:02:30Z"
     }
   ]
 }
