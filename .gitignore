@@ -1,5 +1,6 @@
 .DS_Store
 platform/fuxa/volumes/
+platform/fuxa_guest/volumes/
 platform/diagnostics/capture/*.pcap
 platform/active_protocol
 __pycache__/

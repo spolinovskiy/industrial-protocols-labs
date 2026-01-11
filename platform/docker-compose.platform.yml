@@ -32,6 +32,30 @@ services:
           cpus: "1.0"
           memory: 512M
 
+  # Guest-only FUXA (Modbus Test Bench only)
+  fuxa_guest:
+    image: frangoteam/fuxa:latest
+    container_name: fuxa_guest
+    networks:
+      - platform_net
+      - modbus_net
+    volumes:
+      - "./fuxa_guest/volumes/appdata:/usr/src/app/FUXA/server/_appdata"
+      - "./fuxa_guest/volumes/db:/usr/src/app/FUXA/server/_db"
+      - "./fuxa_guest/volumes/logs:/usr/src/app/FUXA/server/_logs"
+      - "./fuxa_guest/volumes/images:/usr/src/app/FUXA/server/_images"
+    environment:
+      - PORT=1883
+    restart: always
+    labels:
+      - "com.example.role=scada-guest"
+      - "com.example.stack=platform"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+
   # Diagnostics (termshark + ttyd menu)
   diagnostics:
     build:
@@ -69,6 +93,7 @@ services:
     container_name: gateway
     depends_on:
       - fuxa
+      - fuxa_guest
       - diagnostics
     networks:
       - platform_net

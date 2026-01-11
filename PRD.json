@@ -186,6 +186,53 @@
         "scripts/fuxa_update_view_styles.py"
       ],
       "updated_at": "2026-01-10T21:12:30Z"
+    },
+    {
+      "id": "T013",
+      "title": "Guest-only Modbus access with locked FUXA views",
+      "priority": 13,
+      "dependencies": [
+        "T012"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Expose a guest-only FUXA instance containing only the Modbus Test Bench, routed by Nginx so guests cannot access editor/lab or switch views. Admin access remains unchanged.",
+      "validation": "Guest URL shows only Modbus Test Bench with no view switching; /editor and /lab are blocked for guest; admin still sees all protocol views.",
+      "scripts": [
+        "scripts/fuxa_make_guest_db.py",
+        "scripts/fuxa_make_guest_db.sh"
+      ],
+      "updated_at": "2026-01-11T06:59:10Z"
+    },
+    {
+      "id": "T014",
+      "title": "Remove advanced CLI access from diagnostics menu",
+      "priority": 14,
+      "dependencies": [
+        "T013"
+      ],
+      "passes": false,
+      "status": "pending",
+      "description": "Remove the advanced shell option from the diagnostics menu and keep ttyd limited to the capture workflow.",
+      "validation": "Diagnostics menu has no advanced shell option and users cannot access a shell from ttyd.",
+      "scripts": [
+        "platform/diagnostics/menu.sh"
+      ],
+      "updated_at": "2026-01-10T21:30:00Z"
+    },
+    {
+      "id": "T015",
+      "title": "Document HTTPS/TLS hardening guidance",
+      "priority": 15,
+      "dependencies": [
+        "T014"
+      ],
+      "passes": false,
+      "status": "pending",
+      "description": "Document where TLS termination should live (nginx or external proxy) and recommended HTTPS deployment for guest/admin/diagnostics endpoints.",
+      "validation": "README or docs section explains HTTPS/TLS setup with clear deployment guidance.",
+      "scripts": [],
+      "updated_at": "2026-01-10T21:30:00Z"
     }
   ]
 }
