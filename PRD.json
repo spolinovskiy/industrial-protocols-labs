@@ -285,12 +285,12 @@
       "dependencies": [
         "T018"
       ],
-      "passes": false,
-      "status": "pending",
+      "passes": true,
+      "status": "done",
       "description": "Prevent guest users from accessing lab/home/configurator navigation and restrict guest to Modbus view only.",
       "validation": "Guest access cannot open lab/home/configurator or editor routes; only Modbus Test Bench is reachable.",
       "scripts": [],
-      "updated_at": "2026-01-11T14:30:00Z"
+      "updated_at": "2026-01-11T15:25:00Z"
     },
     {
       "id": "T020",
