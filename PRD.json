@@ -313,12 +313,12 @@
       "dependencies": [
         "T020"
       ],
-      "passes": false,
-      "status": "pending",
+      "passes": true,
+      "status": "done",
       "description": "Measure lab switchover timing, startup from zero, and resource peaks. Provide optimization options and compose vs Kubernetes evaluation.",
       "validation": "docs/switchover_performance.md includes timings, CPU/RAM peaks, restart behavior, and optimization recommendations.",
       "scripts": [],
-      "updated_at": "2026-01-11T14:30:00Z"
+      "updated_at": "2026-01-11T16:05:00Z"
     },
     {
       "id": "T022",
