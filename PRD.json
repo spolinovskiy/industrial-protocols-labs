@@ -255,14 +255,14 @@
       "dependencies": [
         "T016"
       ],
-      "passes": false,
-      "status": "pending",
+      "passes": true,
+      "status": "done",
       "description": "Create a simple HTML page to test lab switching and a minimal control script to start/stop protocol containers and toggle FUXA connections.",
       "validation": "HTML page loads and triggers lab switches on the host; control script updates active protocol and enables/disables FUXA connections.",
       "scripts": [
         "scripts/lab_switcher_server.py"
       ],
-      "updated_at": "2026-01-11T13:40:00Z"
+      "updated_at": "2026-01-11T14:08:30Z"
     }
   ]
 }

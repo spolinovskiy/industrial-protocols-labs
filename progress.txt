@@ -22,3 +22,4 @@
 - 2026-01-11: Removed advanced shell option from diagnostics menu to prevent ttyd users from accessing a raw shell.
 - 2026-01-11: Added HTTPS/TLS guidance in README covering nginx termination and external reverse proxy options plus WebSocket notes.
 - 2026-01-11: Authored docs/deployment_evaluation.md with VM sizing, multi-user risks, switchover flow, and backend API integration steps.
+- 2026-01-11: Added lab switcher prototype (platform/lab_switcher/index.html + scripts/lab_switcher_server.py) to switch protocols, stop/pause servers, and toggle FUXA device enablement.

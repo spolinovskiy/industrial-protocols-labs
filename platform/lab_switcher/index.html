@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ICS Lab Switcher</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f7fb;
+        --panel: #ffffff;
+        --text: #1d2330;
+        --muted: #5b677a;
+        --accent: #1f8ed3;
+        --border: #e2e6ef;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: "SF Pro Text", "Segoe UI", "Arial", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      header {
+        padding: 24px 32px;
+        border-bottom: 1px solid var(--border);
+        background: var(--panel);
+      }
+      header h1 {
+        margin: 0 0 8px 0;
+        font-size: 22px;
+      }
+      header p {
+        margin: 0;
+        color: var(--muted);
+      }
+      main {
+        padding: 24px 32px 48px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .status {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px;
+      }
+      .card h2 {
+        margin: 0 0 10px 0;
+        font-size: 16px;
+      }
+      .card p {
+        margin: 6px 0;
+        color: var(--muted);
+      }
+      .links a {
+        color: var(--accent);
+        text-decoration: none;
+        margin-right: 12px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+      button {
+        border: 0;
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: var(--accent);
+        color: #fff;
+        cursor: pointer;
+      }
+      button.secondary {
+        background: #e9eef6;
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: #eef4fb;
+        color: var(--accent);
+        font-size: 12px;
+        margin-left: 6px;
+      }
+      .log {
+        margin-top: 16px;
+        padding: 12px;
+        border-radius: 8px;
+        background: #0f172a;
+        color: #e2e8f0;
+        font-family: "SF Mono", "Menlo", "Consolas", monospace;
+        font-size: 12px;
+        min-height: 80px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>ICS Lab Switcher</h1>
+      <p>Prototype UI to switch protocol servers and validate FUXA behavior.</p>
+    </header>
+    <main>
+      <section class="status">
+        <div class="card">
+          <h2>Active Protocol</h2>
+          <p id="activeProtocol">unknown</p>
+        </div>
+        <div class="card">
+          <h2>Guest / Admin Links</h2>
+          <div class="links">
+            <a href="http://localhost:1881" target="_blank" rel="noreferrer">Guest HMI</a>
+            <a href="http://localhost:1882" target="_blank" rel="noreferrer">Admin HMI</a>
+            <a href="http://localhost:1882/diag/" target="_blank" rel="noreferrer">Diagnostics</a>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Actions</h2>
+          <div class="actions">
+            <button class="secondary" onclick="stopProtocol()">Stop Active</button>
+            <button class="secondary" onclick="refreshStatus()">Refresh</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid" id="protocolGrid"></section>
+      <div class="log" id="log"></div>
+    </main>
+
+    <script>
+      const protocols = ["modbus", "opcua", "bacnet", "cip", "dnp3", "iec104", "mqtt", "s7"];
+      const grid = document.getElementById("protocolGrid");
+      const logEl = document.getElementById("log");
+
+      function log(msg) {
+        const ts = new Date().toISOString();
+        logEl.textContent = `[${ts}] ${msg}\n` + logEl.textContent;
+      }
+
+      function makeCard(proto) {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <h2>${proto.toUpperCase()}</h2>
+          <p>Switch protocol server and enable FUXA connection.</p>
+          <div class="actions">
+            <button onclick="switchProtocol('${proto}')">Switch</button>
+            <button class="secondary" onclick="pauseProtocol('${proto}', true)">Pause</button>
+            <button class="secondary" onclick="pauseProtocol('${proto}', false)">Resume</button>
+          </div>
+        `;
+        return card;
+      }
+
+      function buildGrid() {
+        protocols.forEach((p) => grid.appendChild(makeCard(p)));
+      }
+
+      async function request(path, options = {}) {
+        const res = await fetch(path, options);
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || "request failed");
+        }
+        return data;
+      }
+
+      async function switchProtocol(proto) {
+        log(`Switching to ${proto}...`);
+        try {
+          const data = await request(`/api/switch?protocol=${proto}`, { method: "POST" });
+          log(data.message || "Switched.");
+          await refreshStatus();
+        } catch (err) {
+          log(`Error: ${err.message}`);
+        }
+      }
+
+      async function pauseProtocol(proto, pause) {
+        log(`${pause ? "Pausing" : "Resuming"} ${proto}...`);
+        try {
+          const data = await request(`/api/pause?protocol=${proto}&pause=${pause ? "1" : "0"}`, { method: "POST" });
+          log(data.message || "Done.");
+        } catch (err) {
+          log(`Error: ${err.message}`);
+        }
+      }
+
+      async function stopProtocol() {
+        log("Stopping active protocol...");
+        try {
+          const data = await request(`/api/stop`, { method: "POST" });
+          log(data.message || "Stopped.");
+          await refreshStatus();
+        } catch (err) {
+          log(`Error: ${err.message}`);
+        }
+      }
+
+      async function refreshStatus() {
+        try {
+          const data = await request("/api/status");
+          const active = document.getElementById("activeProtocol");
+          active.textContent = data.active || "none";
+        } catch (err) {
+          log(`Status error: ${err.message}`);
+        }
+      }
+
+      buildGrid();
+      refreshStatus();
+    </script>
+  </body>
+</html>
