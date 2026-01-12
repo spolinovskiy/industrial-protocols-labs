@@ -327,12 +327,26 @@
       "dependencies": [
         "T021"
       ],
-      "passes": false,
-      "status": "pending",
+      "passes": true,
+      "status": "done",
       "description": "Add a blog content folder and seed it with the Industrial Protocols Overview article in markdown.",
       "validation": "docs/blog/01-industrial-protocols-overview.md exists and contains the provided article text.",
       "scripts": [],
-      "updated_at": "2026-01-11T15:10:00Z"
+      "updated_at": "2026-01-11T15:55:00Z"
+    },
+    {
+      "id": "T023",
+      "title": "Add OT version control blog article",
+      "priority": 23,
+      "dependencies": [
+        "T022"
+      ],
+      "passes": false,
+      "status": "pending",
+      "description": "Add the Version Control Comes to the Plant Floor article to the blog content folder.",
+      "validation": "docs/blog/02-version-control-plant-floor.md exists and contains the provided article text.",
+      "scripts": [],
+      "updated_at": "2026-01-11T15:55:00Z"
     }
   ]
 }
