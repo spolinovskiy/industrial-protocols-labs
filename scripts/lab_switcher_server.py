@@ -3,6 +3,7 @@ import json
 import os
 import sqlite3
 import subprocess
+import time
 from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -16,6 +17,7 @@ ACTIVE_FILE = ROOT / "platform" / "active_protocol"
 FUXA_DB = ROOT / "platform" / "fuxa" / "volumes" / "appdata" / "project.fuxap.db"
 
 PROTOCOLS = ["modbus", "opcua", "bacnet", "cip", "dnp3", "iec104", "mqtt", "s7"]
+STREAM_INTERVAL_SEC = float(os.environ.get("LAB_SWITCHER_STREAM_INTERVAL", "2.0"))
 
 
 def run_cmd(cmd, check=True):
@@ -100,6 +102,13 @@ def require_token(handler, params):
     return provided == token
 
 
+def build_status_payload():
+    return {
+        "active": read_active_protocol(),
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    }
+
+
 class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(STATIC_DIR), **kwargs)
@@ -114,6 +123,28 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         parsed = urlparse(self.path)
+        if parsed.path == "/api/stream":
+            params = parse_qs(parsed.query)
+            if not require_token(self, params):
+                self.send_json(HTTPStatus.UNAUTHORIZED, {"error": "unauthorized"})
+                return
+            self.send_response(HTTPStatus.OK)
+            self.send_header("Content-Type", "text/event-stream")
+            self.send_header("Cache-Control", "no-cache")
+            self.send_header("Connection", "keep-alive")
+            self.end_headers()
+            last_payload = None
+            try:
+                while True:
+                    payload = json.dumps(build_status_payload(), separators=(",", ":"))
+                    if payload != last_payload:
+                        self.wfile.write(f"event: status\ndata: {payload}\n\n".encode("utf-8"))
+                        self.wfile.flush()
+                        last_payload = payload
+                    time.sleep(STREAM_INTERVAL_SEC)
+            except (BrokenPipeError, ConnectionResetError):
+                return
+            return
         if parsed.path.startswith("/api/"):
             params = parse_qs(parsed.query)
             if not require_token(self, params):

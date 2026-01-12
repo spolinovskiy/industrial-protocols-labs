@@ -146,10 +146,23 @@
       const protocols = ["modbus", "opcua", "bacnet", "cip", "dnp3", "iec104", "mqtt", "s7"];
       const grid = document.getElementById("protocolGrid");
       const logEl = document.getElementById("log");
+      const params = new URLSearchParams(window.location.search);
+      const authToken = params.get("token");
 
       function log(msg) {
         const ts = new Date().toISOString();
         logEl.textContent = `[${ts}] ${msg}\n` + logEl.textContent;
+      }
+
+      function withToken(path) {
+        if (!authToken) return path;
+        const joiner = path.includes("?") ? "&" : "?";
+        return `${path}${joiner}token=${encodeURIComponent(authToken)}`;
+      }
+
+      function setActiveProtocol(value) {
+        const active = document.getElementById("activeProtocol");
+        active.textContent = value || "none";
       }
 
       function makeCard(proto) {
@@ -172,7 +185,7 @@
       }
 
       async function request(path, options = {}) {
-        const res = await fetch(path, options);
+        const res = await fetch(withToken(path), options);
         const data = await res.json();
         if (!res.ok) {
           throw new Error(data.error || "request failed");
@@ -215,15 +228,32 @@
       async function refreshStatus() {
         try {
           const data = await request("/api/status");
-          const active = document.getElementById("activeProtocol");
-          active.textContent = data.active || "none";
+          setActiveProtocol(data.active);
         } catch (err) {
           log(`Status error: ${err.message}`);
         }
       }
 
+      function startStream() {
+        const stream = new EventSource(withToken("/api/stream"));
+        stream.addEventListener("status", (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            setActiveProtocol(data.active);
+          } catch (err) {
+            log("Status stream payload error");
+          }
+        });
+        stream.onerror = () => {
+          stream.close();
+          log("Status stream disconnected. Reconnecting...");
+          setTimeout(startStream, 2000);
+        };
+      }
+
       buildGrid();
       refreshStatus();
+      startStream();
     </script>
   </body>
 </html>

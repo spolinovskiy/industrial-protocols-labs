@@ -31,3 +31,4 @@
 - 2026-01-11: Added docs/blog/02-version-control-plant-floor.md covering OT adoption of version control principles.
 - 2026-01-11: Authored docs/replit_integration_roadmap.md with integration steps, QA checks, multi-user scenarios, recovery plan, and a Replit agent prompt.
 - 2026-01-12: Integrated Replit frontend into repo as frontend/ and updated README with fullstack layout notes.
+- 2026-01-12: Added SSE status stream to lab switcher server and UI for live protocol status updates.

@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-12T18:27:49Z",
+  "updated_at": "2026-01-12T18:49:59Z",
   "tasks": [
     {
       "id": "T001",
@@ -383,14 +383,14 @@
       "dependencies": [
         "T025"
       ],
-      "passes": false,
-      "status": "pending",
+      "passes": true,
+      "status": "done",
       "description": "Add a websocket (or SSE) channel so the frontend can receive lab status updates without polling.",
       "validation": "Frontend receives live lab status updates when switching protocols.",
       "scripts": [
         "scripts/lab_switcher_server.py"
       ],
-      "updated_at": "2026-01-12T20:55:00Z"
+      "updated_at": "2026-01-12T18:49:59Z"
     },
     {
       "id": "T027",
