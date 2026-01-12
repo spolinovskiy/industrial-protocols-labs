@@ -28,3 +28,4 @@
 - 2026-01-11: Documented lab switcher UI usage and token auth in README.
 - 2026-01-11: Measured cold start and switchover timings on l-machine and documented results plus optimization guidance in docs/switchover_performance.md.
 - 2026-01-11: Added docs/blog/01-industrial-protocols-overview.md with the updated protocol philosophy article.
+- 2026-01-11: Added docs/blog/02-version-control-plant-floor.md covering OT adoption of version control principles.
