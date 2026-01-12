@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-12T18:49:59Z",
+  "updated_at": "2026-01-12T18:54:37Z",
   "tasks": [
     {
       "id": "T001",
@@ -399,12 +399,12 @@
       "dependencies": [
         "T026"
       ],
-      "passes": false,
-      "status": "pending",
+      "passes": true,
+      "status": "done",
       "description": "Merge frontend prompt guidance into docs and PRD, including websocket usage and DevOps labs links to FUXA.",
       "validation": "docs/replit_integration_roadmap.md updated with websocket integration and next-step checklist.",
       "scripts": [],
-      "updated_at": "2026-01-12T20:55:00Z"
+      "updated_at": "2026-01-12T18:54:37Z"
     }
   ]
 }

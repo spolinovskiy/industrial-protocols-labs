@@ -53,6 +53,7 @@ Use the existing switcher server (recommended):
   - `POST /api/stop`
   - `POST /api/pause?protocol=<name>&pause=1|0`
   - `GET /api/status`
+  - `GET /api/stream` (SSE status stream)
 
 The switcher:
 - Runs `labctl switch <protocol>`.
@@ -79,7 +80,7 @@ Admin URL:
 
 Add UI behaviors:
 - Protocol cards call `/api/switch`.
-- Show current active protocol using `/api/status`.
+- Show current active protocol via `/api/stream` (SSE), with a fallback to `/api/status`.
 - For Modbus:
   - Provide guest link and admin link.
 - For other protocols:
@@ -114,6 +115,9 @@ Diagnostics:
 - No advanced shell access.
 - Capture-only menu.
 - Keep capped capture retention.
+
+Reverse proxy (if used):
+- Ensure buffering is disabled for SSE (`/api/stream`) so status events flush to the browser.
 
 ## QC / Testing Scenarios
 
@@ -187,8 +191,9 @@ Goals:
 1) Build a protocol catalog UI with cards for Modbus, OPC UA, CIP, BACnet, DNP3, IEC-104, MQTT, S7.
 2) On card click, call the lab switcher API:
    - POST `${LAB_API_BASE}/api/switch?protocol=<protocol>`
-3) Show current active protocol by polling:
-   - GET `${LAB_API_BASE}/api/status`
+3) Show current active protocol using the SSE stream:
+   - GET `${LAB_API_BASE}/api/stream` (event: `status`, payload includes `active`)
+   - Fallback to `${LAB_API_BASE}/api/status` if SSE is unavailable
 4) Provide links:
    - Guest HMI: `${LAB_GUEST_URL}` (Modbus only)
    - Admin HMI: `${LAB_ADMIN_URL}` (proto-researcher / lab123)
