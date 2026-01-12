@@ -64,6 +64,8 @@ Note: `Pause/Resume` uses `docker pause/unpause` and is intended only for debugg
 
 ```
 industrial-protocols-labs/
+  frontend/              # Replit UI project (see frontend/README.md)
+  docs/
   platform/
     docker-compose.platform.yml
     nginx/
@@ -114,7 +116,12 @@ industrial-protocols-labs/
     test_all.sh
 ```
 
-Legacy per-protocol lab folders (e.g. `modbus-lab/`, `opcua-lab/`) are kept to preserve earlier work. The unified platform is the supported path forward.
+Legacy per-protocol lab folders live under `legacy/` to preserve earlier work. The unified platform is the supported path forward.
+
+## Frontend (Replit)
+
+The Replit UI project is embedded in `frontend/`. Follow `frontend/README.md` to run it locally,
+then point it at the backend host that runs `scripts/lab_switcher_server.py`.
 
 ## Protocol Profiles
 

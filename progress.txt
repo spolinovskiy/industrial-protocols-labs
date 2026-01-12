@@ -30,3 +30,4 @@
 - 2026-01-11: Added docs/blog/01-industrial-protocols-overview.md with the updated protocol philosophy article.
 - 2026-01-11: Added docs/blog/02-version-control-plant-floor.md covering OT adoption of version control principles.
 - 2026-01-11: Authored docs/replit_integration_roadmap.md with integration steps, QA checks, multi-user scenarios, recovery plan, and a Replit agent prompt.
+- 2026-01-12: Integrated Replit frontend into repo as frontend/ and updated README with fullstack layout notes.

@@ -1,0 +1,37 @@
+# IACS Behavior Analysis Platform - Progress Log
+
+## 2026-01-12
+
+### T001: Bootstrap PRD tracking artifacts
+- Status: IN PROGRESS
+- Created PRD.json with 13 tasks
+- Created progress.txt for tracking
+- Database provisioned (PostgreSQL)
+
+---
+
+## Task Summary
+
+| Task | Title | Status |
+|------|-------|--------|
+| T001 | Bootstrap PRD tracking | In Progress |
+| T002 | PostgreSQL + user schemas | Pending |
+| T003 | Replit Auth integration | Pending |
+| T004 | Platform branding transformation | Pending |
+| T005 | Main page redesign | Pending |
+| T006 | About page redesign | Pending |
+| T007 | Lab backend env vars | Pending |
+| T008 | Lab control API client | Pending |
+| T009 | Guest vs user access control | Pending |
+| T010 | Blog content rewrite | Pending |
+| T011 | Cybersecurity best practices | Pending |
+| T012 | Test scenarios | Pending |
+| T013 | Final review + documentation | Pending |
+
+---
+
+## Notes
+
+- External lab backend (Docker) must be hosted separately
+- Replit handles: auth, frontend, user data, content
+- External VM handles: protocol servers, FUXA HMI, diagnostics

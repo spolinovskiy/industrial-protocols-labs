@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-10T15:23:45Z",
+  "updated_at": "2026-01-12T18:27:49Z",
   "tasks": [
     {
       "id": "T001",
@@ -361,6 +361,50 @@
       "validation": "docs/replit_integration_roadmap.md exists with roadmap, QA checklist, multi-user scenarios, recovery plan, and expansion-ready site structure.",
       "scripts": [],
       "updated_at": "2026-01-11T16:40:00Z"
+    },
+    {
+      "id": "T025",
+      "title": "Integrate Replit frontend into repo layout",
+      "priority": 25,
+      "dependencies": [
+        "T024"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Place the Replit frontend project into the repo under a canonical path (frontend/) and align README/docs to the new fullstack layout.",
+      "validation": "frontend/ exists in repo with the Replit code and README reflects the unified layout.",
+      "scripts": [],
+      "updated_at": "2026-01-12T18:27:49Z"
+    },
+    {
+      "id": "T026",
+      "title": "Add frontend-backend realtime channel",
+      "priority": 26,
+      "dependencies": [
+        "T025"
+      ],
+      "passes": false,
+      "status": "pending",
+      "description": "Add a websocket (or SSE) channel so the frontend can receive lab status updates without polling.",
+      "validation": "Frontend receives live lab status updates when switching protocols.",
+      "scripts": [
+        "scripts/lab_switcher_server.py"
+      ],
+      "updated_at": "2026-01-12T20:55:00Z"
+    },
+    {
+      "id": "T027",
+      "title": "Update frontend integration prompt and next steps",
+      "priority": 27,
+      "dependencies": [
+        "T026"
+      ],
+      "passes": false,
+      "status": "pending",
+      "description": "Merge frontend prompt guidance into docs and PRD, including websocket usage and DevOps labs links to FUXA.",
+      "validation": "docs/replit_integration_roadmap.md updated with websocket integration and next-step checklist.",
+      "scripts": [],
+      "updated_at": "2026-01-12T20:55:00Z"
     }
   ]
 }

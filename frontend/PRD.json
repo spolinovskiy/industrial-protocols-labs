@@ -1,0 +1,137 @@
+{
+  "project": "iacs-behavior-analysis-platform",
+  "updated_at": "2026-01-12T10:00:00Z",
+  "description": "IACS Behavior Analysis Platform - A comprehensive web application for industrial automation engineers featuring protocol labs, technical blogs, and learning resources with authenticated user access.",
+  "tasks": [
+    {
+      "id": "T001",
+      "title": "Bootstrap PRD tracking artifacts",
+      "priority": 1,
+      "dependencies": [],
+      "status": "in_progress",
+      "description": "Create PRD.json and progress.txt to enforce development tracking methodology.",
+      "validation": "PRD.json and progress.txt exist in repo root.",
+      "updated_at": "2026-01-12T10:00:00Z"
+    },
+    {
+      "id": "T002",
+      "title": "Set up PostgreSQL database with user schemas",
+      "priority": 2,
+      "dependencies": ["T001"],
+      "status": "pending",
+      "description": "Create database schemas for users, sessions, and lab progress tracking using Drizzle ORM.",
+      "validation": "Database tables created and migrations applied successfully.",
+      "updated_at": "2026-01-12T10:00:00Z"
+    },
+    {
+      "id": "T003",
+      "title": "Add Replit Auth integration",
+      "priority": 3,
+      "dependencies": ["T002"],
+      "status": "pending",
+      "description": "Implement Replit Auth for Google, GitHub, Apple, X and email login with secure credential storage.",
+      "validation": "Users can sign in via multiple providers and sessions persist correctly.",
+      "updated_at": "2026-01-12T10:00:00Z"
+    },
+    {
+      "id": "T004",
+      "title": "Transform platform branding to IACS Behavior Analysis Platform",
+      "priority": 4,
+      "dependencies": ["T003"],
+      "status": "pending",
+      "description": "Update hero section, navigation, and branding to reflect the new IACS Behavior Analysis Platform identity.",
+      "validation": "Header shows new branding; hero section describes platform capabilities.",
+      "updated_at": "2026-01-12T10:00:00Z"
+    },
+    {
+      "id": "T005",
+      "title": "Redesign main page with dashboard sections",
+      "priority": 5,
+      "dependencies": ["T004"],
+      "status": "pending",
+      "description": "Create dashboard layout with Protocol Labs section and expansion placeholders for future features.",
+      "validation": "Homepage displays organized sections for labs, learning resources, and future areas.",
+      "updated_at": "2026-01-12T10:00:00Z"
+    },
+    {
+      "id": "T006",
+      "title": "Redesign About page",
+      "priority": 6,
+      "dependencies": ["T004"],
+      "status": "pending",
+      "description": "Create professional About page with proper sections, author bio, and social links.",
+      "validation": "About page has clean layout with structured content sections.",
+      "updated_at": "2026-01-12T10:00:00Z"
+    },
+    {
+      "id": "T007",
+      "title": "Configure lab backend environment variables",
+      "priority": 7,
+      "dependencies": ["T003"],
+      "status": "pending",
+      "description": "Set up environment variables for external lab backend integration (LAB_API_BASE, LAB_GUEST_URL, LAB_ADMIN_URL, LAB_DIAG_URL).",
+      "validation": "Environment variables configured and accessible in application.",
+      "updated_at": "2026-01-12T10:00:00Z"
+    },
+    {
+      "id": "T008",
+      "title": "Implement lab control API client",
+      "priority": 8,
+      "dependencies": ["T007"],
+      "status": "pending",
+      "description": "Create API client to communicate with external Docker backend for lab switching (/api/switch, /api/status).",
+      "validation": "Frontend can call lab API and display status updates.",
+      "updated_at": "2026-01-12T10:00:00Z"
+    },
+    {
+      "id": "T009",
+      "title": "Add guest vs authenticated user access control",
+      "priority": 9,
+      "dependencies": ["T003", "T008"],
+      "status": "pending",
+      "description": "Implement access control: Modbus for guests, all protocols for authenticated users.",
+      "validation": "Guest users see only Modbus; authenticated users can access all protocols.",
+      "updated_at": "2026-01-12T10:00:00Z"
+    },
+    {
+      "id": "T010",
+      "title": "Rewrite blog content",
+      "priority": 10,
+      "dependencies": ["T005"],
+      "status": "pending",
+      "description": "Rewrite blog content to sound natural and engineer-focused, removing AI-generated patterns.",
+      "validation": "Blog posts read naturally with technical depth appropriate for engineers.",
+      "updated_at": "2026-01-12T10:00:00Z"
+    },
+    {
+      "id": "T011",
+      "title": "Implement cybersecurity best practices",
+      "priority": 11,
+      "dependencies": ["T003"],
+      "status": "pending",
+      "description": "Add CSRF protection, rate limiting, input validation, and secure headers.",
+      "validation": "Security headers present; rate limiting active; inputs validated.",
+      "updated_at": "2026-01-12T10:00:00Z"
+    },
+    {
+      "id": "T012",
+      "title": "Create comprehensive test scenarios",
+      "priority": 12,
+      "dependencies": ["T009", "T010", "T011"],
+      "status": "pending",
+      "description": "Document and implement test scenarios for guest and user flows per QC checklist.",
+      "validation": "Test document covers functional, security, and performance scenarios.",
+      "updated_at": "2026-01-12T10:00:00Z"
+    },
+    {
+      "id": "T013",
+      "title": "Final review and documentation update",
+      "priority": 13,
+      "dependencies": ["T012"],
+      "status": "pending",
+      "description": "Complete architect review and update replit.md with new platform documentation.",
+      "validation": "replit.md reflects current architecture and all features documented.",
+      "updated_at": "2026-01-12T10:00:00Z"
+    }
+  ]
+}
