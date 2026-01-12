@@ -347,6 +347,20 @@
       "validation": "docs/blog/02-version-control-plant-floor.md exists and contains the provided article text.",
       "scripts": [],
       "updated_at": "2026-01-11T16:12:00Z"
+    },
+    {
+      "id": "T024",
+      "title": "Replit integration roadmap and merge prompt",
+      "priority": 24,
+      "dependencies": [
+        "T023"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Produce a step-by-step roadmap to merge the Replit frontend project with this backend, plus a structured prompt for the Replit agent covering hardening, QC tests, multi-user scenarios, and recovery.",
+      "validation": "docs/replit_integration_roadmap.md exists with roadmap, QA checklist, multi-user scenarios, recovery plan, and expansion-ready site structure.",
+      "scripts": [],
+      "updated_at": "2026-01-11T16:40:00Z"
     }
   ]
 }
