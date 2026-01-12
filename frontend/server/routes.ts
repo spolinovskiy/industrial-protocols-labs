@@ -98,15 +98,41 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/lab/status", async (req, res) => {
+  app.get("/api/lab/status", async (_req, res) => {
     try {
-      const { protocol } = req.query as { protocol?: Protocol };
-      const status = await getLabStatus(protocol);
+      const status = await getLabStatus();
       res.json(status);
     } catch (error) {
       console.error("Error getting lab status:", error);
       res.status(500).json({ error: "Failed to get lab status" });
     }
+  });
+
+  app.get("/api/lab/stream", async (req, res) => {
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+    res.flushHeaders?.();
+
+    let lastPayload = "";
+    const intervalMs = Number.parseInt(process.env.LAB_STATUS_INTERVAL_MS || "2000", 10);
+
+    const timer = setInterval(async () => {
+      try {
+        const status = await getLabStatus();
+        const payload = JSON.stringify(status);
+        if (payload !== lastPayload) {
+          res.write(`event: status\ndata: ${payload}\n\n`);
+          lastPayload = payload;
+        }
+      } catch (error) {
+        res.write(`event: error\ndata: ${JSON.stringify({ message: "status error" })}\n\n`);
+      }
+    }, intervalMs);
+
+    req.on("close", () => {
+      clearInterval(timer);
+    });
   });
 
   app.get("/api/lab/diagnostics", async (req, res) => {

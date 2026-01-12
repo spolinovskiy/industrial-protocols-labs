@@ -1,18 +1,14 @@
-const LAB_API_BASE = process.env.LAB_API_BASE || "https://lab-backend.example.com";
-const LAB_GUEST_URL = process.env.LAB_GUEST_URL || `${LAB_API_BASE}/guest`;
-const LAB_ADMIN_URL = process.env.LAB_ADMIN_URL || `${LAB_API_BASE}/admin`;
-const LAB_DIAG_URL = process.env.LAB_DIAG_URL || `${LAB_API_BASE}/diagnostics`;
+const LAB_SWITCHER_URL = process.env.LAB_SWITCHER_URL || process.env.LAB_API_BASE || "";
+const LAB_API_TOKEN = process.env.LAB_API_TOKEN || "";
+const LAB_GUEST_URL = process.env.LAB_GUEST_URL || "";
+const LAB_ADMIN_URL = process.env.LAB_ADMIN_URL || "";
+const LAB_DIAG_URL = process.env.LAB_DIAG_URL || "";
 
 export type Protocol = "modbus" | "opcua" | "cip" | "dnp3" | "iec104" | "mqtt" | "s7" | "bacnet";
 
 export interface LabStatus {
-  protocol: Protocol;
-  active: boolean;
-  containerId?: string;
-  hmiUrl?: string;
-  serverPort?: number;
-  startedAt?: string;
-  health: "healthy" | "degraded" | "unhealthy" | "unknown";
+  active: Protocol | null;
+  timestamp: string;
 }
 
 export interface LabSwitchResponse {
@@ -60,6 +56,21 @@ async function fetchWithTimeout(url: string, options: RequestInit = {}, timeoutM
   }
 }
 
+function buildHeaders(extra: Record<string, string> = {}): Record<string, string> {
+  const headers: Record<string, string> = { ...extra };
+  if (LAB_API_TOKEN) {
+    headers["X-Auth-Token"] = LAB_API_TOKEN;
+  }
+  return headers;
+}
+
+function requireSwitcherUrl(): string {
+  if (!LAB_SWITCHER_URL) {
+    throw new Error("LAB_SWITCHER_URL is not configured");
+  }
+  return LAB_SWITCHER_URL.replace(/\/$/, "");
+}
+
 export async function switchProtocol(protocol: Protocol, isAuthenticated: boolean): Promise<LabSwitchResponse> {
   const validProtocols: Protocol[] = ["modbus", "opcua", "cip", "dnp3", "iec104", "mqtt", "s7", "bacnet"];
   if (!validProtocols.includes(protocol)) {
@@ -87,14 +98,18 @@ export async function switchProtocol(protocol: Protocol, isAuthenticated: boolea
     };
   }
 
-  const endpoint = isAuthenticated ? LAB_ADMIN_URL : LAB_GUEST_URL;
+  let switcherBase: string;
+  try {
+    switcherBase = requireSwitcherUrl();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Missing lab switcher URL";
+    return { success: false, protocol, message };
+  }
   
   try {
-    const response = await fetchWithTimeout(`${endpoint}/switch`, {
+    const response = await fetchWithTimeout(`${switcherBase}/api/switch?protocol=${protocol}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: buildHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({ protocol }),
     });
 
@@ -108,10 +123,11 @@ export async function switchProtocol(protocol: Protocol, isAuthenticated: boolea
     }
 
     const data = await response.json();
+    const hmiUrl = isAuthenticated ? LAB_ADMIN_URL : LAB_GUEST_URL;
     return {
       success: true,
       protocol,
-      hmiUrl: data.hmiUrl,
+      hmiUrl: data.hmiUrl || hmiUrl || undefined,
       message: data.message,
     };
   } catch (error) {
@@ -124,38 +140,45 @@ export async function switchProtocol(protocol: Protocol, isAuthenticated: boolea
   }
 }
 
-export async function getLabStatus(protocol?: Protocol): Promise<LabStatus | LabStatus[]> {
+export async function getLabStatus(): Promise<LabStatus> {
+  const timestamp = new Date().toISOString();
+  let switcherBase = "";
   try {
-    const url = protocol ? `${LAB_DIAG_URL}/status/${protocol}` : `${LAB_DIAG_URL}/status`;
-    const response = await fetchWithTimeout(url);
+    switcherBase = requireSwitcherUrl();
+  } catch {
+    return { active: null, timestamp };
+  }
+
+  try {
+    const response = await fetchWithTimeout(`${switcherBase}/api/status`, {
+      headers: buildHeaders(),
+    });
 
     if (!response.ok) {
-      if (protocol) {
-        return {
-          protocol,
-          active: false,
-          health: "unknown",
-        };
-      }
-      return [];
+      return { active: null, timestamp };
     }
 
-    return await response.json();
-  } catch (error) {
-    if (protocol) {
-      return {
-        protocol,
-        active: false,
-        health: "unknown",
-      };
-    }
-    return [];
+    const data = await response.json();
+    return {
+      active: data.active ?? null,
+      timestamp: data.timestamp || timestamp,
+    };
+  } catch {
+    return { active: null, timestamp };
   }
 }
 
 export async function getDiagnostics(): Promise<DiagnosticsResponse> {
   try {
-    const response = await fetchWithTimeout(`${LAB_DIAG_URL}/containers`);
+    if (!LAB_DIAG_URL) {
+      return {
+        containers: [],
+        timestamp: new Date().toISOString(),
+      };
+    }
+    const response = await fetchWithTimeout(`${LAB_DIAG_URL}/containers`, {
+      headers: buildHeaders(),
+    });
 
     if (!response.ok) {
       return {
@@ -180,7 +203,12 @@ export async function getHmiUrl(protocol: Protocol, isAuthenticated: boolean): P
 
   try {
     const endpoint = isAuthenticated ? LAB_ADMIN_URL : LAB_GUEST_URL;
-    const response = await fetchWithTimeout(`${endpoint}/hmi/${protocol}`);
+    if (!endpoint) {
+      return null;
+    }
+    const response = await fetchWithTimeout(`${endpoint}/hmi/${protocol}`, {
+      headers: buildHeaders(),
+    });
 
     if (!response.ok) {
       return null;

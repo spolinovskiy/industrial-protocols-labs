@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-12T18:54:37Z",
+  "updated_at": "2026-01-12T19:43:26Z",
   "tasks": [
     {
       "id": "T001",
@@ -405,6 +405,20 @@
       "validation": "docs/replit_integration_roadmap.md updated with websocket integration and next-step checklist.",
       "scripts": [],
       "updated_at": "2026-01-12T18:54:37Z"
+    },
+    {
+      "id": "T028",
+      "title": "Fix frontend lab switcher integration and UX",
+      "priority": 28,
+      "dependencies": [
+        "T027"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Align frontend environment variables with the lab switcher API, add a lab start action on protocol pages, and expose a live status stream for the UI.",
+      "validation": "Frontend can start a lab via /api/lab/switch, shows live active protocol updates, and opens the correct guest/admin FUXA links.",
+      "scripts": [],
+      "updated_at": "2026-01-12T19:43:26Z"
     }
   ]
 }

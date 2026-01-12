@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -57,6 +58,10 @@ function LoadingSkeleton() {
 export default function ProtocolTest() {
   const { protocol: protocolId } = useParams<{ protocol: string }>();
   const { user } = useAuth();
+  const [switching, setSwitching] = useState(false);
+  const [switchError, setSwitchError] = useState<string | null>(null);
+  const [activeProtocol, setActiveProtocol] = useState<string | null>(null);
+  const [statusTimestamp, setStatusTimestamp] = useState<string | null>(null);
 
   const { data: protocol, isLoading, error } = useQuery<Protocol>({
     queryKey: ["/api/protocols", protocolId],
@@ -74,6 +79,51 @@ export default function ProtocolTest() {
   const Icon = protocol?.icon ? protocolIcons[protocol.icon] || Network : Network;
   const canAccess = protocol?.guestAccess || labAccess?.isAuthenticated;
   const relatedBlogPosts = blogs?.filter(blog => protocol?.relatedBlogs.includes(blog.slug)) || [];
+  const isActive = protocol?.id && activeProtocol === protocol.id;
+  const guestBase = import.meta.env.VITE_LAB_GUEST_URL || import.meta.env.VITE_LAB_BACKEND_URL || "";
+  const adminBase = import.meta.env.VITE_LAB_ADMIN_URL || import.meta.env.VITE_LAB_BACKEND_URL || "";
+  const hmiBase = (labAccess?.isAuthenticated ? adminBase : guestBase).replace(/\/$/, "");
+  const hmiPath = protocol?.fuxaConfig.hmiPath || "";
+  const normalizedPath = hmiPath ? (hmiPath.startsWith("/") ? hmiPath : `/${hmiPath}`) : "";
+  const hmiUrl = hmiBase ? `${hmiBase}${normalizedPath}` : null;
+
+  useEffect(() => {
+    const source = new EventSource("/api/lab/stream");
+    source.addEventListener("status", (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        setActiveProtocol(data.active ?? null);
+        setStatusTimestamp(data.timestamp ?? null);
+      } catch {
+        setActiveProtocol(null);
+      }
+    });
+    source.onerror = () => {
+      source.close();
+    };
+    return () => source.close();
+  }, []);
+
+  const handleStartLab = async () => {
+    if (!protocol) return;
+    setSwitchError(null);
+    setSwitching(true);
+    try {
+      const response = await fetch("/api/lab/switch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ protocol: protocol.id }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setSwitchError(data?.error || data?.message || "Failed to start lab");
+      }
+    } catch (error) {
+      setSwitchError("Failed to reach lab controller");
+    } finally {
+      setSwitching(false);
+    }
+  };
 
   if (isLoading) {
     return <LoadingSkeleton />;
@@ -143,16 +193,34 @@ export default function ProtocolTest() {
                     Access the FUXA HMI interface to interact with the {protocol.name} server.
                     Toggle digital outputs, write analog values, and monitor inputs in real-time.
                   </p>
-                  <Button size="lg" className="gap-2" asChild>
-                    <a 
-                      href={`${import.meta.env.VITE_LAB_BACKEND_URL || ''}${protocol.fuxaConfig.hmiPath}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                      Open FUXA Interface
-                    </a>
-                  </Button>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Button size="lg" className="gap-2" onClick={handleStartLab} disabled={switching}>
+                      <Play className="h-4 w-4" />
+                      {switching ? "Starting lab..." : "Start Lab"}
+                    </Button>
+                    <Button size="lg" variant="outline" className="gap-2" asChild disabled={!hmiUrl}>
+                      <a href={hmiUrl || "#"} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-4 w-4" />
+                        Open FUXA Interface
+                      </a>
+                    </Button>
+                    {isActive && (
+                      <Badge variant="secondary" className="gap-1">
+                        <CheckCircle className="h-3 w-3" />
+                        Active
+                      </Badge>
+                    )}
+                  </div>
+                  {switchError && (
+                    <div className="p-3 rounded-md border border-destructive/30 text-sm text-destructive">
+                      {switchError}
+                    </div>
+                  )}
+                  {statusTimestamp && (
+                    <p className="text-xs text-muted-foreground">
+                      Last status update: {new Date(statusTimestamp).toLocaleTimeString()}
+                    </p>
+                  )}
                 </div>
               ) : (
                 <div className="space-y-4">

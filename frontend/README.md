@@ -20,25 +20,45 @@ focused on industrial communication, observability, and security analysis.
 - Packet-level visibility (Wireshark / PyShark)
 
 ## Repository structure
-- client/ – web UI
-- server/ – backend services
-- labs/ – protocol laboratories (Docker-based)
-- scripts/ – helper and automation scripts
+- client/ – web UI (React + Vite)
+- server/ – Express API used by the UI
 - shared/ – shared models and utilities
+- script/ – build helpers
 
-## Protocol laboratories
-Each protocol lab provides:
-- Docker Compose environment
-- Client and server simulators
-- Packet capture (PCAP) export
-- Wireshark and PyShark analysis
+## Local development
 
-Supported / planned protocols:
-- Modbus TCP
-- OPC UA
-- CIP (EtherNet/IP)
-- DNP3
-- MQTT
+1) Install dependencies:
 
-## Getting started
-See `docs/getting-started.md`.
+```bash
+npm install
+```
+
+2) Export environment variables for the lab backend:
+
+```bash
+export LAB_SWITCHER_URL="http://<lab-host>:8090"
+export LAB_GUEST_URL="http://<lab-host>:1881"
+export LAB_ADMIN_URL="http://<lab-host>:1882"
+export LAB_DIAG_URL="http://<lab-host>:1882/diag"
+export LAB_API_TOKEN="optional-token"
+
+export VITE_LAB_GUEST_URL="http://<lab-host>:1881"
+export VITE_LAB_ADMIN_URL="http://<lab-host>:1882"
+```
+
+3) Start the frontend server:
+
+```bash
+npm run dev
+```
+
+4) Open the site:
+
+```
+http://localhost:5000
+```
+
+5) Test a lab:
+- Open a protocol page.
+- Click "Start Lab" to run the backend protocol stack.
+- Click "Open FUXA Interface" to view the HMI.
