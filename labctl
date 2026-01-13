@@ -30,6 +30,26 @@ stop_all_servers() {
   fi
 }
 
+protocol_services() {
+  local proto="$1"
+  local services=("proto-server-${proto}")
+  case "$proto" in
+    cip)
+      services+=("proto-gateway-cip")
+      ;;
+    dnp3)
+      services+=("proto-gateway-dnp3")
+      ;;
+    iec104)
+      services+=("proto-gateway-iec104")
+      ;;
+    mqtt)
+      services+=("proto-server-mqtt-bridge")
+      ;;
+  esac
+  printf '%s\n' "${services[@]}"
+}
+
 cmd=${1:-}
 case "$cmd" in
   list)
@@ -39,7 +59,8 @@ case "$cmd" in
     proto=${2:-}
     is_protocol "$proto" || die "unknown protocol: $proto"
     stop_all_servers
-    docker compose -f "$COMPOSE_FILE" --profile "$proto" up -d
+    mapfile -t services < <(protocol_services "$proto")
+    docker compose -f "$COMPOSE_FILE" --profile "$proto" up -d --no-deps "${services[@]}"
     echo "$proto" > "$ACTIVE_FILE"
     ;;
   stop)
@@ -52,7 +73,8 @@ case "$cmd" in
     proto=${2:-}
     is_protocol "$proto" || die "unknown protocol: $proto"
     stop_all_servers
-    docker compose -f "$COMPOSE_FILE" --profile "$proto" up -d
+    mapfile -t services < <(protocol_services "$proto")
+    docker compose -f "$COMPOSE_FILE" --profile "$proto" up -d --no-deps "${services[@]}"
     echo "$proto" > "$ACTIVE_FILE"
     ;;
   *)

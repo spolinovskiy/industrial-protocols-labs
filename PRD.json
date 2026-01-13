@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-13T18:31:48Z",
+  "updated_at": "2026-01-13T19:15:22Z",
   "tasks": [
     {
       "id": "T001",
@@ -488,7 +488,7 @@
       "description": "Add a local auth mode for frontend login, remove guest basic auth for FUXA, and ensure Modbus lab start works for guests.",
       "validation": "Guest can start Modbus lab without login, guest FUXA opens without credentials, and local auth mode allows signed-in access to all labs.",
       "scripts": [],
-      "updated_at": "2026-01-13T18:31:48Z"
+      "updated_at": "2026-01-13T19:15:22Z"
     }
   ]
 }
