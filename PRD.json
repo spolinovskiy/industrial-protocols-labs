@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-12T19:43:26Z",
+  "updated_at": "2026-01-13T16:38:21Z",
   "tasks": [
     {
       "id": "T001",
@@ -419,6 +419,20 @@
       "validation": "Frontend can start a lab via /api/lab/switch, shows live active protocol updates, and opens the correct guest/admin FUXA links.",
       "scripts": [],
       "updated_at": "2026-01-12T19:43:26Z"
+    },
+    {
+      "id": "T029",
+      "title": "Add frontend container + nginx reverse proxy for unified site",
+      "priority": 29,
+      "dependencies": [
+        "T028"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Containerize the frontend production build and add an nginx reverse proxy service that exposes the full site alongside guest/admin/diagnostics paths.",
+      "validation": "docker compose brings up frontend + web proxy, site loads on a single port, and guest/admin/diag paths proxy correctly.",
+      "scripts": [],
+      "updated_at": "2026-01-13T16:38:21Z"
     }
   ]
 }

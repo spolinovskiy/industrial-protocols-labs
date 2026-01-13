@@ -34,3 +34,4 @@
 - 2026-01-12: Added SSE status stream to lab switcher server and UI for live protocol status updates.
 - 2026-01-12: Updated docs/replit_integration_roadmap.md with SSE status stream guidance and proxy notes.
 - 2026-01-12: Aligned frontend lab switcher integration, added SSE status stream, and added Start Lab action with correct HMI URLs.
+- 2026-01-13: Added frontend Dockerfile, lab-switcher container, and web nginx reverse proxy for unified site on port 8080.

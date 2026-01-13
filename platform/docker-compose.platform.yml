@@ -115,6 +115,82 @@ services:
           cpus: "0.25"
           memory: 128M
 
+  # Lab switcher API (controls protocol selection)
+  lab-switcher:
+    build:
+      context: ./lab_switcher
+    container_name: lab-switcher
+    networks:
+      - platform_net
+    volumes:
+      - ./:/lab
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - LAB_SWITCHER_HOST=0.0.0.0
+      - LAB_SWITCHER_PORT=8090
+      - LAB_SWITCHER_TOKEN=${LAB_SWITCHER_TOKEN:-}
+    ports:
+      - "8090:8090"
+    restart: always
+    labels:
+      - "com.example.role=lab-switcher"
+      - "com.example.stack=platform"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+
+  # Frontend app (production build)
+  frontend:
+    build:
+      context: ../frontend
+      args:
+        - VITE_LAB_GUEST_URL=/guest
+        - VITE_LAB_ADMIN_URL=/admin
+    container_name: frontend
+    networks:
+      - platform_net
+    environment:
+      - PORT=5000
+      - LAB_SWITCHER_URL=http://lab-switcher:8090
+      - LAB_GUEST_URL=/guest
+      - LAB_ADMIN_URL=/admin
+      - LAB_DIAG_URL=/diag
+      - LAB_API_TOKEN=${LAB_API_TOKEN:-}
+    restart: always
+    labels:
+      - "com.example.role=frontend"
+      - "com.example.stack=platform"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+
+  # Web reverse proxy (front page + guest/admin/diag)
+  web:
+    image: nginx:alpine
+    container_name: web
+    depends_on:
+      - frontend
+      - gateway
+    networks:
+      - platform_net
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./web/nginx.conf:/etc/nginx/nginx.conf:ro"
+    restart: always
+    labels:
+      - "com.example.role=web"
+      - "com.example.stack=platform"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 128M
+
   # Reset controller (session TTL + idle timeout)
   reset-controller:
     build:

@@ -8,6 +8,7 @@ Unified, docker-based ICS protocol testbed focused on packet inspection and a co
 ./labctl start modbus
 ```
 
+- Full site (frontend + reverse proxy): `http://localhost:8080`
 - Guest HMI (view-only): `http://localhost:1881` (user: `guest`, pass: `guest`)
 - Admin HMI + diagnostics: `http://localhost:1882` (user: `proto-researcher`, pass: `lab123`)
 - Diagnostics menu: `http://localhost:1882/diag/`
@@ -68,11 +69,15 @@ industrial-protocols-labs/
   docs/
   platform/
     docker-compose.platform.yml
+    web/
+      nginx.conf
     nginx/
       nginx.conf
       auth/
         guest.htpasswd
         admin.htpasswd
+    lab_switcher/
+      Dockerfile
     diagnostics/
       Dockerfile
       entrypoint.sh
