@@ -36,3 +36,4 @@
 - 2026-01-12: Aligned frontend lab switcher integration, added SSE status stream, and added Start Lab action with correct HMI URLs.
 - 2026-01-13: Added frontend Dockerfile, lab-switcher container, and web nginx reverse proxy for unified site on port 8080.
 - 2026-01-13: Added auth fallback to run frontend without Postgres/Replit env, using in-memory auth storage and disabled login routes.
+- 2026-01-13: Fixed lab-switcher volume mount to repo root so the control server can start reliably.

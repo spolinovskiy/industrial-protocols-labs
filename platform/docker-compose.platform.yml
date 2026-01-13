@@ -123,7 +123,7 @@ services:
     networks:
       - platform_net
     volumes:
-      - ./:/lab
+      - ../:/lab
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - LAB_SWITCHER_HOST=0.0.0.0

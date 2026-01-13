@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-13T17:27:52Z",
+  "updated_at": "2026-01-13T17:34:39Z",
   "tasks": [
     {
       "id": "T001",
@@ -447,6 +447,20 @@
       "validation": "Frontend container starts without DATABASE_URL, and /api/protocols returns data with guest-only access enforced.",
       "scripts": [],
       "updated_at": "2026-01-13T17:27:52Z"
+    },
+    {
+      "id": "T031",
+      "title": "Fix lab-switcher volume mount in compose",
+      "priority": 31,
+      "dependencies": [
+        "T030"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Mount the repository root into the lab-switcher container so scripts/lab_switcher_server.py is available.",
+      "validation": "lab-switcher container stays up and serves /api/status without restart loops.",
+      "scripts": [],
+      "updated_at": "2026-01-13T17:34:39Z"
     }
   ]
 }
