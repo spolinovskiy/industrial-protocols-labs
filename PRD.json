@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-13T19:26:05Z",
+  "updated_at": "2026-01-13T20:13:58Z",
   "tasks": [
     {
       "id": "T001",
@@ -503,6 +503,20 @@
       "validation": "/guest/modbus and /admin/modbus redirect to /lab and Open FUXA Interface uses /lab.",
       "scripts": [],
       "updated_at": "2026-01-13T19:26:05Z"
+    },
+    {
+      "id": "T035",
+      "title": "Redirect protocol slugs on web proxy guest/admin routes",
+      "priority": 35,
+      "dependencies": [
+        "T034"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Ensure /guest/<protocol> and /admin/<protocol> redirect to /guest/lab and /admin/lab on the web proxy.",
+      "validation": "/guest/modbus and /admin/modbus return 302 to /guest/lab or /admin/lab.",
+      "scripts": [],
+      "updated_at": "2026-01-13T20:13:58Z"
     }
   ]
 }
