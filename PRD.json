@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-13T16:38:21Z",
+  "updated_at": "2026-01-13T17:27:52Z",
   "tasks": [
     {
       "id": "T001",
@@ -433,6 +433,20 @@
       "validation": "docker compose brings up frontend + web proxy, site loads on a single port, and guest/admin/diag paths proxy correctly.",
       "scripts": [],
       "updated_at": "2026-01-13T16:38:21Z"
+    },
+    {
+      "id": "T030",
+      "title": "Allow frontend container to run without Postgres",
+      "priority": 30,
+      "dependencies": [
+        "T029"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Make Replit auth optional so the frontend can run without DATABASE_URL/REPL_ID by falling back to a guest-only mode.",
+      "validation": "Frontend container starts without DATABASE_URL, and /api/protocols returns data with guest-only access enforced.",
+      "scripts": [],
+      "updated_at": "2026-01-13T17:27:52Z"
     }
   ]
 }

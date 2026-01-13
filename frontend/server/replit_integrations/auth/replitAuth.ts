@@ -8,6 +8,10 @@ import memoize from "memoizee";
 import connectPg from "connect-pg-simple";
 import { authStorage } from "./storage";
 
+const replitAuthEnabled = Boolean(
+  process.env.REPL_ID && process.env.SESSION_SECRET && process.env.DATABASE_URL,
+);
+
 const getOidcConfig = memoize(
   async () => {
     return await client.discovery(
@@ -61,6 +65,30 @@ async function upsertUser(claims: any) {
 }
 
 export async function setupAuth(app: Express) {
+  if (!replitAuthEnabled) {
+    app.use((req, _res, next) => {
+      if (typeof req.isAuthenticated !== "function") {
+        req.isAuthenticated = () => false;
+      }
+      next();
+    });
+
+    app.get("/api/login", (_req, res) => {
+      res.status(503).json({ message: "Authentication is disabled." });
+    });
+
+    app.get("/api/callback", (_req, res) => {
+      res.status(503).json({ message: "Authentication is disabled." });
+    });
+
+    app.get("/api/logout", (_req, res) => {
+      res.status(200).json({ message: "Authentication is disabled." });
+    });
+
+    console.warn("Replit auth disabled: missing REPL_ID, SESSION_SECRET, or DATABASE_URL.");
+    return;
+  }
+
   app.set("trust proxy", 1);
   app.use(getSession());
   app.use(passport.initialize());
@@ -131,6 +159,10 @@ export async function setupAuth(app: Express) {
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
+  if (!replitAuthEnabled) {
+    return res.status(401).json({ message: "Authentication is disabled." });
+  }
+
   const user = req.user as any;
 
   if (!req.isAuthenticated() || !user.expires_at) {

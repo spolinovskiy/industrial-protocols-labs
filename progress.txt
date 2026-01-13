@@ -35,3 +35,4 @@
 - 2026-01-12: Updated docs/replit_integration_roadmap.md with SSE status stream guidance and proxy notes.
 - 2026-01-12: Aligned frontend lab switcher integration, added SSE status stream, and added Start Lab action with correct HMI URLs.
 - 2026-01-13: Added frontend Dockerfile, lab-switcher container, and web nginx reverse proxy for unified site on port 8080.
+- 2026-01-13: Added auth fallback to run frontend without Postgres/Replit env, using in-memory auth storage and disabled login routes.
