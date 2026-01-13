@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-13T17:34:39Z",
+  "updated_at": "2026-01-13T17:55:22Z",
   "tasks": [
     {
       "id": "T001",
@@ -461,6 +461,20 @@
       "validation": "lab-switcher container stays up and serves /api/status without restart loops.",
       "scripts": [],
       "updated_at": "2026-01-13T17:34:39Z"
+    },
+    {
+      "id": "T032",
+      "title": "Enable nginx DNS re-resolve for backend containers",
+      "priority": 32,
+      "dependencies": [
+        "T031"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Update nginx reverse proxy to re-resolve frontend/gateway container DNS so upstream IP changes after rebuild do not cause 502s.",
+      "validation": "After rebuilding frontend, web proxy continues serving /api/protocols without 502 errors.",
+      "scripts": [],
+      "updated_at": "2026-01-13T17:55:22Z"
     }
   ]
 }
