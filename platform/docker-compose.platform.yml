@@ -158,6 +158,10 @@ services:
       - LAB_ADMIN_URL=/admin
       - LAB_DIAG_URL=/diag
       - LAB_API_TOKEN=${LAB_API_TOKEN:-}
+      - LOCAL_AUTH_MODE=${LOCAL_AUTH_MODE:-login}
+      - LOCAL_AUTH_PASSWORD=${LOCAL_AUTH_PASSWORD:-}
+      - SESSION_SECRET=${SESSION_SECRET:-local-dev-secret}
+      - CSRF_ALLOW_MISSING=${CSRF_ALLOW_MISSING:-1}
     restart: always
     labels:
       - "com.example.role=frontend"

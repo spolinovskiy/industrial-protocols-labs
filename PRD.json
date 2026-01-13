@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-13T17:55:22Z",
+  "updated_at": "2026-01-13T18:31:48Z",
   "tasks": [
     {
       "id": "T001",
@@ -475,6 +475,20 @@
       "validation": "After rebuilding frontend, web proxy continues serving /api/protocols without 502 errors.",
       "scripts": [],
       "updated_at": "2026-01-13T17:55:22Z"
+    },
+    {
+      "id": "T033",
+      "title": "Simplify local auth and guest access for Modbus",
+      "priority": 33,
+      "dependencies": [
+        "T032"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Add a local auth mode for frontend login, remove guest basic auth for FUXA, and ensure Modbus lab start works for guests.",
+      "validation": "Guest can start Modbus lab without login, guest FUXA opens without credentials, and local auth mode allows signed-in access to all labs.",
+      "scripts": [],
+      "updated_at": "2026-01-13T18:31:48Z"
     }
   ]
 }

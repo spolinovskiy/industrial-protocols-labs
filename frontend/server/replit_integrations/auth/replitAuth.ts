@@ -12,6 +12,11 @@ const replitAuthEnabled = Boolean(
   process.env.REPL_ID && process.env.SESSION_SECRET && process.env.DATABASE_URL,
 );
 
+const localAuthMode = process.env.LOCAL_AUTH_MODE || "disabled";
+const localAuthEnabled = localAuthMode !== "disabled";
+const localAuthAuto = localAuthMode === "auto";
+const localAuthPassword = process.env.LOCAL_AUTH_PASSWORD || "";
+
 const getOidcConfig = memoize(
   async () => {
     return await client.discovery(
@@ -65,6 +70,75 @@ async function upsertUser(claims: any) {
 }
 
 export async function setupAuth(app: Express) {
+  if (!replitAuthEnabled && localAuthEnabled) {
+    app.set("trust proxy", 1);
+
+    if (localAuthAuto) {
+      app.use((req, _res, next) => {
+        req.isAuthenticated = () => true;
+        req.user = {
+          claims: { sub: "local-user" },
+        } as Express.User;
+        next();
+      });
+    } else {
+      const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
+      app.use(
+        session({
+          secret: process.env.SESSION_SECRET || "local-dev-secret",
+          resave: false,
+          saveUninitialized: false,
+          cookie: {
+            httpOnly: true,
+            secure: false,
+            maxAge: sessionTtl,
+          },
+        })
+      );
+      app.use((req, _res, next) => {
+        if (typeof req.isAuthenticated !== "function") {
+          req.isAuthenticated = () => Boolean((req.session as any)?.localAuth);
+        }
+        if (req.isAuthenticated()) {
+          req.user = {
+            claims: { sub: "local-user" },
+          } as Express.User;
+        }
+        next();
+      });
+    }
+
+    app.get("/api/login", (req, res) => {
+      if (localAuthPassword) {
+        const token = req.query.token;
+        if (token !== localAuthPassword) {
+          return res.status(401).json({ message: "Invalid local auth token." });
+        }
+      }
+      if (!localAuthAuto) {
+        (req.session as any).localAuth = true;
+      }
+      return res.redirect("/");
+    });
+
+    app.get("/api/callback", (_req, res) => {
+      res.redirect("/");
+    });
+
+    app.get("/api/logout", (req, res) => {
+      if (req.session) {
+        req.session.destroy(() => {
+          res.redirect("/");
+        });
+        return;
+      }
+      res.redirect("/");
+    });
+
+    console.warn("Replit auth disabled: using local auth mode.");
+    return;
+  }
+
   if (!replitAuthEnabled) {
     app.use((req, _res, next) => {
       if (typeof req.isAuthenticated !== "function") {
@@ -159,6 +233,13 @@ export async function setupAuth(app: Express) {
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
+  if (!replitAuthEnabled && localAuthEnabled) {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
   if (!replitAuthEnabled) {
     return res.status(401).json({ message: "Authentication is disabled." });
   }

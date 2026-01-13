@@ -38,3 +38,4 @@
 - 2026-01-13: Added auth fallback to run frontend without Postgres/Replit env, using in-memory auth storage and disabled login routes.
 - 2026-01-13: Fixed lab-switcher volume mount to repo root so the control server can start reliably.
 - 2026-01-13: Updated nginx proxy to re-resolve container DNS using Docker resolver and variable proxy_pass to avoid 502 after rebuilds.
+- 2026-01-13: Added local auth mode for frontend, relaxed CSRF host matching, and removed guest basic auth in gateway to allow Modbus guest start.
