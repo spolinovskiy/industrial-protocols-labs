@@ -83,7 +83,8 @@ export default function ProtocolTest() {
   const guestBase = import.meta.env.VITE_LAB_GUEST_URL || import.meta.env.VITE_LAB_BACKEND_URL || "";
   const adminBase = import.meta.env.VITE_LAB_ADMIN_URL || import.meta.env.VITE_LAB_BACKEND_URL || "";
   const hmiBase = (labAccess?.isAuthenticated ? adminBase : guestBase).replace(/\/$/, "");
-  const hmiPath = protocol?.fuxaConfig.hmiPath || "";
+  const rawPath = protocol?.fuxaConfig.hmiPath || "";
+  const hmiPath = rawPath.startsWith("/lab") ? rawPath : "/lab";
   const normalizedPath = hmiPath ? (hmiPath.startsWith("/") ? hmiPath : `/${hmiPath}`) : "";
   const hmiUrl = hmiBase ? `${hmiBase}${normalizedPath}` : null;
 

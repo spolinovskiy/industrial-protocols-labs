@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-13T19:15:22Z",
+  "updated_at": "2026-01-13T19:26:05Z",
   "tasks": [
     {
       "id": "T001",
@@ -489,6 +489,20 @@
       "validation": "Guest can start Modbus lab without login, guest FUXA opens without credentials, and local auth mode allows signed-in access to all labs.",
       "scripts": [],
       "updated_at": "2026-01-13T19:15:22Z"
+    },
+    {
+      "id": "T034",
+      "title": "Normalize FUXA guest/admin HMI paths",
+      "priority": 34,
+      "dependencies": [
+        "T033"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Redirect protocol-specific HMI paths (e.g., /modbus) to /lab and update frontend links to open /lab directly.",
+      "validation": "/guest/modbus and /admin/modbus redirect to /lab and Open FUXA Interface uses /lab.",
+      "scripts": [],
+      "updated_at": "2026-01-13T19:26:05Z"
     }
   ]
 }
