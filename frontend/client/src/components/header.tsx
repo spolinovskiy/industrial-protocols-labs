@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Menu, X, Server, Github, Container, LogIn, LogOut, User } from "lucide-react";
+import { Menu, X, Github, Container, LogIn, LogOut, User } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -41,12 +41,14 @@ export function Header() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-2" data-testid="link-home-logo">
-            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
-              <Server className="h-5 w-5" />
-            </div>
+            <img
+              src="/images/iacs-logo.svg"
+              alt="IACS DevOps Labs and Experiments logo"
+              className="h-9 w-9"
+            />
             <div className="flex flex-col">
-              <span className="text-lg font-semibold tracking-tight leading-tight">IACS Behavior</span>
-              <span className="text-xs text-muted-foreground leading-tight">Analysis Platform</span>
+              <span className="text-lg font-semibold tracking-tight leading-tight">IACS DevOps Labs</span>
+              <span className="text-xs text-muted-foreground leading-tight">and Experiments</span>
             </div>
           </Link>
 

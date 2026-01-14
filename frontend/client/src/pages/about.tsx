@@ -11,7 +11,7 @@ export default function AboutPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold tracking-tight mb-4">About</h1>
           <p className="text-lg text-muted-foreground">
-            The IACS Behavior Analysis Platform is an educational resource for industrial automation engineers and security researchers.
+            The IACS DevOps Labs and Experiments platform is an educational resource for industrial automation engineers and security researchers.
           </p>
         </div>
 

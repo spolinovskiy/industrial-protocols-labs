@@ -1,10 +1,10 @@
-# IACS Behavior Analysis Platform
+# IACS DevOps Labs and Experiments
 
 A comprehensive web platform for studying industrial automation protocol behaviors, featuring live protocol labs, technical resources, and traffic analysis tools.
 
 ## Overview
 
-The IACS Behavior Analysis Platform is a split-architecture application built with React (frontend) and Express (backend) hosted on Replit, designed to integrate with an external Docker-based lab infrastructure. The platform provides:
+The IACS DevOps Labs and Experiments platform is a split-architecture application built with React (frontend) and Express (backend) hosted on Replit, designed to integrate with an external Docker-based lab infrastructure. The platform provides:
 
 - **Protocol Labs**: Live hands-on labs for 8 industrial protocols (Modbus, OPC UA, CIP, DNP3, IEC-104, MQTT, S7, BACnet)
 - **Guest Access**: Modbus lab available without authentication
@@ -155,7 +155,7 @@ The app runs on port 5000 with the frontend and backend served together via Vite
 - **2026-01-12**: Redesigned protocol pages from "4 labs per protocol" to single-page with FUXA launch, test workflow, related blogs, and library docs
 - **2026-01-12**: Added termshark blog article for terminal-based industrial protocol packet analysis
 - **2026-01-12**: Updated protocol schema with transportLayer, fuxaConfig, testWorkflow, relatedBlogs, libraryDocs fields
-- **2026-01-12**: Platform branding transformation to "IACS Behavior Analysis Platform"
+- **2026-01-12**: Platform branding transformation to "IACS DevOps Labs and Experiments"
 - **2026-01-12**: Added Replit Auth integration with multiple OAuth providers
 - **2026-01-12**: Implemented lab control API for external Docker backend integration
 - **2026-01-12**: Added security middleware (Helmet, rate limiting)

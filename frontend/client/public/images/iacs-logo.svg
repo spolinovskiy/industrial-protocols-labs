@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="IACS DevOps Labs and Experiments">
+  <rect width="128" height="128" rx="20" fill="#1f8ed3" />
+  <rect x="30" y="28" width="68" height="26" rx="6" fill="none" stroke="#ffffff" stroke-width="8" />
+  <rect x="30" y="66" width="68" height="26" rx="6" fill="none" stroke="#ffffff" stroke-width="8" />
+  <circle cx="42" cy="41" r="4" fill="#ffffff" />
+  <circle cx="42" cy="79" r="4" fill="#ffffff" />
+  <line x1="52" y1="41" x2="86" y2="41" stroke="#ffffff" stroke-width="6" stroke-linecap="round" />
+  <line x1="52" y1="79" x2="86" y2="79" stroke="#ffffff" stroke-width="6" stroke-linecap="round" />
+</svg>

@@ -1,7 +1,7 @@
 {
-  "project": "iacs-behavior-analysis-platform",
+  "project": "iacs-devops-labs-and-experiments",
   "updated_at": "2026-01-12T10:00:00Z",
-  "description": "IACS Behavior Analysis Platform - A comprehensive web application for industrial automation engineers featuring protocol labs, technical blogs, and learning resources with authenticated user access.",
+  "description": "IACS DevOps Labs and Experiments - A comprehensive web application for industrial automation engineers featuring protocol labs, technical blogs, and learning resources with authenticated user access.",
   "tasks": [
     {
       "id": "T001",
@@ -35,11 +35,11 @@
     },
     {
       "id": "T004",
-      "title": "Transform platform branding to IACS Behavior Analysis Platform",
+      "title": "Transform platform branding to IACS DevOps Labs and Experiments",
       "priority": 4,
       "dependencies": ["T003"],
       "status": "pending",
-      "description": "Update hero section, navigation, and branding to reflect the new IACS Behavior Analysis Platform identity.",
+      "description": "Update hero section, navigation, and branding to reflect the new IACS DevOps Labs and Experiments identity.",
       "validation": "Header shows new branding; hero section describes platform capabilities.",
       "updated_at": "2026-01-12T10:00:00Z"
     },

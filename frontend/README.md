@@ -1,7 +1,7 @@
-# IACS DevOps Lab
+# IACS DevOps Labs and Experiments
 
 ## Purpose
-IACS DevOps Lab is a hands-on training and experimentation platform for
+IACS DevOps Labs and Experiments is a hands-on training and experimentation platform for
 industrial automation and control system (IACS) engineers.
 
 The project provides reproducible protocol laboratories using Docker,

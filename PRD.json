@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-14T09:25:00Z",
+  "updated_at": "2026-01-14T09:55:00Z",
   "tasks": [
     {
       "id": "T001",
@@ -531,6 +531,21 @@
       "validation": "Lab start no longer fails with 'operation was aborted' during slow container start.",
       "scripts": [],
       "updated_at": "2026-01-14T09:25:00Z"
+    }
+    ,
+    {
+      "id": "T037",
+      "title": "Update branding logo and site name",
+      "priority": 37,
+      "dependencies": [
+        "T036"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Replace the Replit orange logo with the provided icon and rename \"IACS Behavior Analisys Platform\" to \"IACS DevOps Labs and Experiments\" across the frontend.",
+      "validation": "Updated logo appears on the frontend and all instances of the old name are replaced with the new name.",
+      "scripts": [],
+      "updated_at": "2026-01-14T09:55:00Z"
     }
   ]
 }

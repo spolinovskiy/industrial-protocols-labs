@@ -43,3 +43,4 @@
 - 2026-01-13: Normalized guest/admin FUXA paths by redirecting protocol slugs to /lab and forcing frontend HMI link to /lab.
 - 2026-01-13: Added web proxy redirects so /guest/<protocol> and /admin/<protocol> land on the correct /lab endpoints.
 - 2026-01-14: Increased lab switch timeout (LAB_SWITCH_TIMEOUT_MS) and wired it into the frontend switch request to prevent aborted fetches on slow starts.
+- 2026-01-14: Swapped in the new IACS DevOps Labs and Experiments logo, updated favicon to SVG, and renamed the platform copy from IACS Behavior Analysis Platform.

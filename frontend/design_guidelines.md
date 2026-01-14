@@ -1,4 +1,4 @@
-# IACS DevOps Lab - Design Guidelines
+# IACS DevOps Labs and Experiments - Design Guidelines
 
 ## Design Approach
 
@@ -48,7 +48,7 @@
 ## Component Library
 
 ### Navigation
-- **Sticky header** with site logo "IACS DevOps Lab", primary nav links (Blog, Labs, Tools, Resources)
+- **Sticky header** with site logo "IACS DevOps Labs and Experiments", primary nav links (Blog, Labs, Tools, Resources)
 - Desktop: horizontal nav with dropdown menus for Labs (by protocol) and Tools
 - Mobile: hamburger menu with expandable sections
 - Include GitHub/DockerHub icon links in header

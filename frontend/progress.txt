@@ -1,4 +1,4 @@
-# IACS Behavior Analysis Platform - Progress Log
+# IACS DevOps Labs and Experiments - Progress Log
 
 ## 2026-01-12
 

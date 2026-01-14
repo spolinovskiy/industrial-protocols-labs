@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Server, Github, Container, Mail, Linkedin } from "lucide-react";
+import { Github, Container, Mail, Linkedin } from "lucide-react";
 
 const protocols = [
   { name: "Modbus", href: "/labs/modbus" },
@@ -34,12 +34,14 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4" data-testid="link-footer-home">
-              <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
-                <Server className="h-5 w-5" />
-              </div>
+              <img
+                src="/images/iacs-logo.svg"
+                alt="IACS DevOps Labs and Experiments logo"
+                className="h-9 w-9"
+              />
               <div className="flex flex-col">
-                <span className="text-lg font-semibold leading-tight">IACS Behavior</span>
-                <span className="text-xs text-muted-foreground leading-tight">Analysis Platform</span>
+                <span className="text-lg font-semibold leading-tight">IACS DevOps Labs</span>
+                <span className="text-xs text-muted-foreground leading-tight">and Experiments</span>
               </div>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
@@ -109,7 +111,7 @@ export function Footer() {
               Built for Industrial Automation Security Research
             </p>
             <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} IACS Behavior Analysis Platform. All rights reserved.
+              &copy; {new Date().getFullYear()} IACS DevOps Labs and Experiments. All rights reserved.
             </p>
           </div>
         </div>

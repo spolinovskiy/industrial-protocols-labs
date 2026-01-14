@@ -31,8 +31,8 @@ export function Hero() {
           
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
             IACS{" "}
-            <span className="text-primary">Behavior Analysis</span>{" "}
-            Platform
+            <span className="text-primary">DevOps Labs</span>{" "}
+            and Experiments
           </h1>
           
           <p className="text-lg sm:text-xl text-muted-foreground mb-8 leading-relaxed max-w-2xl">
