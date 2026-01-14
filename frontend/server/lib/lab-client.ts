@@ -3,6 +3,8 @@ const LAB_API_TOKEN = process.env.LAB_API_TOKEN || "";
 const LAB_GUEST_URL = process.env.LAB_GUEST_URL || "";
 const LAB_ADMIN_URL = process.env.LAB_ADMIN_URL || "";
 const LAB_DIAG_URL = process.env.LAB_DIAG_URL || "";
+const LAB_SWITCH_TIMEOUT_MS = Number.parseInt(process.env.LAB_SWITCH_TIMEOUT_MS || "", 10);
+const SWITCH_TIMEOUT_MS = Number.isFinite(LAB_SWITCH_TIMEOUT_MS) ? LAB_SWITCH_TIMEOUT_MS : 60000;
 
 export type Protocol = "modbus" | "opcua" | "cip" | "dnp3" | "iec104" | "mqtt" | "s7" | "bacnet";
 
@@ -107,11 +109,15 @@ export async function switchProtocol(protocol: Protocol, isAuthenticated: boolea
   }
   
   try {
-    const response = await fetchWithTimeout(`${switcherBase}/api/switch?protocol=${protocol}`, {
-      method: "POST",
-      headers: buildHeaders({ "Content-Type": "application/json" }),
-      body: JSON.stringify({ protocol }),
-    });
+    const response = await fetchWithTimeout(
+      `${switcherBase}/api/switch?protocol=${protocol}`,
+      {
+        method: "POST",
+        headers: buildHeaders({ "Content-Type": "application/json" }),
+        body: JSON.stringify({ protocol }),
+      },
+      SWITCH_TIMEOUT_MS
+    );
 
     if (!response.ok) {
       const errorText = await response.text();

@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-13T20:13:58Z",
+  "updated_at": "2026-01-14T09:25:00Z",
   "tasks": [
     {
       "id": "T001",
@@ -517,6 +517,20 @@
       "validation": "/guest/modbus and /admin/modbus return 302 to /guest/lab or /admin/lab.",
       "scripts": [],
       "updated_at": "2026-01-13T20:13:58Z"
+    },
+    {
+      "id": "T036",
+      "title": "Increase lab switch timeout to avoid aborted fetch",
+      "priority": 36,
+      "dependencies": [
+        "T035"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Allow longer backend switch operations by extending the frontend lab switch timeout.",
+      "validation": "Lab start no longer fails with 'operation was aborted' during slow container start.",
+      "scripts": [],
+      "updated_at": "2026-01-14T09:25:00Z"
     }
   ]
 }

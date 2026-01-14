@@ -158,6 +158,7 @@ services:
       - LAB_ADMIN_URL=/admin
       - LAB_DIAG_URL=/diag
       - LAB_API_TOKEN=${LAB_API_TOKEN:-}
+      - LAB_SWITCH_TIMEOUT_MS=${LAB_SWITCH_TIMEOUT_MS:-60000}
       - LOCAL_AUTH_MODE=${LOCAL_AUTH_MODE:-login}
       - LOCAL_AUTH_PASSWORD=${LOCAL_AUTH_PASSWORD:-}
       - SESSION_SECRET=${SESSION_SECRET:-local-dev-secret}
