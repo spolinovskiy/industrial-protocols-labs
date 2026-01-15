@@ -46,3 +46,4 @@
 - 2026-01-14: Swapped in the new IACS DevOps Labs and Experiments logo, updated favicon to SVG, and renamed the platform copy from IACS Behavior Analysis Platform.
 - 2026-01-14: Reconciled OPC UA and DNP3 server logic with canonical reset/timer/counter behavior and added the OPC UA FUXA view helper script to tracking.
 - 2026-01-14: Added the Industrial Protocols Overview and Version Control Comes to the Plant Floor articles to the frontend blog catalog.
+- 2026-01-14: Audited frontend dependencies and documented container optimization guidance in docs/frontend_dependency_audit.md.
