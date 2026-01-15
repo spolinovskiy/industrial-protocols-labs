@@ -47,3 +47,4 @@
 - 2026-01-14: Reconciled OPC UA and DNP3 server logic with canonical reset/timer/counter behavior and added the OPC UA FUXA view helper script to tracking.
 - 2026-01-14: Added the Industrial Protocols Overview and Version Control Comes to the Plant Floor articles to the frontend blog catalog.
 - 2026-01-14: Audited frontend dependencies and documented container optimization guidance in docs/frontend_dependency_audit.md.
+- 2026-01-15: Added FUXA warmup/ready messaging, disabled FUXA link until active, and redirected /lab to /guest/lab to avoid 404s.

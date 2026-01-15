@@ -80,13 +80,25 @@ export default function ProtocolTest() {
   const canAccess = protocol?.guestAccess || labAccess?.isAuthenticated;
   const relatedBlogPosts = blogs?.filter(blog => protocol?.relatedBlogs.includes(blog.slug)) || [];
   const isActive = protocol?.id && activeProtocol === protocol.id;
+  const isStarting = switching && !isActive;
   const guestBase = import.meta.env.VITE_LAB_GUEST_URL || import.meta.env.VITE_LAB_BACKEND_URL || "";
   const adminBase = import.meta.env.VITE_LAB_ADMIN_URL || import.meta.env.VITE_LAB_BACKEND_URL || "";
   const hmiBase = (labAccess?.isAuthenticated ? adminBase : guestBase).replace(/\/$/, "");
   const rawPath = protocol?.fuxaConfig.hmiPath || "";
   const hmiPath = rawPath.startsWith("/lab") ? rawPath : "/lab";
-  const normalizedPath = hmiPath ? (hmiPath.startsWith("/") ? hmiPath : `/${hmiPath}`) : "";
+  const normalizedPath = hmiPath
+    ? (hmiPath.startsWith("/") ? hmiPath : `/${hmiPath}`)
+    : "";
+  const hmiPathWithSlash = normalizedPath.endsWith("/") ? normalizedPath : `${normalizedPath}/`;
   const hmiUrl = hmiBase ? `${hmiBase}${normalizedPath}` : null;
+  const hmiUrlWithSlash = hmiBase ? `${hmiBase}${hmiPathWithSlash}` : null;
+  const statusLabel = isActive ? "Active" : isStarting ? "Starting" : "Idle";
+  const statusTone = isActive ? "text-green-600" : isStarting ? "text-amber-600" : "text-muted-foreground";
+  const statusMessage = isActive
+    ? "FUXA is ready. Use Open FUXA Interface to launch the HMI."
+    : isStarting
+      ? "Starting containers. Wait for Active before opening FUXA."
+      : "Lab is idle. Start the lab to launch containers.";
 
   useEffect(() => {
     const source = new EventSource("/api/lab/stream");
@@ -199,24 +211,30 @@ export default function ProtocolTest() {
                       <Play className="h-4 w-4" />
                       {switching ? "Starting lab..." : "Start Lab"}
                     </Button>
-                    <Button size="lg" variant="outline" className="gap-2" asChild disabled={!hmiUrl}>
-                      <a href={hmiUrl || "#"} target="_blank" rel="noopener noreferrer">
+                    <Button size="lg" variant="outline" className="gap-2" asChild disabled={!hmiUrlWithSlash || !isActive}>
+                      <a href={hmiUrlWithSlash || "#"} target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="h-4 w-4" />
                         Open FUXA Interface
                       </a>
                     </Button>
-                    {isActive && (
-                      <Badge variant="secondary" className="gap-1">
-                        <CheckCircle className="h-3 w-3" />
-                        Active
-                      </Badge>
-                    )}
+                    <Badge variant={isActive ? "secondary" : "outline"} className="gap-1">
+                      <CheckCircle className="h-3 w-3" />
+                      {statusLabel}
+                    </Badge>
                   </div>
+                  {hmiUrlWithSlash && (
+                    <p className="text-xs text-muted-foreground">
+                      FUXA URL: {hmiUrlWithSlash}
+                    </p>
+                  )}
                   {switchError && (
                     <div className="p-3 rounded-md border border-destructive/30 text-sm text-destructive">
                       {switchError}
                     </div>
                   )}
+                  <p className={`text-xs ${statusTone}`}>
+                    {statusMessage}
+                  </p>
                   {statusTimestamp && (
                     <p className="text-xs text-muted-foreground">
                       Last status update: {new Date(statusTimestamp).toLocaleTimeString()}
@@ -273,7 +291,7 @@ export default function ProtocolTest() {
                 </div>
                 <div className="p-3 bg-muted/50 rounded-lg">
                   <p className="text-xs text-muted-foreground uppercase tracking-wide">Server Status</p>
-                  <p className="font-medium text-green-600">Active</p>
+                  <p className={`font-medium ${statusTone}`}>{statusLabel}</p>
                 </div>
               </div>
               <p className="text-muted-foreground">{protocol.transportLayer.description}</p>

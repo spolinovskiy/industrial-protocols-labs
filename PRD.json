@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-14T11:25:00Z",
+  "updated_at": "2026-01-15T18:45:00Z",
   "tasks": [
     {
       "id": "T001",
@@ -590,6 +590,20 @@
       "validation": "Docs or README include dependency rationale and optimization recommendations.",
       "scripts": [],
       "updated_at": "2026-01-14T11:25:00Z"
+    },
+    {
+      "id": "T041",
+      "title": "Improve FUXA launch UX and /lab redirects",
+      "priority": 41,
+      "dependencies": [
+        "T040"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Clarify lab warmup status, disable the FUXA launch link until the lab is active, and redirect /lab to the guest FUXA endpoint to avoid 404s.",
+      "validation": "Protocol page shows warmup/ready messaging, Active status reflects lab switcher state, and /lab redirects to /guest/lab.",
+      "scripts": [],
+      "updated_at": "2026-01-15T18:45:00Z"
     }
   ]
 }
