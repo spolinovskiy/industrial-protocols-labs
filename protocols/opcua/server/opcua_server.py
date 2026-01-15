@@ -30,8 +30,11 @@ def main() -> None:
     cnt_01 = add_var(lab, "CNT_01", 0, ua.VariantType.Int32, False)
 
     prev_ao1 = 0.0
+    prev_do = [False] * 8
     timer = 0
-    counter = 0
+    switch_count = 0
+    thresh_count = 0
+    last_tick = time.monotonic()
 
     server.start()
     print("OPC UA server listening on opc.tcp://0.0.0.0:4840/")
@@ -39,23 +42,48 @@ def main() -> None:
     try:
         while True:
             current_do = [bool(v.get_value()) for v in do_vars]
+            reset_requested = current_do[4] and not prev_do[4]
+            if reset_requested:
+                timer = 0
+                switch_count = 0
+                thresh_count = 0
+                prev_ao1 = float(ao_vars[0].get_value())
+                last_tick = time.monotonic()
+                for idx in range(5):
+                    do_vars[idx].set_value(False)
+                current_do = [bool(v.get_value()) for v in do_vars]
+
             for idx, val in enumerate(current_do):
                 di_vars[idx].set_value(val)
 
             ao_vals = [float(v.get_value()) for v in ao_vars]
-            for idx, val in enumerate(ao_vals):
-                ai_vars[idx].set_value(val)
-
             ao1 = ao_vals[0]
-            if prev_ao1 <= THRESHOLD < ao1:
-                counter = min(counter + 1, 2**31 - 1)
-            prev_ao1 = ao1
 
-            if ao1 > THRESHOLD:
-                timer = min(timer + 1, 2**31 - 1)
+            if not reset_requested:
+                for idx in range(4):
+                    if not prev_do[idx] and current_do[idx]:
+                        switch_count = min(switch_count + 1, 2**31 - 1)
+
+                if prev_ao1 <= THRESHOLD < ao1:
+                    thresh_count = min(thresh_count + 1, 2**31 - 1)
+                prev_ao1 = ao1
+
+                now = time.monotonic()
+                if now - last_tick >= 1.0:
+                    ticks = int(now - last_tick)
+                    last_tick += ticks
+                    if ao1 > THRESHOLD:
+                        timer = min(timer + ticks, 2**31 - 1)
+
+            ai_vars[0].set_value(ao1)
+            ai_vars[1].set_value(switch_count)
+            ai_vars[2].set_value(thresh_count)
+            ai_vars[3].set_value(ao_vals[3])
 
             tmr_01.set_value(timer)
-            cnt_01.set_value(counter)
+            cnt_01.set_value(thresh_count)
+
+            prev_do = list(current_do)
 
             time.sleep(1)
     finally:

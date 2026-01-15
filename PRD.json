@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-14T09:55:00Z",
+  "updated_at": "2026-01-14T10:30:00Z",
   "tasks": [
     {
       "id": "T001",
@@ -546,6 +546,21 @@
       "validation": "Updated logo appears on the frontend and all instances of the old name are replaced with the new name.",
       "scripts": [],
       "updated_at": "2026-01-14T09:55:00Z"
+    }
+    ,
+    {
+      "id": "T038",
+      "title": "Reconcile OPC UA/DNP3 server logic and missing helper script",
+      "priority": 38,
+      "dependencies": [
+        "T037"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Review and commit the untracked OPC UA/DNP3 server logic updates and add the missing OPC UA view helper script if appropriate.",
+      "validation": "protocols/opcua/server/opcua_server.py and protocols/dnp3/server/dnp3_server.py align with canonical reset/counter logic, and scripts/fuxa_add_opcua_view.py is tracked or removed deliberately.",
+      "scripts": [],
+      "updated_at": "2026-01-14T10:30:00Z"
     }
   ]
 }
