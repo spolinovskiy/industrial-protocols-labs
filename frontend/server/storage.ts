@@ -11,6 +11,296 @@ export interface IStorage {
 
 const blogPosts: BlogPost[] = [
   {
+    slug: "industrial-protocols-overview",
+    title: "Industrial Protocols Overview",
+    excerpt: "Understand how protocol philosophy shapes data models, communications, and security choices before you capture the first packet.",
+    author: "IACS DevOps Team",
+    date: "January 14, 2026",
+    category: "Foundations",
+    readTime: "18 min read",
+    tags: ["Protocols", "Architecture", "OT/IT", "Security"],
+    content: `
+<h2>Understanding Protocol Philosophy Before You Touch the Wire</h2>
+<p>Industrial protocols are often taught as collections of ports, frame formats, and supported devices. That approach is sufficient for basic integration, but it fails when systems must scale, interoperate across vendors, or withstand operational and security pressure.</p>
+<p>This article takes a different approach. Instead of beginning with how to use industrial protocols, it begins with how they think. Every protocol encodes assumptions about data, communication, reliability, and security. Those assumptions shape architectures long before the first packet is captured. When they are misunderstood, integration problems follow. When they are understood, protocol selection becomes an engineering decision rather than guesswork.</p>
+
+<h2>What "protocol philosophy" means</h2>
+<p>At a practical level, every industrial protocol answers the same four questions, whether explicitly or implicitly.</p>
+<ul>
+  <li><strong>How is data represented?</strong> As raw memory locations, structured objects, or opaque messages?</li>
+  <li><strong>How does communication occur?</strong> Through polling, cyclic exchange, event reporting, or brokered publish/subscribe?</li>
+  <li><strong>What assumptions exist about time and reliability?</strong> Best-effort reads, deterministic updates, or guaranteed event delivery?</li>
+  <li><strong>Where does security live?</strong> Outside the protocol, added later, or embedded in the architecture itself?</li>
+</ul>
+<p>Most integration failures occur when systems with incompatible answers to these questions are forced together.</p>
+
+<h2>Four mental models of industrial protocols</h2>
+<p>Viewed through this lens, the eight protocols discussed here fall naturally into four conceptual families.</p>
+
+<h3>1. Memory-oriented protocols</h3>
+<p><strong>Modbus, classic S7comm</strong></p>
+<p>These protocols treat data as locations, not concepts. A register or memory offset has no intrinsic meaning; interpretation exists entirely outside the protocol. Communication is simple request/response. Their strength is durability and simplicity. Their weakness is semantic blindness. As systems grow, documentation replaces protocol structure, and complexity moves out of sight.</p>
+
+<h3>2. Telecontrol and event-centric protocols</h3>
+<p><strong>DNP3, IEC-60870-5-104</strong></p>
+<p>These protocols assume unreliable links, large distances, and operational consequences. Data is modeled as points with state, quality, and time. Event reporting and acknowledgements are central, not optional. They were designed for critical infrastructure long before the term "IIoT" existed.</p>
+
+<h3>3. Object-oriented industrial protocols</h3>
+<p><strong>CIP (EtherNet/IP), OPC UA, BACnet</strong></p>
+<p>These protocols model devices explicitly. Data has structure, type, and context. Objects expose attributes and services. Discovery and metadata are first-class concerns. This increases complexity, but it enables long-term interoperability and vendor independence.</p>
+
+<h3>4. Messaging and transport protocols</h3>
+<p><strong>MQTT</strong></p>
+<p>MQTT deliberately avoids modeling the physical world. It moves messages efficiently and at scale. Semantics are external, defined by topic structure and payload conventions. This is not a limitation. It is the point.</p>
+
+<h2>Philosophy-level comparison</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Protocol</th>
+      <th>Data model</th>
+      <th>Communication</th>
+      <th>Semantics</th>
+      <th>Complexity</th>
+      <th>Security posture</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Modbus</td>
+      <td>Registers, coils</td>
+      <td>Client polling</td>
+      <td>None</td>
+      <td>Low</td>
+      <td>Originally none; TLS via Modbus Security</td>
+    </tr>
+    <tr>
+      <td>DNP3</td>
+      <td>Points + events</td>
+      <td>Event-driven</td>
+      <td>Limited</td>
+      <td>Medium</td>
+      <td>Secure Authentication profiles</td>
+    </tr>
+    <tr>
+      <td>S7comm</td>
+      <td>PLC memory areas</td>
+      <td>Session reads/writes</td>
+      <td>None</td>
+      <td>Medium</td>
+      <td>Historically weak; proprietary hardening</td>
+    </tr>
+    <tr>
+      <td>IEC-104</td>
+      <td>Information objects</td>
+      <td>Telecontrol workflow</td>
+      <td>Limited</td>
+      <td>Medium</td>
+      <td>IEC-62351 (TLS profiles)</td>
+    </tr>
+    <tr>
+      <td>MQTT</td>
+      <td>Messages on topics</td>
+      <td>Brokered pub/sub</td>
+      <td>External</td>
+      <td>Low-Medium</td>
+      <td>TLS + broker policy</td>
+    </tr>
+    <tr>
+      <td>OPC UA</td>
+      <td>Typed information model</td>
+      <td>Services + subscriptions</td>
+      <td>Strong</td>
+      <td>High</td>
+      <td>Built-in secure channels</td>
+    </tr>
+    <tr>
+      <td>CIP</td>
+      <td>Objects + cyclic I/O</td>
+      <td>Implicit + explicit</td>
+      <td>Strong</td>
+      <td>High</td>
+      <td>CIP Security (TLS/DTLS)</td>
+    </tr>
+    <tr>
+      <td>BACnet</td>
+      <td>Building objects</td>
+      <td>Service-oriented</td>
+      <td>Strong</td>
+      <td>High</td>
+      <td>BACnet/SC with TLS 1.3</td>
+    </tr>
+  </tbody>
+</table>
+<p>This comparison is not about superiority. It is about architectural fitness.</p>
+
+<h2>How each protocol "thinks"</h2>
+
+<h3>Modbus - "Read this address"</h3>
+<p>Modbus models the world as shared memory. A value is a value, nothing more. This makes it easy to implement and trivial to test, but incapable of self-description or native eventing. Security can be added at the transport layer, but the data model remains flat.</p>
+<p><strong>Architectural takeaway:</strong> Use Modbus where simplicity and ubiquity outweigh semantic richness.</p>
+
+<h3>DNP3 - "Tell me what changed, and when"</h3>
+<p>DNP3 assumes that polling everything is wasteful and fragile. It prioritizes time-stamped events, acknowledgements, and operational discipline. Security extensions fit naturally because command authenticity already mattered.</p>
+<p><strong>Architectural takeaway:</strong> DNP3 embeds operational intent directly into protocol behavior.</p>
+
+<h3>S7comm - "Access the PLC internals"</h3>
+<p>S7comm is optimized for Siemens tooling, not interoperability. It assumes trusted environments and direct memory access. Security improvements have come later, but they reinforce its closed, privileged nature.</p>
+<p><strong>Architectural takeaway:</strong> Treat S7comm as internal plumbing, not an architectural boundary.</p>
+
+<h3>IEC-104 - "Operate the grid safely"</h3>
+<p>IEC-104 encodes power-system operations as protocol rules: monitoring, commands, confirmations, sequencing. It formalizes control-room workflow on the wire. Security profiles extend this model without changing its intent.</p>
+<p><strong>Architectural takeaway:</strong> IEC-104 is operational process, not generic data exchange.</p>
+
+<h3>MQTT - "Move messages, not meaning"</h3>
+<p>MQTT minimizes assumptions. It scales by decoupling producers and consumers. Meaning is imposed by convention, not enforced by protocol rules. Security is delegated to brokers and transport.</p>
+<p><strong>Architectural takeaway:</strong> MQTT excels as a distribution layer, not a device model.</p>
+
+<h3>OPC UA - "Make meaning explicit"</h3>
+<p>OPC UA assumes interoperability requires shared understanding. Its information model captures structure, relationships, and access rules. Security is integral, not optional. Complexity is the price of clarity.</p>
+<p><strong>Architectural takeaway:</strong> OPC UA belongs at system boundaries where meaning must survive change.</p>
+
+<h3>CIP (EtherNet/IP) - "Objects plus real-time behavior"</h3>
+<p>CIP unifies object modeling with cyclic real-time exchange. Time-critical I/O and configuration services coexist within one framework. Security enhancements preserve control behavior.</p>
+<p><strong>Architectural takeaway:</strong> CIP is a control system architecture, not just a protocol.</p>
+
+<h3>BACnet - "Buildings as structured systems"</h3>
+<p>BACnet standardizes building concepts as shared objects. This enables multi-vendor integration at the application level. BACnet/SC modernizes the architecture with TLS-based security.</p>
+<p><strong>Architectural takeaway:</strong> BACnet's strength is semantic alignment across building systems.</p>
+
+<h2>A security reality check</h2>
+<p>TLS alone does not make systems secure. Effective security depends on identity, certificate lifecycle, roles, segmentation, and operations. Protocols differ mainly in how much of this they standardize versus how much they leave to architecture.</p>
+
+<h2>Why this matters for protocol labs</h2>
+<p>Protocol labs should not stop at packet dissection. They should test assumptions:</p>
+<ul>
+  <li>Polling versus events</li>
+  <li>Cyclic versus on-demand</li>
+  <li>Flat memory versus semantic models</li>
+  <li>Security outside versus inside the protocol</li>
+</ul>
+<p>A good lab answers one question: What architectural behavior does this protocol encourage?</p>
+
+<h2>Closing perspective</h2>
+<p>Industrial protocols do not compete in isolation. They coexist in layers. Understanding protocol philosophy allows engineers to place each protocol where it fits naturally, avoid forcing one protocol to imitate another, and design systems that scale technically and organizationally. That understanding is the foundation of any serious industrial protocol lab and any sustainable OT architecture.</p>
+    `,
+  },
+  {
+    slug: "version-control-plant-floor",
+    title: "Version Control Comes to the Plant Floor",
+    excerpt: "How OT is adopting Git principles for PLC logic, configuration, and change management across major automation vendors.",
+    author: "IACS DevOps Team",
+    date: "January 14, 2026",
+    category: "DevOps",
+    readTime: "16 min read",
+    tags: ["Version Control", "PLC", "DevOps", "Change Management"],
+    content: `
+<h2>How OT Is Adopting Git Principles for PLC Logic, Configuration, and Change Management</h2>
+<p>For decades, version control in industrial automation meant one thing: "Who has the latest backup?" Projects were tracked through file names, USB drives, and email attachments. Rollbacks depended on tribal knowledge. Merges were avoided entirely. Audit trails were manual at best.</p>
+<p>That model no longer survives modern OT reality. As industrial systems become software-heavy, continuously updated, cyber-regulated, and increasingly integrated with IT systems, OT is being forced to adopt IT-grade version control discipline.</p>
+
+<h2>1. Why Git principles matter in OT (not Git itself)</h2>
+<p>Before naming tools, it is critical to separate principles from implementations. OT does not need engineers typing <code>git rebase</code> on PLCs. OT does need:</p>
+<ul>
+  <li>Deterministic history of logic changes</li>
+  <li>Diff visibility at logic and configuration level</li>
+  <li>Safe rollback to known-good states</li>
+  <li>Branch-like workflows for FAT/SAT/hotfixes</li>
+  <li>Traceability for compliance (IEC 62443, FDA, ISO)</li>
+</ul>
+<p>In other words: OT needs outcomes of Git, not Git commands on the shop floor.</p>
+
+<h2>2. Rockwell Automation: VCS Custom Tools (a milestone moment)</h2>
+<p>Rockwell's release of VCS (Version Control System) Custom Tools is a strong signal that PLC logic is now treated as source code.</p>
+<h3>What VCS Custom Tools actually do</h3>
+<ul>
+  <li>Integrate Studio 5000 Logix Designer with Git-based repositories</li>
+  <li>Serialize PLC projects into diff-friendly artifacts</li>
+  <li>Enable change tracking, commit history, rollback, and multi-engineer workflows</li>
+</ul>
+<p>Git is not exposed directly to controls engineers. It acts as a backend system of record, and Rockwell controls how projects are decomposed and compared. This mirrors how IT tools abstract Git behind IDEs.</p>
+<p><strong>Why this is important:</strong> Rockwell historically relied on AssetCentre, proprietary project files, and lock-based workflows. VCS tools represent a philosophical shift: PLC logic is no longer a monolithic binary; it is versioned content.</p>
+
+<h2>3. Siemens: openness first, Git second</h2>
+<p>Siemens took a different path. Instead of adding Git inside TIA Portal, Siemens focused on openness of engineering data and external lifecycle tooling.</p>
+<h3>Key Siemens elements</h3>
+<ul>
+  <li><strong>TIA Portal Openness</strong>: APIs for exporting project elements and external scripts for serialization and comparison</li>
+  <li><strong>Siemens Automation Toolchain (SAT)</strong>: CI/CD-like pipelines, integration with GitLab/Azure DevOps, PLC code generation</li>
+  <li>Structured text increasingly resembles traditional code</li>
+</ul>
+<p><strong>Philosophy:</strong> Siemens assumes OT teams will integrate into existing IT DevOps ecosystems. Version control is handled externally while engineering tools remain deterministic editors.</p>
+
+<h2>4. Schneider Electric: EcoStruxure and lifecycle traceability</h2>
+<p>Schneider's approach focuses on lifecycle management rather than pure Git tooling. Key components include EcoStruxure Control Expert project history, integrations with SVN/Git repositories, and strong emphasis on safety lifecycle and auditability. Schneider treats version control as governance infrastructure, not a developer convenience.</p>
+
+<h2>5. Beckhoff: PLC as software, unapologetically</h2>
+<p>Beckhoff is the most IT-native of major PLC vendors. TwinCAT runs on Windows with real-time extensions, PLC projects are text-based, modular, and scriptable, and Git integration is direct and practical. Engineers commonly store TwinCAT projects in Git and use branching strategies similar to software teams.</p>
+<p><strong>Philosophy:</strong> Beckhoff does not add IT principles to OT. It assumes them.</p>
+
+<h2>6. ABB and Emerson: controlled evolution</h2>
+<p>ABB and Emerson operate in highly regulated, safety-critical domains. Their version control strategies emphasize change authorization, state control, and audit completeness. Git is typically used in engineering support layers, not exposed directly to control logic runtime workflows. This is intentional; customers prioritize predictability over agility and governance over speed.</p>
+
+<h2>7. Comparative view: OT vendors and Git adoption</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Vendor</th>
+      <th>Git integration style</th>
+      <th>Philosophy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Rockwell</td>
+      <td>Embedded VCS tools</td>
+      <td>Git abstracted, OT-friendly</td>
+    </tr>
+    <tr>
+      <td>Siemens</td>
+      <td>External DevOps integration</td>
+      <td>IT-driven lifecycle</td>
+    </tr>
+    <tr>
+      <td>Schneider</td>
+      <td>Governance-focused</td>
+      <td>Compliance first</td>
+    </tr>
+    <tr>
+      <td>Beckhoff</td>
+      <td>Native usage</td>
+      <td>PLC = software</td>
+    </tr>
+    <tr>
+      <td>ABB</td>
+      <td>Controlled lifecycle</td>
+      <td>Safety and audit</td>
+    </tr>
+    <tr>
+      <td>Emerson</td>
+      <td>Change management</td>
+      <td>Regulated OT</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>8. What this means for OT engineers</h2>
+<p>The shift is irreversible. Future OT workflows will include repositories, not folders; commits, not "final_final_v7"; rollbacks, not emergency reuploads; and parallel development, not tool locking. But this does not turn OT engineers into software developers. It turns PLC logic into managed intellectual property.</p>
+
+<h2>9. Practical guidance for protocol labs and OT testbeds</h2>
+<ul>
+  <li>Store logic exports, not binaries</li>
+  <li>Use Git as single source of truth</li>
+  <li>Separate runtime testing from configuration versioning</li>
+  <li>Simulate bad commits, rollbacks, and merge conflicts</li>
+</ul>
+<p>Labs that ignore version control no longer represent real industrial systems.</p>
+
+<h2>10. Closing: OT is not becoming IT - it is maturing</h2>
+<p>OT is not copying IT blindly. It is selectively adopting what works: determinism from OT, traceability from IT, governance from safety standards. Git is not the goal.</p>
+    `,
+  },
+  {
     slug: "getting-started-with-docker-for-ot",
     title: "Getting Started with Docker for OT Environments",
     excerpt: "Learn how to use Docker containers to create isolated testing environments for industrial automation protocols without affecting production systems.",

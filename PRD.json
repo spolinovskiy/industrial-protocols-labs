@@ -1,6 +1,6 @@
 {
   "project": "industrial-protocols-labs",
-  "updated_at": "2026-01-14T10:30:00Z",
+  "updated_at": "2026-01-14T11:05:00Z",
   "tasks": [
     {
       "id": "T001",
@@ -561,6 +561,35 @@
       "validation": "protocols/opcua/server/opcua_server.py and protocols/dnp3/server/dnp3_server.py align with canonical reset/counter logic, and scripts/fuxa_add_opcua_view.py is tracked or removed deliberately.",
       "scripts": [],
       "updated_at": "2026-01-14T10:30:00Z"
+    }
+    ,
+    {
+      "id": "T039",
+      "title": "Publish protocol blog articles in site blog section",
+      "priority": 39,
+      "dependencies": [
+        "T038"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Add the industrial protocol blog articles to the frontend blog section in the same style as existing posts.",
+      "validation": "Blog list shows both protocol articles and the detail pages render the markdown content.",
+      "scripts": [],
+      "updated_at": "2026-01-14T11:05:00Z"
+    },
+    {
+      "id": "T040",
+      "title": "Review frontend dependencies and container optimization options",
+      "priority": 40,
+      "dependencies": [
+        "T039"
+      ],
+      "passes": false,
+      "status": "pending",
+      "description": "Audit frontend dependencies, explain why they are needed, and document container size/performance optimizations without breaking functionality.",
+      "validation": "Docs or README include dependency rationale and optimization recommendations.",
+      "scripts": [],
+      "updated_at": "2026-01-14T10:45:00Z"
     }
   ]
 }
