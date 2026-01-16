@@ -37,10 +37,10 @@ def update_ranges(prop):
 
 def update_property(prop):
     changed = update_ranges(prop)
-    if "color" in prop and prop.get("color") != TARGET_COLOR:
+    if prop.get("color") != TARGET_COLOR:
         prop["color"] = TARGET_COLOR
         changed += 1
-    if "stroke" in prop and prop.get("stroke") != TARGET_COLOR:
+    if prop.get("stroke") != TARGET_COLOR:
         prop["stroke"] = TARGET_COLOR
         changed += 1
     return changed

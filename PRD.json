@@ -604,6 +604,23 @@
       "validation": "Protocol page shows warmup/ready messaging, Active status reflects lab switcher state, and /lab redirects to /guest/lab.",
       "scripts": [],
       "updated_at": "2026-01-15T18:45:00Z"
+    },
+    {
+      "id": "T042",
+      "title": "Re-apply FUXA Test Bench style enforcement for outputs and shapes",
+      "priority": 42,
+      "dependencies": [
+        "T041"
+      ],
+      "passes": true,
+      "status": "done",
+      "description": "Ensure led/output/shape styling is enforced for all Test Bench views by setting stroke/text colors to #1f8ed3ff and regenerating the guest DB.",
+      "validation": "Test Bench items led_1..led_4, output_1..output_3, shape_24, and ai_bar show #1f8ed3ff for stroke/text in both admin and guest views.",
+      "scripts": [
+        "scripts/fuxa_update_view_styles.py",
+        "scripts/fuxa_make_guest_db.py"
+      ],
+      "updated_at": "2026-01-16T18:15:00Z"
     }
   ]
 }

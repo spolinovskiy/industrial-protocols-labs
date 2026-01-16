@@ -48,3 +48,4 @@
 - 2026-01-14: Added the Industrial Protocols Overview and Version Control Comes to the Plant Floor articles to the frontend blog catalog.
 - 2026-01-14: Audited frontend dependencies and documented container optimization guidance in docs/frontend_dependency_audit.md.
 - 2026-01-15: Added FUXA warmup/ready messaging, disabled FUXA link until active, and redirected /lab to /guest/lab to avoid 404s.
+- 2026-01-16: Re-applied FUXA Test Bench style enforcement (led/output/shape/ai_bar colors) and regenerated the guest DB to keep guest/admin views consistent.
